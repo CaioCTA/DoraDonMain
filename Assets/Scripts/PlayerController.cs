@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
-using UnityEditor.Tilemaps;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -25,7 +24,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private Vector2 _playerMovement;
 
     private GameObject _itemNearby;
-    
     
     #endregion
 

@@ -11,10 +11,14 @@ using UnityEngine.UI;
 public class LobbyManager : MonoBehaviourPunCallbacks
 {
     #region Variables
+
+    public float displayTime = 3f;
     [SerializeField] private List<GameObject> _playersPanels;
     [SerializeField] private TMP_Text _textPlayerCount;
+    [SerializeField] private TMP_Text _NoPlay;
+    [SerializeField] private TMP_Text _NoStart;
     private int _playersCount;
-    private string _masterPlayer = PhotonNetwork.MasterClient.NickName;
+    // private string _masterPlayer = PhotonNetwork.MasterClient.NickName;
     #endregion
 
     #region Unity Methods
@@ -23,6 +27,10 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         
         ChecaJogadores();
         
+    }
+
+    private void Start()
+    {
     }
 
     private void Update()
@@ -69,12 +77,15 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         if (!PhotonNetwork.IsMasterClient)
         {
-            Debug.Log($"Apenas o dono da sala {_masterPlayer} pode inciar o jogo!");
+            Debug.Log($"Apenas o dono da sala {PhotonNetwork.MasterClient.NickName} pode inciar o jogo!");
+            StartCoroutine(DisplayTextNoStart());
+
         }
         
         if (_playersCount != 2)
         {
             Debug.Log("Precisa de dois players para iniciar.");
+            StartCoroutine(DisplayTextNoPLay());
             return;
         }
         else if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
@@ -82,7 +93,21 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             PhotonNetwork.LoadLevel("GameScene");
         }
         
-    }    
+    }
+
+    IEnumerator DisplayTextNoStart()
+    {
+        _NoStart.text = $"Apenas o dono da sala {PhotonNetwork.MasterClient.NickName} pode inciar o jogo!";
+        yield return new WaitForSeconds(displayTime);
+        _NoStart.text = string.Empty;
+    }
+    
+    IEnumerator DisplayTextNoPLay()
+    {
+        _NoPlay.text = $"Não pode iniciar o jogo com apenas {PhotonNetwork.CurrentRoom.PlayerCount} jogadores.";
+        yield return new WaitForSeconds(displayTime);
+        _NoPlay.text = string.Empty;
+    }
     
     #endregion
     
