@@ -29,10 +29,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         
     }
 
-    private void Start()
-    {
-    }
-
     private void Update()
     {
         ChecaJogadores();
@@ -82,16 +78,18 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         }
         
-        if (_playersCount != 2)
-        {
-            Debug.Log("Precisa de dois players para iniciar.");
-            StartCoroutine(DisplayTextNoPLay());
-            return;
-        }
-        else if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.LoadLevel("GameScene");
-        }
+        PhotonNetwork.LoadLevel("GameScene");
+        
+        // if (_playersCount != 2)
+        // {
+        //     Debug.Log("Precisa de dois players para iniciar.");
+        //     StartCoroutine(DisplayTextNoPLay());
+        //     return;
+        // }
+        // else if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
+        // {
+        //     PhotonNetwork.LoadLevel("GameScene");
+        // }
         
     }
 
@@ -100,6 +98,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         _NoStart.text = $"Apenas o dono da sala {PhotonNetwork.MasterClient.NickName} pode inciar o jogo!";
         yield return new WaitForSeconds(displayTime);
         _NoStart.text = string.Empty;
+        DisplayTextForAllPlayers();
     }
     
     IEnumerator DisplayTextNoPLay()
@@ -107,6 +106,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         _NoPlay.text = $"Não pode iniciar o jogo com apenas {PhotonNetwork.CurrentRoom.PlayerCount} jogadores.";
         yield return new WaitForSeconds(displayTime);
         _NoPlay.text = string.Empty;
+        DisplayTextForAllPlayers();
+    }
+    
+    public void DisplayTextForAllPlayers()
+    {
+        photonView.RPC("ShowTextOnAllClients", RpcTarget.All);
     }
     
     #endregion

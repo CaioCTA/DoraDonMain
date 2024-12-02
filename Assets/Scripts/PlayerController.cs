@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         PhotonView itemPhotonView = PhotonView.Find(itemViewID);
         if (itemPhotonView != null)
         {
-            Destroy(itemPhotonView.gameObject);  // Destrói o item em todos os clientes
+            // Destroy(itemPhotonView.gameObject);  // Destrói o item em todos os clientes
         }
     }
 
