@@ -128,6 +128,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         if (go.CompareTag("Button"))
         {
             _itemNearby = go.gameObject;
+            Debug.Log("Aperte 'E' para pressionar o Botao!");
         }
         
     }
@@ -172,23 +173,29 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         PhotonView itemPhotonView = PhotonView.Find(itemViewID);
         if (itemPhotonView != null)
         {
-            // Destroy(itemPhotonView.gameObject);  // Destrói o item em todos os clientes
+            // Destroy(itemPhotonView.gameObject);
+            GameObject button = GameObject.FindWithTag("Button");
+            button.GetComponent<SpriteRenderer>().color = Color.green;
+            Debug.Log("Botao pressionado!");
+            
+            
+            // Destrói o item em todos os clientes
         }
     }
 
-    private void ButtonDoor()
-    {
-        
-    }
-    
-    private void OpenDoor(int itemViewID)
-    {
-        PhotonView itemPhotonView = PhotonView.Find(itemViewID);
-        if (itemPhotonView != null)
-        {
-            Destroy(itemPhotonView.gameObject);
-        }
-    }
+    // private void ButtonDoor()
+    // {
+    //     
+    // }
+    //
+    // private void OpenDoor(int itemViewID)
+    // {
+    //     PhotonView itemPhotonView = PhotonView.Find(itemViewID);
+    //     if (itemPhotonView != null)
+    //     {
+    //         Destroy(itemPhotonView.gameObject);
+    //     }
+    // }
     
     #endregion
     

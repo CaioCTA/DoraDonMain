@@ -6,17 +6,17 @@ using UnityEngine;
 public class Door : MonoBehaviourPunCallbacks
 {
 
-    public GameObject door;
-
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        PhotonView view = other.gameObject.GetComponent<PhotonView>();
-        
-        if (view != null && other.gameObject.tag == "Player" && Input.GetKeyDown(KeyCode.E))
-        {
-            Destroy(door.gameObject);
-        }
-    }
+    // public GameObject door;
+    //
+    // private void OnTriggerStay2D(Collider2D other)
+    // {
+    //     PhotonView view = other.gameObject.GetComponent<PhotonView>();
+    //     
+    //     if (view != null && other.gameObject.tag == "Player" && Input.GetKeyDown(KeyCode.E))
+    //     {
+    //         Destroy(door.gameObject);
+    //     }
+    // }
     
     
 }

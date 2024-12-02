@@ -70,6 +70,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     
     public void StartGame()
     {
+        
+        if (_playersCount < 2)
+        {
+            Debug.Log("Precisa de dois players para iniciar.");
+            StartCoroutine(DisplayTextNoPLay());
+        }
+
 
         if (!PhotonNetwork.IsMasterClient)
         {
@@ -77,19 +84,12 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             StartCoroutine(DisplayTextNoStart());
 
         }
-        
-        PhotonNetwork.LoadLevel("GameScene");
-        
-        // if (_playersCount != 2)
-        // {
-        //     Debug.Log("Precisa de dois players para iniciar.");
-        //     StartCoroutine(DisplayTextNoPLay());
-        //     return;
-        // }
-        // else if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient)
-        // {
-        //     PhotonNetwork.LoadLevel("GameScene");
-        // }
+
+        if (PhotonNetwork.IsMasterClient && _playersCount == 2)
+        {
+            PhotonNetwork.LoadLevel("GameScene");
+        }
+
         
     }
 
@@ -98,7 +98,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         _NoStart.text = $"Apenas o dono da sala {PhotonNetwork.MasterClient.NickName} pode inciar o jogo!";
         yield return new WaitForSeconds(displayTime);
         _NoStart.text = string.Empty;
-        DisplayTextForAllPlayers();
+        // DisplayTextForAllPlayers();
     }
     
     IEnumerator DisplayTextNoPLay()
@@ -106,13 +106,13 @@ public class LobbyManager : MonoBehaviourPunCallbacks
         _NoPlay.text = $"Não pode iniciar o jogo com apenas {PhotonNetwork.CurrentRoom.PlayerCount} jogadores.";
         yield return new WaitForSeconds(displayTime);
         _NoPlay.text = string.Empty;
-        DisplayTextForAllPlayers();
+        // DisplayTextForAllPlayers();
     }
     
-    public void DisplayTextForAllPlayers()
-    {
-        photonView.RPC("ShowTextOnAllClients", RpcTarget.All);
-    }
+    // public void DisplayTextForAllPlayers()
+    // {
+    //     photonView.RPC("ShowTextOnAllClients", RpcTarget.All);
+    // }
     
     #endregion
     
