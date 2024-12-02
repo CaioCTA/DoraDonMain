@@ -144,7 +144,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             _itemNearby = null;
         }
     }
+    
 
+    #endregion
+    
+    
+    #region Player Methods
+    
     private void Pular()
     {
         _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
@@ -152,13 +158,42 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     
     private void PickUpItem(GameObject item)
     {
-        // Implementa o comportamento de pegar o item
-        Debug.Log($"Pegou o item: {item.name}");
-        Destroy(item); // Remove o item da cena
-        photonView.RPC("PickUpItemRPC", RpcTarget.All, item);
+        // Garantir que o item tenha um PhotonView
+        PhotonView itemPhotonView = item.GetComponent<PhotonView>();
+        if (itemPhotonView != null)
+        {
+            // Envia o ViewID do item para todos os jogadores via RPC
+            photonView.RPC("DestroyItem", RpcTarget.AllBuffered, itemPhotonView.ViewID);
+        }
+    }
+    
+    [PunRPC]
+    private void DestroyItem(int itemViewID)
+    {
+        // Encontrar o PhotonView do item pelo ViewID
+        PhotonView itemPhotonView = PhotonView.Find(itemViewID);
+        if (itemPhotonView != null)
+        {
+            Destroy(itemPhotonView.gameObject);  // Destrói o item em todos os clientes
+        }
     }
 
+    private void ButtonDoor()
+    {
+        
+    }
+    
+    private void OpenDoor(int itemViewID)
+    {
+        PhotonView itemPhotonView = PhotonView.Find(itemViewID);
+        if (itemPhotonView != null)
+        {
+            Destroy(itemPhotonView.gameObject);
+        }
+    }
+    
     #endregion
+    
 
     #region Photon callbacks
 
