@@ -117,7 +117,7 @@ public class CreateGame : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Entrou na sala: " + PhotonNetwork.CurrentRoom.Name);
-        PhotonNetwork.LoadLevel("GameScene");
+        PhotonNetwork.LoadLevel("Lobby");
     }
 
     #endregion

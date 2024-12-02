@@ -7,6 +7,7 @@ TagManager:
   - Bullet
   - Ground
   - Door
+  - Button
   layers:
   - Default
   - TransparentFX

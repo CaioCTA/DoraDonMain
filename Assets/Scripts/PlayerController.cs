@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private Rigidbody2D _rb;
     private string _nickName;
     private Vector2 _playerMovement;
+
+    private GameObject _itemNearby;
     
     
     #endregion
@@ -79,6 +81,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
                 Pular();
             }
         }
+        
+        
+        if (Input.GetKeyDown(KeyCode.E) && _itemNearby != null)
+        {
+            PickUpItem(_itemNearby);
+        }
+        
 
     }
     #endregion
@@ -114,9 +123,39 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        GameObject go = collision.gameObject;
+
+        if (go.CompareTag("Button"))
+        {
+            _itemNearby = go.gameObject;
+        }
+        
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        
+        GameObject go = collision.gameObject;
+        
+        if (go.CompareTag("Button"))
+        {
+            _itemNearby = null;
+        }
+    }
+
     private void Pular()
     {
         _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
+    }
+    
+    private void PickUpItem(GameObject item)
+    {
+        // Implementa o comportamento de pegar o item
+        Debug.Log($"Pegou o item: {item.name}");
+        Destroy(item); // Remove o item da cena
+        photonView.RPC("PickUpItemRPC", RpcTarget.All, item);
     }
 
     #endregion
