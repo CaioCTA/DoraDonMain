@@ -14,6 +14,9 @@ public class ChatManager : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _content;
     [SerializeField] private GameObject _message;
     private PhotonView _photonView;
+    [SerializeField] private int _numeroMaxMessage = 10;
+
+    private Queue<GameObject> _filaMessage = new Queue<GameObject>();
 
     #endregion
 
@@ -21,6 +24,7 @@ public class ChatManager : MonoBehaviourPunCallbacks
     void Start()
     {
         _photonView = GetComponent<PhotonView>();
+
     }
     
     void Update()
@@ -41,23 +45,35 @@ public class ChatManager : MonoBehaviourPunCallbacks
 
     #region Public Methods
 
-    // public void SendMessage()
-    // {
-    //     _photonView.RPC("ReceiveMessage", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName + ": " + _inputMessage.text);
-    //
-    //     _inputMessage.text = "";
-    //
-    // }
 
     [PunRPC]
     public void ReceiveMessage(string messageReceived)
     {
+        
+        if (_filaMessage.Count <= _numeroMaxMessage)
+        {
+            _filaMessage.Enqueue(CriaMessage(messageReceived));
+        }
+        else
+        {
+            GameObject smsRemoved = _filaMessage.Dequeue();
+            Destroy(smsRemoved);
+            _filaMessage.Enqueue(CriaMessage(messageReceived));
+        }
+        
+    }
+
+    public GameObject CriaMessage(string texto)
+    {
+        //Cria o objryo mensagem apartir do prefab de texto.
         GameObject message = Instantiate(_message, _content.transform);
-        
-        message.GetComponent<TMP_Text>().text = messageReceived;
-        
+
+        //Edita o texto da mensagem.
+        message.GetComponent<TMP_Text>().text = texto;
+        //Ultimas mensagens virão primeiro.
         message.GetComponent<RectTransform>().SetAsLastSibling();
-        
+
+        return message;
     }
     
     #endregion

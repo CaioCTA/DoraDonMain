@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private Vector2 _playerMovement;
 
     private GameObject _itemNearby;
+
+    private int _localScore; //Pontuacao
     
     #endregion
 
@@ -39,6 +41,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
             }
             _nickName = PhotonNetwork.LocalPlayer.NickName;
+            var score = PhotonNetwork.LocalPlayer.CustomProperties["Score"];
             _namePlayer.text = _nickName;
         }
         else
@@ -147,7 +150,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     #endregion
     
-    
     #region Player Methods
     
     private void Pular()
@@ -196,9 +198,30 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     //         Destroy(itemPhotonView.gameObject);
     //     }
     // }
-    
+
     #endregion
+
+    #region Public Methods
     
+    //public void UpdateScore(int quantidade)
+    //{
+    //    int scoreAtual = 0;
+    //    if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Score"))
+    //    {
+    //        scoreAtual = (int)PhotonNetwork.LocalPlayer.CustomProperties["Score"];
+    //    }
+
+    //    scoreAtual += quantidade;
+
+    //    // Atualizar essa pontuacao nas propriedades customizaveis do jogador.
+
+    //    var tabela = new ExitGames.Client.Photon.Hashtable();
+    //    tabela.TryAdd("Score", scoreAtual);
+    //    PhotonNetwork.LocalPlayer.SetCustomProperties(tabela);
+
+    //}
+
+    #endregion
 
     #region Photon callbacks
 
