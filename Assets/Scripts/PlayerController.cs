@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         
         GameObject go = collision.gameObject;
         
-        if (go.CompareTag("Ground"))
+        if (go.CompareTag("Ground") || go.CompareTag("Player"))
         {
             isGrounded = true;
             //Debug.Log("chao");
@@ -118,7 +118,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         
         GameObject go = collision.gameObject;
         
-        if (go.CompareTag("Ground"))
+        if (go.CompareTag("Ground") || go.CompareTag("Player"))
         {
             isGrounded = false;
         }
@@ -185,19 +185,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    // private void ButtonDoor()
-    // {
-    //     
-    // }
-    //
-    // private void OpenDoor(int itemViewID)
-    // {
-    //     PhotonView itemPhotonView = PhotonView.Find(itemViewID);
-    //     if (itemPhotonView != null)
-    //     {
-    //         Destroy(itemPhotonView.gameObject);
-    //     }
-    // }
+    //Trocar os methods de pegar item para seus proprios scripts.
 
     #endregion
 
