@@ -53,7 +53,7 @@ public class RoomManager : MonoBehaviourPunCallbacks
             {
                 // Defina o Follow como o transform do jogador local
                 cinemachineCamera.Follow = localPlayerObject.transform;
-                Debug.Log("Virtual Camera agora segue: " + localPlayerObject.name);
+                // Debug.Log("Virtual Camera agora segue: " + PhotonNetwork.LocalPlayer.NickName);
             }
             else
             {

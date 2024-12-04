@@ -23,9 +23,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private string _nickName;
     private Vector2 _playerMovement;
 
-    private GameObject _itemNearby;
-
-    private int _localScore; //Pontuacao
+    // private GameObject _itemNearby;
+    //
+    // private int _localScore; //Pontuacao
     
     #endregion
 
@@ -84,10 +84,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         }
         
         
-        if (Input.GetKeyDown(KeyCode.E) && _itemNearby != null)
-        {
-            PickUpItem(_itemNearby);
-        }
+        // if (Input.GetKeyDown(KeyCode.E) && _itemNearby != null)
+        // {
+        //     PickUpItem(_itemNearby);
+        // }
         
 
     }
@@ -126,25 +126,25 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        GameObject go = collision.gameObject;
-
-        if (go.CompareTag("Button"))
-        {
-            _itemNearby = go.gameObject;
-            Debug.Log("Aperte 'E' para pressionar o Botao!");
-        }
+        // GameObject go = collision.gameObject;
+        //
+        // if (go.CompareTag("Button"))
+        // {
+        //     _itemNearby = go.gameObject;
+        //     Debug.Log("Aperte 'E' para pressionar o Botao!");
+        // }
         
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
         
-        GameObject go = collision.gameObject;
-        
-        if (go.CompareTag("Button"))
-        {
-            _itemNearby = null;
-        }
+        // GameObject go = collision.gameObject;
+        //
+        // if (go.CompareTag("Button"))
+        // {
+        //     _itemNearby = null;
+        // }
     }
     
 
@@ -157,33 +157,33 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
     }
     
-    private void PickUpItem(GameObject item)
-    {
-        // Garantir que o item tenha um PhotonView
-        PhotonView itemPhotonView = item.GetComponent<PhotonView>();
-        if (itemPhotonView != null)
-        {
-            // Envia o ViewID do item para todos os jogadores via RPC
-            photonView.RPC("DestroyItem", RpcTarget.AllBuffered, itemPhotonView.ViewID);
-        }
-    }
-    
-    [PunRPC]
-    private void DestroyItem(int itemViewID)
-    {
-        // Encontrar o PhotonView do item pelo ViewID
-        PhotonView itemPhotonView = PhotonView.Find(itemViewID);
-        if (itemPhotonView != null)
-        {
-            // Destroy(itemPhotonView.gameObject);
-            GameObject button = GameObject.FindWithTag("Button");
-            button.GetComponent<SpriteRenderer>().color = Color.green;
-            Debug.Log("Botao pressionado!");
-            
-            
-            // Destrói o item em todos os clientes
-        }
-    }
+    // private void PickUpItem(GameObject item)
+    // {
+    //     // Garantir que o item tenha um PhotonView
+    //     PhotonView itemPhotonView = item.GetComponent<PhotonView>();
+    //     if (itemPhotonView != null)
+    //     {
+    //         // Envia o ViewID do item para todos os jogadores via RPC
+    //         photonView.RPC("DestroyItem", RpcTarget.AllBuffered, itemPhotonView.ViewID);
+    //     }
+    // }
+    //
+    // [PunRPC]
+    // private void DestroyItem(int itemViewID)
+    // {
+    //     // Encontrar o PhotonView do item pelo ViewID
+    //     PhotonView itemPhotonView = PhotonView.Find(itemViewID);
+    //     if (itemPhotonView != null)
+    //     {
+    //         // Destroy(itemPhotonView.gameObject);
+    //         GameObject button = GameObject.FindWithTag("Button");
+    //         button.GetComponent<SpriteRenderer>().color = Color.green;
+    //         Debug.Log("Botao pressionado!");
+    //         
+    //         
+    //         // Destrói o item em todos os clientes
+    //     }
+    // }
 
     //Trocar os methods de pegar item para seus proprios scripts.
 

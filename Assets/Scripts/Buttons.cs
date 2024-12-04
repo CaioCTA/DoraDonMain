@@ -6,29 +6,87 @@ using UnityEngine;
 
 public class Buttons : MonoBehaviourPunCallbacks
 {
-    
+    #region Variables
+
+    private GameObject _isNearby;
     [SerializeField] private GameObject Door;
+    [SerializeField] private GameObject Button1;
+    private bool _botaoAtivado = false;
+
+    #endregion
+
+    #region Unity Methods
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.E) && _isNearby != null && _botaoAtivado == false)
+        {
+            AtivarButton(Button1);
+        }
+    }
+
+    #endregion
     
+    #region 2D Methods
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.gameObject.GetPhotonView().IsMine)
+        
+        if (other.CompareTag("Player")) // Certifique-se de que os jogadores têm a tag "Player"
         {
-            return;
+            _isNearby = other.gameObject; // Marca o jogador como estando próximo
+
+            if (_botaoAtivado == true)
+            {
+                Debug.Log("Botao ja ativado!");
+            }
+            else
+            {
+                Debug.Log("Pressione 'E' para ativar o botão.");
+            }
         }
         
-        other.GetComponent<PlayerController>();
-        photonView.RPC("AtivarButton", RpcTarget.MasterClient);
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        
+        // Se o jogador sair do trigger, a referência é removida
+        if (other.CompareTag("Player"))
+        {
+            _isNearby = null;
+            Debug.Log("O jogador saiu da área.");
+        }
+        
+    }
+
+    // this.gameObject: Refere-se ao objeto no qual o script está anexado.
+    // other.gameObject: Refere-se ao objeto que entrou no trigger.
+    
+    #endregion
+    
+    #region Public Methods
+    [PunRPC]
+    public void AtivarButton(GameObject btn)
+    {
+        
+        PhotonView btnPhotonView = btn.GetComponent<PhotonView>();
+        if (btnPhotonView != null)
+        {
+            Debug.Log("Botao Ativado!");
+            photonView.RPC("DestroyDoor", RpcTarget.MasterClient);
+            _botaoAtivado = true;
+        }
         
     }
     
     [PunRPC]
-    public void AtivarButton()
+    public void DestroyDoor()
     {
-        Color button = GetComponent<SpriteRenderer>().color;
-        button = Color.green;
-        // _ButtonAtivado.Add();
-        PhotonNetwork.Destroy(Door);
+        Door.SetActive(false);
     }
+    
+    #endregion
+    
     
     
 }
