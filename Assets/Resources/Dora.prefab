@@ -112,11 +112,11 @@ GameObject:
   m_Component:
   - component: {fileID: 673475766581981829}
   - component: {fileID: 5159644289972993533}
-  - component: {fileID: 3157187709387603442}
   - component: {fileID: -2285724197879925858}
   - component: {fileID: -5416475645041350772}
   - component: {fileID: -4691982681392614705}
   - component: {fileID: 6510087965300599019}
+  - component: {fileID: 2892037498713541472}
   m_Layer: 0
   m_Name: Dora
   m_TagString: Player
@@ -192,21 +192,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3157187709387603442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4114354980830581767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e95981c6c88ffc4c8575f3cd86ee51b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _moveSpeed: 10
-  _jumpForce: 6
-  _namePlayer: {fileID: 5204506532641698049}
 --- !u!114 &-2285724197879925858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -226,8 +211,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 3157187709387603442}
   - {fileID: -5416475645041350772}
+  - {fileID: 2892037498713541472}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -319,6 +304,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2892037498713541472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4114354980830581767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 978177276099814409a0e74e5e5674c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _moveSpeed: 10
+  _jumpForce: 6
+  _namePlayer: {fileID: 5204506532641698049}
+  _flyForce: 3
+  maxFlyTime: 1.5
 --- !u!1 &6747223821561338405
 GameObject:
   m_ObjectHideFlags: 0

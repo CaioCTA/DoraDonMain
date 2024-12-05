@@ -29,11 +29,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.Instantiate("Don", player1SpawnerPosition.position, Quaternion.identity);
+                PhotonNetwork.Instantiate("Dora", player1SpawnerPosition.position, Quaternion.identity);
             }
             else
             {
-                PhotonNetwork.Instantiate("Dora", player2SpawnerPosition.position, Quaternion.identity);
+                PhotonNetwork.Instantiate("Don", player2SpawnerPosition.position, Quaternion.identity);
             }
             
         }

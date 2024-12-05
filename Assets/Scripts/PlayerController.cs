@@ -12,15 +12,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     
     #region Variables
     public static GameObject LocalPlayerInstance;
-    [SerializeField] private float _moveSpeed = 10f;
-    [SerializeField] private float _jumpForce = 6f;
-    [SerializeField] private TMP_Text _namePlayer;
+    [SerializeField] protected float _moveSpeed = 10f;
+    [SerializeField] protected float _jumpForce = 6f;
+    [SerializeField] protected TMP_Text _namePlayer;
 
-    private bool isGrounded = false;
+    protected bool isGrounded = false;
 
     private Vector2 _networkingPosition;
-    private Rigidbody2D _rb;
-    private string _nickName;
+    protected Rigidbody2D _rb;
+    protected string _nickName;
     private Vector2 _playerMovement;
 
     // private GameObject _itemNearby;
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     #endregion
 
     #region Unity Methods
-    void Start()
+    protected virtual void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         if (photonView.IsMine)
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
             }
             _nickName = PhotonNetwork.LocalPlayer.NickName;
-            var score = PhotonNetwork.LocalPlayer.CustomProperties["Score"];
+            // var score = PhotonNetwork.LocalPlayer.CustomProperties["Score"];
             _namePlayer.text = _nickName;
         }
         else
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     }
 
 
-    private void Update()
+    protected virtual void Update()
     {
         if (photonView.IsMine)
         {
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     #region 2D Methods
 
-    public void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         
         GameObject go = collision.gameObject;
@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         
     }
     
-    private void OnCollisionExit2D(Collision2D collision)
+    protected virtual void OnCollisionExit2D(Collision2D collision)
     {
         
         GameObject go = collision.gameObject;
@@ -157,57 +157,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
     }
     
-    // private void PickUpItem(GameObject item)
-    // {
-    //     // Garantir que o item tenha um PhotonView
-    //     PhotonView itemPhotonView = item.GetComponent<PhotonView>();
-    //     if (itemPhotonView != null)
-    //     {
-    //         // Envia o ViewID do item para todos os jogadores via RPC
-    //         photonView.RPC("DestroyItem", RpcTarget.AllBuffered, itemPhotonView.ViewID);
-    //     }
-    // }
-    //
-    // [PunRPC]
-    // private void DestroyItem(int itemViewID)
-    // {
-    //     // Encontrar o PhotonView do item pelo ViewID
-    //     PhotonView itemPhotonView = PhotonView.Find(itemViewID);
-    //     if (itemPhotonView != null)
-    //     {
-    //         // Destroy(itemPhotonView.gameObject);
-    //         GameObject button = GameObject.FindWithTag("Button");
-    //         button.GetComponent<SpriteRenderer>().color = Color.green;
-    //         Debug.Log("Botao pressionado!");
-    //         
-    //         
-    //         // Destrói o item em todos os clientes
-    //     }
-    // }
-
-    //Trocar os methods de pegar item para seus proprios scripts.
-
-    #endregion
-
-    #region Public Methods
-    
-    //public void UpdateScore(int quantidade)
-    //{
-    //    int scoreAtual = 0;
-    //    if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Score"))
-    //    {
-    //        scoreAtual = (int)PhotonNetwork.LocalPlayer.CustomProperties["Score"];
-    //    }
-
-    //    scoreAtual += quantidade;
-
-    //    // Atualizar essa pontuacao nas propriedades customizaveis do jogador.
-
-    //    var tabela = new ExitGames.Client.Photon.Hashtable();
-    //    tabela.TryAdd("Score", scoreAtual);
-    //    PhotonNetwork.LocalPlayer.SetCustomProperties(tabela);
-
-    //}
 
     #endregion
 
