@@ -6,7 +6,9 @@ using UnityEngine;
 public class Dora : PlayerController
 {
     #region Variables
-    
+
+    public typeBtn doraBtn = typeBtn.Dora;
+
     private GameObject _isNearby;
     private bool _isFlying;
     [SerializeField] private float _flyForce = 3f;

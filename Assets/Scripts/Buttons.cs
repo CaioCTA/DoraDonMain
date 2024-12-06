@@ -4,9 +4,18 @@ using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
 
+
+public enum typeBtn
+{
+    Dora,Don
+}
+
+
 public class Buttons : MonoBehaviourPunCallbacks
 {
     #region Variables
+
+    protected typeBtn typeBtn;
 
     private GameObject _isNearby;
     [SerializeField] private GameObject Door;
@@ -21,7 +30,7 @@ public class Buttons : MonoBehaviourPunCallbacks
     {
         if (Input.GetKey(KeyCode.E) && _isNearby != null && _botaoAtivado == false)
         {
-            AtivarButton(Button1);
+            AtivarButton();
         }
     }
 
@@ -65,20 +74,35 @@ public class Buttons : MonoBehaviourPunCallbacks
     #endregion
     
     #region Public Methods
+    //[PunRPC]
+    //public void AtivarButton(GameObject btn)
+    //{
+
+    //    PhotonView btnPhotonView = btn.GetComponent<PhotonView>();
+    //    if (btnPhotonView != null)
+    //    {
+    //        Debug.Log("Botao Ativado!");
+    //        photonView.RPC("DestroyDoor", RpcTarget.MasterClient);
+    //        _botaoAtivado = true;
+    //    }
+
+    //}
+
     [PunRPC]
-    public void AtivarButton(GameObject btn)
+    protected void AtivarButton()
     {
-        
-        PhotonView btnPhotonView = btn.GetComponent<PhotonView>();
+
+        PhotonView btnPhotonView = this.GetComponent<PhotonView>();
         if (btnPhotonView != null)
         {
             Debug.Log("Botao Ativado!");
             photonView.RPC("DestroyDoor", RpcTarget.MasterClient);
             _botaoAtivado = true;
         }
-        
+
     }
-    
+
+
     [PunRPC]
     public void DestroyDoor()
     {
