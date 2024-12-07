@@ -15,11 +15,11 @@ public class Buttons : MonoBehaviourPunCallbacks
 {
     #region Variables
 
-    protected typeBtn typeBtn;
-
+    public typeBtn typeBtn;
+    
     private GameObject _isNearby;
     [SerializeField] private GameObject Door;
-    [SerializeField] private GameObject Button1;
+    // [SerializeField] private GameObject Button;
     private bool _botaoAtivado = false;
 
     #endregion
@@ -28,10 +28,48 @@ public class Buttons : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.E) && _isNearby != null && _botaoAtivado == false)
+
+        if (typeBtn == typeBtn.Dora)
         {
-            AtivarButton();
+            // Verifica se o componente Dora está presente
+            // PhotonView doraPView = GetComponent<Dora>().photonView;
+            Dora doraGO = GameObject.Find("Dora").GetComponent<Dora>();
+            
+            if (doraGO != null)
+            {
+                // Verifica as condições para ativar o botão
+                if (Input.GetKey(KeyCode.E) && _isNearby != null && !_botaoAtivado)
+                {
+                    photonView.RPC("AtivarButton", RpcTarget.MasterClient);
+                }
+            }
+            else
+            {
+                Debug.LogError("O botão Dora requer o componente Dora, mas ele não está anexado!");
+            }
+            
         }
+        else if (typeBtn == typeBtn.Don)
+        {
+            
+            // PhotonView donPView = GetComponent<Don>().photonView;
+            Don donGO = GameObject.Find("Don").GetComponent<Don>();
+            
+            if (donGO != null)
+            {
+                if (Input.GetKey(KeyCode.E) && _isNearby != null && !_botaoAtivado)
+                {
+                    photonView.RPC("AtivarButton", RpcTarget.MasterClient);
+                }
+            }
+            
+            
+        }
+        else
+        {
+            Debug.LogError("Tipo de botão desconhecido!");
+        }
+        
     }
 
     #endregion
@@ -46,7 +84,7 @@ public class Buttons : MonoBehaviourPunCallbacks
 
             if (_botaoAtivado == true)
             {
-                Debug.Log("Botao ja ativado!");
+                // Debug.Log("Botao ja ativado!");
             }
             else
             {
@@ -63,7 +101,7 @@ public class Buttons : MonoBehaviourPunCallbacks
         if (other.CompareTag("Player"))
         {
             _isNearby = null;
-            Debug.Log("O jogador saiu da área.");
+            // Debug.Log("O jogador saiu da área.");
         }
         
     }
@@ -74,29 +112,16 @@ public class Buttons : MonoBehaviourPunCallbacks
     #endregion
     
     #region Public Methods
-    //[PunRPC]
-    //public void AtivarButton(GameObject btn)
-    //{
-
-    //    PhotonView btnPhotonView = btn.GetComponent<PhotonView>();
-    //    if (btnPhotonView != null)
-    //    {
-    //        Debug.Log("Botao Ativado!");
-    //        photonView.RPC("DestroyDoor", RpcTarget.MasterClient);
-    //        _botaoAtivado = true;
-    //    }
-
-    //}
-
+    
     [PunRPC]
-    protected void AtivarButton()
+    public void AtivarButton()
     {
 
         PhotonView btnPhotonView = this.GetComponent<PhotonView>();
         if (btnPhotonView != null)
         {
             Debug.Log("Botao Ativado!");
-            photonView.RPC("DestroyDoor", RpcTarget.MasterClient);
+            DestroyDoor();
             _botaoAtivado = true;
         }
 

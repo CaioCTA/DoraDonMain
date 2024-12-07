@@ -60,10 +60,10 @@ public class Don : PlayerController
         GameObject don = collision.gameObject;
         
         base.OnCollisionEnter2D(collision);
-        if (don.CompareTag("Water"))
-        {
-            _isInWater = true;
-        }
+        // if (don.CompareTag("Water"))
+        // {
+        //     _isInWater = true;
+        // }
     }
     
     protected override void OnCollisionExit2D(Collision2D collision)
@@ -71,10 +71,10 @@ public class Don : PlayerController
         GameObject don = collision.gameObject;
         
         base.OnCollisionExit2D(collision);
-        if (don.CompareTag("Water"))
-        {
-            _isInWater = false;
-        }
+        // if (don.CompareTag("Water"))
+        // {
+        //     _isInWater = false;
+        // }
         
     }
 
