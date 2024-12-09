@@ -76,18 +76,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             _playerMovement = new Vector2(moveH * _moveSpeed, _rb.velocity.y);
 
             bool jump = Input.GetButtonDown("Jump");
-
+            
             if (jump && isGrounded)
             {
-                Pular();
+                photonView.RPC("Pular", RpcTarget.All);
             }
         }
-        
-        
-        // if (Input.GetKeyDown(KeyCode.E) && _itemNearby != null)
-        // {
-        //     PickUpItem(_itemNearby);
-        // }
         
 
     }
@@ -123,36 +117,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             isGrounded = false;
         }
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        // GameObject go = collision.gameObject;
-        //
-        // if (go.CompareTag("Button"))
-        // {
-        //     _itemNearby = go.gameObject;
-        //     Debug.Log("Aperte 'E' para pressionar o Botao!");
-        // }
-        
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        
-        // GameObject go = collision.gameObject;
-        //
-        // if (go.CompareTag("Button"))
-        // {
-        //     _itemNearby = null;
-        // }
-    }
+    
     
 
     #endregion
     
     #region Player Methods
-    
-    private void Pular()
+    [PunRPC]
+    protected void Pular()
     {
         _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
     }
@@ -169,12 +141,14 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             // Enviar dados
             stream.SendNext((Vector2)transform.position);
             stream.SendNext(_nickName);
+            stream.SendNext(isGrounded);
         }
         else
         {
             //Receber dados
             _networkingPosition = (Vector2)stream.ReceiveNext();
             _nickName = (string)stream.ReceiveNext();
+            isGrounded = (bool)stream.ReceiveNext();
 
 
             if (photonView.IsMine)

@@ -22,6 +22,7 @@ public class Dora : PlayerController
     protected override void Start()
     {
         
+        
         _rb = GetComponent<Rigidbody2D>();
         if (photonView.IsMine)
         {
@@ -68,10 +69,8 @@ public class Dora : PlayerController
                     StopFlying();
                 }
             }
+
         }
-        
-        
-        
     }
 
     #endregion
@@ -88,10 +87,6 @@ public class Dora : PlayerController
         }
     }
     
-    protected override void OnCollisionExit2D(Collision2D collision)
-    {
-        base.OnCollisionExit2D(collision);
-    }
 
     #endregion
 

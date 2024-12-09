@@ -1,3 +1,4 @@
+using System;
 using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
@@ -39,7 +40,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
     }
-    
-    
-    
+
+    // public override void OnPlayerLeftRoom(Player otherPlayer)
+    // {
+    //     base.OnPlayerLeftRoom(otherPlayer);
+    // }
 }

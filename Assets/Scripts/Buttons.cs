@@ -19,79 +19,77 @@ public class Buttons : MonoBehaviourPunCallbacks
     
     private GameObject _isNearby;
     [SerializeField] private GameObject Door;
-    // [SerializeField] private GameObject Button;
+    private bool _isDoorOpen = false;
     private bool _botaoAtivado = false;
 
     #endregion
 
     #region Unity Methods
-
+    
     private void Update()
     {
-
-        if (typeBtn == typeBtn.Dora)
+        if (_isNearby != null && !_botaoAtivado)
         {
-            // Verifica se o componente Dora está presente
-            // PhotonView doraPView = GetComponent<Dora>().photonView;
-            Dora doraGO = GameObject.Find("Dora").GetComponent<Dora>();
-            
-            if (doraGO != null)
+            PhotonView playerPhotonView = _isNearby.GetComponent<PhotonView>();
+
+            if (playerPhotonView != null)
             {
-                // Verifica as condições para ativar o botão
-                if (Input.GetKey(KeyCode.E) && _isNearby != null && !_botaoAtivado)
+                if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Dora>() != null)
                 {
-                    photonView.RPC("AtivarButton", RpcTarget.MasterClient);
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
+                    }
+                }
+                else if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Don>() != null && Input.GetKey(KeyCode.E))
+                {
+                    Debug.Log("Você nao pode ativar esse botão.");
+                }
+                
+                if (typeBtn == typeBtn.Don && _isNearby.GetComponent<Don>() != null)
+                {
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
+                    }
+                }
+                else if (typeBtn == typeBtn.Don && _isNearby.GetComponent<Dora>() != null && Input.GetKey(KeyCode.E))
+                {
+                    Debug.Log("Você nao pode ativar esse botão.");
                 }
             }
             else
             {
-                Debug.LogError("O botão Dora requer o componente Dora, mas ele não está anexado!");
+                Debug.LogError("O jogador próximo não tem um PhotonView!");
             }
-            
         }
-        else if (typeBtn == typeBtn.Don)
-        {
-            
-            // PhotonView donPView = GetComponent<Don>().photonView;
-            Don donGO = GameObject.Find("Don").GetComponent<Don>();
-            
-            if (donGO != null)
-            {
-                if (Input.GetKey(KeyCode.E) && _isNearby != null && !_botaoAtivado)
-                {
-                    photonView.RPC("AtivarButton", RpcTarget.MasterClient);
-                }
-            }
-            
-            
-        }
-        else
-        {
-            Debug.LogError("Tipo de botão desconhecido!");
-        }
-        
     }
 
     #endregion
     
     #region 2D Methods
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
-        
-        if (other.CompareTag("Player")) // Certifique-se de que os jogadores têm a tag "Player"
+        if (other.CompareTag("Player")) // Certifique-se de que o jogador tenha a tag correta
         {
-            _isNearby = other.gameObject; // Marca o jogador como estando próximo
+            _isNearby = other.gameObject; // Marca o jogador como próximo
 
-            if (_botaoAtivado == true)
+            // if (_botaoAtivado)
+            // {
+            //     Debug.Log("Botão já ativado!");
+            // }
+            // else
+            // {
+            //     Debug.Log("Pressione 'E' para ativar o botão.");
+            // }
+
+            // Valida se o jogador tem o componente esperado
+            if (_isNearby.GetComponent<PhotonView>() == null)
             {
-                // Debug.Log("Botao ja ativado!");
-            }
-            else
-            {
-                Debug.Log("Pressione 'E' para ativar o botão.");
+                Debug.LogError("O jogador não possui um PhotonView!");
             }
         }
-        
     }
 
     private void OnTriggerExit2D(Collider2D other)
@@ -131,11 +129,11 @@ public class Buttons : MonoBehaviourPunCallbacks
     [PunRPC]
     public void DestroyDoor()
     {
+        _isDoorOpen = true;
         Door.SetActive(false);
     }
     
     #endregion
-    
     
     
 }

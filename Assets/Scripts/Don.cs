@@ -49,6 +49,7 @@ public class Don : PlayerController
                 //Nadar();
             }
         }
+
     }
 
     #endregion
@@ -77,34 +78,7 @@ public class Don : PlayerController
         // }
         
     }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        // GameObject don = other.gameObject;
-        //
-        // if (photonView.IsMine)
-        // {
-        //     if (don.CompareTag("Bola"))
-        //     {
-        //         _isNearby = don.gameObject;
-        //         Debug.Log("AEEEE");
-        //     }
-        // }
-    }
     
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        // GameObject don = other.gameObject;
-        //
-        // if (photonView.IsMine)
-        // {
-        //     if (don.CompareTag("Bola"))
-        //     {
-        //         _isNearby = null;
-        //         Debug.Log("Sai do range");
-        //     }
-        // }
-    }
 
 
     #endregion
