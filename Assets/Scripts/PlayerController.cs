@@ -12,11 +12,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     
     #region Variables
     public static GameObject LocalPlayerInstance;
-    [SerializeField] protected float _moveSpeed = 10f;
-    [SerializeField] protected float _jumpForce = 6f;
+    [SerializeField] protected float _moveSpeed = 6.5f;
+    [SerializeField] protected float _jumpForce = 3f;
     [SerializeField] protected TMP_Text _namePlayer;
 
     protected bool isGrounded = false;
+    protected bool isDead = false;
 
     private Vector2 _networkingPosition;
     protected Rigidbody2D _rb;
@@ -117,8 +118,19 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             isGrounded = false;
         }
     }
-    
-    
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (photonView.IsMine)
+        {
+            GameObject go = other.gameObject;
+
+            if (go.CompareTag("Morte"))
+            {
+                photonView.RPC("Morte", RpcTarget.All);
+            }
+        }
+    }
 
     #endregion
     
@@ -127,6 +139,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     protected void Pular()
     {
         _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
+    }
+
+    [PunRPC]
+    protected void Morte()
+    {
+        isGrounded = true;
+        PhotonNetwork.LoadLevel("GameScene");
     }
     
 

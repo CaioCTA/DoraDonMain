@@ -316,8 +316,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978177276099814409a0e74e5e5674c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 10
-  _jumpForce: 6
+  _moveSpeed: 6.5
+  _jumpForce: 3
   _namePlayer: {fileID: 5204506532641698049}
   doraBtn: 0
   _flyForce: 3

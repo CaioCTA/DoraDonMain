@@ -9,6 +9,7 @@ TagManager:
   - Door
   - Button
   - Bola
+  - Morte
   layers:
   - Default
   - TransparentFX
