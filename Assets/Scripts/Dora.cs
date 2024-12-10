@@ -68,7 +68,7 @@ public class Dora : PlayerController
                 {
                     StopFlying();
                 }
-            }
+            } 
 
         }
     }
@@ -81,10 +81,13 @@ public class Dora : PlayerController
     {
         base.OnCollisionEnter2D(collision);
 
+        GameObject go = collision.gameObject;
+
         if (_isFlying)
         {
             isGrounded = false; // Impede que a Dora seja considerada como "no chão" enquanto voando
         }
+
     }
     
 

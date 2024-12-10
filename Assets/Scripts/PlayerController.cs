@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
             }
             _nickName = PhotonNetwork.LocalPlayer.NickName;
-            // var score = PhotonNetwork.LocalPlayer.CustomProperties["Score"];
+            //var score = PhotonNetwork.LocalPlayer.CustomProperties["Score"];
             _namePlayer.text = _nickName;
         }
         else
@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             float moveV = Input.GetAxisRaw("Vertical");
             _playerMovement = new Vector2(moveH * _moveSpeed, _rb.velocity.y);
 
-            bool jump = Input.GetButtonDown("Jump");
+            bool jump = Input.GetKeyDown(KeyCode.Space);
             
             if (jump && isGrounded)
             {
@@ -98,8 +98,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         if (go.CompareTag("Ground") || go.CompareTag("Player"))
         {
             isGrounded = true;
-            //Debug.Log("chao");
+            Debug.Log("chao");
         }
+
 
         if (go.CompareTag("Door"))
         {
@@ -129,6 +130,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             {
                 photonView.RPC("Morte", RpcTarget.All);
             }
+
+            //if (go.CompareTag("Final"))
+            //{
+            //    photonView.RPC("Win", RpcTarget.All);
+            //}
+
         }
     }
 
@@ -136,17 +143,24 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     
     #region Player Methods
     [PunRPC]
-    protected void Pular()
+    public void Pular()
     {
         _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
     }
 
     [PunRPC]
-    protected void Morte()
+    public void Morte()
     {
         isGrounded = true;
         PhotonNetwork.LoadLevel("GameScene");
     }
+
+    //[PunRPC]
+    //public void Win()
+    //{
+
+    //    PhotonNetwork.LoadLevel("Win");
+    //}
     
 
     #endregion
