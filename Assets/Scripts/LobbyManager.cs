@@ -71,11 +71,11 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     public void StartGame()
     {
 
-        //if (_playersCount < 2)
-        //{
-        //    Debug.Log("Precisa de dois players para iniciar.");
-        //    StartCoroutine(DisplayTextNoPLay());
-        //}
+        if (_playersCount < 2)
+        {
+            Debug.Log("Precisa de dois players para iniciar.");
+            StartCoroutine(DisplayTextNoPLay());
+        }
 
 
         if (!PhotonNetwork.IsMasterClient)
@@ -85,7 +85,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         }
 
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && _playersCount == 2)
         {
             PhotonNetwork.LoadLevel("GameScene");
         }
