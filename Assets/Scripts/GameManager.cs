@@ -50,12 +50,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     //     base.OnPlayerLeftRoom(otherPlayer);
     // }
 
+    [PunRPC]
     public void CheckWinner()
     {
 
         if (player1 && player2)
         {
-            PhotonNetwork.LoadLevel("Win");
+            Debug.Log("Desgraça");
         }
 
         

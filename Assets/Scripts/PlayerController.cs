@@ -145,27 +145,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
         if (photonView.IsMine)
         {
-            
 
             if (go.CompareTag("Morte"))
             {
                 photonView.RPC("Morte", RpcTarget.All);
             }
 
-            if (go.CompareTag("Final"))
-            {
-                GameManager.Instance.player1 = true;
-                GameManager.Instance.CheckWinner();
-            }
-
-        }
-        else
-        {
-            if (go.CompareTag("Final"))
-            {
-                GameManager.Instance.player2 = true;
-                GameManager.Instance.CheckWinner();
-            }
         }
     }
 
@@ -185,6 +170,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.LoadLevel("GameScene");
     }
 
+    [PunRPC]
     public void Win()
     {
 

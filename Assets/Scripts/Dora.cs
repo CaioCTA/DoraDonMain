@@ -89,7 +89,22 @@ public class Dora : PlayerController
         }
 
     }
-    
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        GameObject go = collision.gameObject;
+
+        if (photonView.IsMine)
+        {
+            if (go.CompareTag("Final"))
+            {
+                GameManager.Instance.player1 = true;
+                GameManager.Instance.CheckWinner();
+            }
+        }
+        
+    }
+
 
     #endregion
 
