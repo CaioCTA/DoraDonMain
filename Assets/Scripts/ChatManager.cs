@@ -18,12 +18,16 @@ public class ChatManager : MonoBehaviourPunCallbacks
 
     private Queue<GameObject> _filaMessage = new Queue<GameObject>();
 
+    public delegate void BloqueioMovimento(bool move);
+    public BloqueioMovimento bloqueioMovimento;
+
     #endregion
 
     #region Unity Methods
     void Start()
     {
         _photonView = GetComponent<PhotonView>();
+        bloqueioMovimento = PlayerController.Instance.HabilitaMovimentacao;
 
     }
     
@@ -61,6 +65,11 @@ public class ChatManager : MonoBehaviourPunCallbacks
             _filaMessage.Enqueue(CriaMessage(messageReceived));
         }
         
+    }
+
+    public void BloqueiaMovimento(bool estado)
+    {
+        bloqueioMovimento.Invoke(estado);
     }
 
     public GameObject CriaMessage(string texto)

@@ -6,12 +6,16 @@ using System.Runtime.CompilerServices;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Linq;
+using Photon.Realtime;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
-    
+
     #region Variables
+    public static PlayerController Instance;
     public static GameObject LocalPlayerInstance;
+    
     [SerializeField] protected float _moveSpeed = 6.5f;
     [SerializeField] protected float _jumpForce = 3f;
     [SerializeField] protected TMP_Text _namePlayer;
@@ -24,11 +28,26 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     protected string _nickName;
     private Vector2 _playerMovement;
 
-    // private GameObject _itemNearby;
-    //
-    // private int _localScore; //Pontuacao
-    
+    public bool PodeMover { get; private set; }
+
+    private bool _win;
+    private int _winners = 0;
+
     #endregion
+
+
+    #region Properties
+
+    public Vector2 Movement { get; set; }
+    public float JumpForce => _jumpForce;
+    public float MoveSpeed
+    {
+        get => _moveSpeed;
+        set => _moveSpeed = value;
+    }
+
+    #endregion
+
 
     #region Unity Methods
     protected virtual void Start()
@@ -42,8 +61,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
             }
             _nickName = PhotonNetwork.LocalPlayer.NickName;
-            //var score = PhotonNetwork.LocalPlayer.CustomProperties["Score"];
+            var win = PhotonNetwork.LocalPlayer.CustomProperties["Win"];
             _namePlayer.text = _nickName;
+            HabilitaMovimentacao(true);
         }
         else
         {
@@ -131,10 +151,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
                 photonView.RPC("Morte", RpcTarget.All);
             }
 
-            //if (go.CompareTag("Final"))
-            //{
-            //    photonView.RPC("Win", RpcTarget.All);
-            //}
+            if (go.CompareTag("Final"))
+            {
+                if (_winners == 2)
+                {
+                    photonView.RPC("Win", RpcTarget.All);
+                }
+                else
+                {
+                    Debug.Log("Precisa de 2 players");
+                }
+                
+            }
 
         }
     }
@@ -155,15 +183,39 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.LoadLevel("GameScene");
     }
 
-    //[PunRPC]
-    //public void Win()
-    //{
+    public void Win()
+    {
 
-    //    PhotonNetwork.LoadLevel("Win");
-    //}
-    
+
+        if ((bool)PhotonNetwork.LocalPlayer.CustomProperties["Win"])
+        {
+            _winners = (int)PhotonNetwork.LocalPlayer.CustomProperties["Win"];
+        }
+
+        var jaGanhou = new ExitGames.Client.Photon.Hashtable();
+        jaGanhou.TryAdd("Win", _winners);
+        PhotonNetwork.LocalPlayer.SetCustomProperties(jaGanhou);
+
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
+    {
+        Debug.Log((bool)PhotonNetwork.LocalPlayer.CustomProperties["Win"]);
+    }
+
 
     #endregion
+
+
+    #region Public Methods
+
+    public void HabilitaMovimentacao(bool mover)
+    {
+        PodeMover = mover;
+    }
+
+    #endregion
+
 
     #region Photon callbacks
 
