@@ -55,7 +55,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (player1 && player2)
         {
-            Debug.Log("Vencemos!");
+            PhotonNetwork.LoadLevel("Win");
         }
 
         
