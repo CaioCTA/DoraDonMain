@@ -30,8 +30,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     public bool PodeMover { get; private set; }
 
-    private bool _win;
-    private int _winners = 0;
+    private bool _winners;
 
     #endregion
 
@@ -61,8 +60,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
             }
             _nickName = PhotonNetwork.LocalPlayer.NickName;
-            var win = PhotonNetwork.LocalPlayer.CustomProperties["Win"];
             _namePlayer.text = _nickName;
+            var win = PhotonNetwork.LocalPlayer.CustomProperties["Win"];
             HabilitaMovimentacao(true);
         }
         else
@@ -142,9 +141,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        GameObject go = other.gameObject;
+
         if (photonView.IsMine)
         {
-            GameObject go = other.gameObject;
+            
 
             if (go.CompareTag("Morte"))
             {
@@ -153,17 +154,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
             if (go.CompareTag("Final"))
             {
-                if (_winners == 2)
-                {
-                    photonView.RPC("Win", RpcTarget.All);
-                }
-                else
-                {
-                    Debug.Log("Precisa de 2 players");
-                }
-                
+                GameManager.Instance.player1 = true;
+                GameManager.Instance.CheckWinner();
             }
 
+        }
+        else
+        {
+            if (go.CompareTag("Final"))
+            {
+                GameManager.Instance.player2 = true;
+                GameManager.Instance.CheckWinner();
+            }
         }
     }
 
@@ -186,10 +188,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public void Win()
     {
 
+        _winners = true;
 
-        if ((bool)PhotonNetwork.LocalPlayer.CustomProperties["Win"])
+        if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Win"))
         {
-            _winners = (int)PhotonNetwork.LocalPlayer.CustomProperties["Win"];
+            _winners = (bool)PhotonNetwork.LocalPlayer.CustomProperties["Win"];
         }
 
         var jaGanhou = new ExitGames.Client.Photon.Hashtable();

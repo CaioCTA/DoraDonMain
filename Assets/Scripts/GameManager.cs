@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] Transform player1SpawnerPosition;
     [SerializeField] Transform player2SpawnerPosition;
 
+    public bool player1 = false;
+    public bool player2 = false;
+
     public void Awake()
     {
         if (Instance == null)
@@ -41,8 +44,21 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
 
+
     // public override void OnPlayerLeftRoom(Player otherPlayer)
     // {
     //     base.OnPlayerLeftRoom(otherPlayer);
     // }
+
+    public void CheckWinner()
+    {
+
+        if (player1 && player2)
+        {
+            Debug.Log("Vencemos!");
+        }
+
+        
+    }
+
 }
