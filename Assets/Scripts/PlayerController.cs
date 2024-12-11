@@ -170,7 +170,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.LoadLevel("GameScene");
     }
 
-    [PunRPC]
     public void Win()
     {
 

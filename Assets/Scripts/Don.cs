@@ -88,7 +88,9 @@ public class Don : PlayerController
             if (go.CompareTag("Final"))
             {
                 GameManager.Instance.player2 = true;
-                GameManager.Instance.CheckWinner();
+                //GameManager.Instance.CheckWinner();
+                photonView.RPC("CheckWinner", RpcTarget.All);
+                Debug.Log("Player2");
             }
         }
 

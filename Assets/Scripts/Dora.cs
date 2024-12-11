@@ -99,7 +99,9 @@ public class Dora : PlayerController
             if (go.CompareTag("Final"))
             {
                 GameManager.Instance.player1 = true;
-                GameManager.Instance.CheckWinner();
+                //GameManager.Instance.CheckWinner();
+                photonView.RPC("CheckWinner", RpcTarget.All);
+                Debug.Log("Player1");
             }
         }
         
