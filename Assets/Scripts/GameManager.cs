@@ -56,10 +56,17 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (player1 && player2)
         {
-            Debug.Log("Desgraça");
+            if (PhotonNetwork.IsMasterClient)
+            {
+                PhotonNetwork.LoadLevel("Win");
+            }
+        }
+        else
+        {
+            Debug.Log("Precisa do dois players.");
         }
 
-        
+
     }
 
 }

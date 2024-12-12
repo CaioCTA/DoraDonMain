@@ -10,6 +10,9 @@ public class Don : PlayerController
 {
     #region Variables
 
+    public typeBtn typeBtn;
+    
+
     private bool _isInWater =  false;
     private GameObject _isNearby;
 
@@ -77,23 +80,6 @@ public class Don : PlayerController
         //     _isInWater = false;
         // }
         
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        GameObject go = collision.gameObject;
-
-        if (photonView.IsMine)
-        {
-            if (go.CompareTag("Final"))
-            {
-                GameManager.Instance.player2 = true;
-                //GameManager.Instance.CheckWinner();
-                photonView.RPC("CheckWinner", RpcTarget.All);
-                Debug.Log("Player2");
-            }
-        }
-
     }
 
 

@@ -20,7 +20,7 @@ public class Buttons : MonoBehaviourPunCallbacks
     private GameObject _isNearby;
     [SerializeField] private GameObject Door;
     private bool _isDoorOpen = false;
-    private bool _botaoAtivado = false;
+    public static bool _botaoAtivado = false;
 
     #endregion
 
@@ -31,7 +31,7 @@ public class Buttons : MonoBehaviourPunCallbacks
         if (_isNearby != null && !_botaoAtivado)
         {
             PhotonView playerPhotonView = _isNearby.GetComponent<PhotonView>();
-
+        
             if (playerPhotonView != null)
             {
                 if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Dora>() != null)
@@ -39,6 +39,7 @@ public class Buttons : MonoBehaviourPunCallbacks
                     if (Input.GetKey(KeyCode.E))
                     {
                         photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
+
                     }
                 }
                 else if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Don>() != null && Input.GetKey(KeyCode.E))
@@ -51,6 +52,7 @@ public class Buttons : MonoBehaviourPunCallbacks
                     if (Input.GetKey(KeyCode.E))
                     {
                         photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
+
                     }
                 }
                 else if (typeBtn == typeBtn.Don && _isNearby.GetComponent<Dora>() != null && Input.GetKey(KeyCode.E))
@@ -125,8 +127,7 @@ public class Buttons : MonoBehaviourPunCallbacks
 
     }
 
-
-    [PunRPC]
+    
     public void DestroyDoor()
     {
         _isDoorOpen = true;

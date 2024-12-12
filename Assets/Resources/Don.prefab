@@ -319,6 +319,7 @@ MonoBehaviour:
   _moveSpeed: 6.5
   _jumpForce: 3
   _namePlayer: {fileID: 5204506532641698049}
+  typeBtn: 0
 --- !u!1 &6747223821561338405
 GameObject:
   m_ObjectHideFlags: 0

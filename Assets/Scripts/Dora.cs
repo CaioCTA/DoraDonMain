@@ -7,7 +7,7 @@ public class Dora : PlayerController
 {
     #region Variables
 
-    public typeBtn doraBtn = typeBtn.Dora;
+    public typeBtn typeBtn;
     
     private GameObject _isNearby;
     private bool _isFlying;
@@ -61,14 +61,14 @@ public class Dora : PlayerController
             if (_isFlying)
             {
                 _rb.velocity = new Vector2(_rb.velocity.x, _flyForce);
-                currentFlyTime -= Time.deltaTime;  // Reduz o tempo de voo a cada frame
+                currentFlyTime -= Time.deltaTime; // Reduz o tempo de voo a cada frame
 
                 // Se o tempo de voo terminar, parar o voo
                 if (currentFlyTime <= 0)
                 {
                     StopFlying();
                 }
-            } 
+            }
 
         }
     }
@@ -88,23 +88,6 @@ public class Dora : PlayerController
             isGrounded = false; // Impede que a Dora seja considerada como "no chão" enquanto voando
         }
 
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        GameObject go = collision.gameObject;
-
-        if (photonView.IsMine)
-        {
-            if (go.CompareTag("Final"))
-            {
-                GameManager.Instance.player1 = true;
-                //GameManager.Instance.CheckWinner();
-                photonView.RPC("CheckWinner", RpcTarget.All);
-                Debug.Log("Player1");
-            }
-        }
-        
     }
 
 

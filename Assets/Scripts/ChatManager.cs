@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class ChatManager : MonoBehaviourPunCallbacks
 {
 
     #region Private Var
+
+
     
     [SerializeField] private TMP_InputField _inputMessage;
     [SerializeField] private GameObject _content;
@@ -38,7 +41,7 @@ public class ChatManager : MonoBehaviourPunCallbacks
             if (!string.IsNullOrEmpty(_inputMessage.text))
             {
                 Debug.Log("Texto enviado: " + _inputMessage.text);
-                _photonView.RPC("ReceiveMessage", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName + ": " + _inputMessage.text);
+                _photonView.RPC("RecebeMensagem", RpcTarget.All, PhotonNetwork.LocalPlayer.NickName + ": " + _inputMessage.text);
                 _inputMessage.text = ""; // Limpa o campo após enviar
                 
             }
@@ -48,24 +51,6 @@ public class ChatManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region Public Methods
-
-
-    [PunRPC]
-    public void ReceiveMessage(string messageReceived)
-    {
-        
-        if (_filaMessage.Count <= _numeroMaxMessage)
-        {
-            _filaMessage.Enqueue(CriaMessage(messageReceived));
-        }
-        else
-        {
-            GameObject smsRemoved = _filaMessage.Dequeue();
-            Destroy(smsRemoved);
-            _filaMessage.Enqueue(CriaMessage(messageReceived));
-        }
-        
-    }
 
     public void BloqueiaMovimento(bool estado)
     {
@@ -83,6 +68,53 @@ public class ChatManager : MonoBehaviourPunCallbacks
         message.GetComponent<RectTransform>().SetAsLastSibling();
 
         return message;
+    }
+    
+    public void EnviaMensagem()
+    {
+        _photonView.RPC(
+            "RecebeMensagem",
+            RpcTarget.All,
+            PhotonNetwork.LocalPlayer.NickName + ": " + _inputMessage.text
+        );
+
+        _inputMessage.text = "";
+
+    }
+    
+    // [PunRPC]
+    // public void ReceiveMessage(string messageReceived)
+    // {
+    //     
+    //     if (_filaMessage.Count <= _numeroMaxMessage)
+    //     {
+    //         _filaMessage.Enqueue(CriaMessage(messageReceived));
+    //     }
+    //     else
+    //     {
+    //         GameObject smsRemoved = _filaMessage.Dequeue();
+    //         Destroy(smsRemoved);
+    //         _filaMessage.Enqueue(CriaMessage(messageReceived));
+    //     }
+    //     
+    // }
+    
+    [PunRPC]
+    public void RecebeMensagem(string mensagemRecebida)
+    {
+        if (_filaMessage.Count <= _numeroMaxMessage)
+        {
+            var mensagem = CriaMessage(mensagemRecebida);
+            _filaMessage.Enqueue(mensagem);
+        }
+        else
+        {
+            var tempMsg = _filaMessage.Dequeue();
+            Destroy(tempMsg);
+            var mensagem = CriaMessage(mensagemRecebida);
+            _filaMessage.Enqueue(mensagem);
+        }
+
     }
     
     #endregion
