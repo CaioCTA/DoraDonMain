@@ -317,11 +317,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _moveSpeed: 2.5
-  _jumpForce: 3
+  _jumpForce: 3.8
   _namePlayer: {fileID: 5204506532641698049}
   typeBtn: 0
   _flyForce: 3
-  maxFlyTime: 1.5
+  maxFlyTime: 2
 --- !u!1 &6747223821561338405
 GameObject:
   m_ObjectHideFlags: 0

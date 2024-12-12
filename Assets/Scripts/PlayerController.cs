@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public static GameObject LocalPlayerInstance;
     
     [SerializeField] protected float _moveSpeed = 2.8f;
-    [SerializeField] protected float _jumpForce = 3.5f;
+    [SerializeField] protected float _jumpForce = 3.8f;
     [SerializeField] protected TMP_Text _namePlayer;
 
     protected bool isGrounded = false;

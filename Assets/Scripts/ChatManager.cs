@@ -5,6 +5,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ChatManager : MonoBehaviourPunCallbacks
 {
@@ -56,6 +57,7 @@ public class ChatManager : MonoBehaviourPunCallbacks
             }
         }
     }
+    
     
     #endregion
 

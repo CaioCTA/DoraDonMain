@@ -12,7 +12,7 @@ public class Dora : PlayerController
     private GameObject _isNearby;
     private bool _isFlying;
     [SerializeField] private float _flyForce = 3f;
-    [SerializeField] private float maxFlyTime = 1.5f; // Tempo máximo de voo em segundos
+    [SerializeField] private float maxFlyTime = 2f; // Tempo máximo de voo em segundos
     private float currentFlyTime = 0f; // Variável para controlar o tempo de voo restante
 
     #endregion
