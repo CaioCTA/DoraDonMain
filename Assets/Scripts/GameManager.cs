@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     public void CheckWinner()
     {
-
+        
         if (player1 && player2)
         {
             if (PhotonNetwork.IsMasterClient)
@@ -65,8 +65,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             Debug.Log("Precisa do dois players.");
         }
-
-
     }
 
 }

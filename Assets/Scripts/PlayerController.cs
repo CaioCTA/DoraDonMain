@@ -16,8 +16,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public static PlayerController Instance;
     public static GameObject LocalPlayerInstance;
     
-    [SerializeField] protected float _moveSpeed = 6.5f;
-    [SerializeField] protected float _jumpForce = 3f;
+    [SerializeField] protected float _moveSpeed = 2.8f;
+    [SerializeField] protected float _jumpForce = 3.5f;
     [SerializeField] protected TMP_Text _namePlayer;
 
     protected bool isGrounded = false;
@@ -84,8 +84,26 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (photonView.IsMine)
         {
-            float moveH = Input.GetAxisRaw("Horizontal");
-            // float moveV = Input.GetAxisRaw("Vertical");
+            
+            if (ChatManager.Instance.ChatAtivo())
+            {
+                Movement = Vector2.zero;
+                return;
+            }
+            
+            // float moveH = Input.GetAxisRaw("Horizontal");
+            float moveH = 0f;
+
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                moveH = 1 * _moveSpeed;
+            }
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                moveH = -1 * _moveSpeed;
+            }
+            
             _rb.velocity = new Vector2(moveH * _moveSpeed, _rb.velocity.y);
             bool jump = Input.GetKeyDown(KeyCode.Space);
             
@@ -95,7 +113,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             }
             
             Movement = new Vector2(moveH * _moveSpeed, _rb.velocity.y);
+            
         }
+        
+        
+        
     }
     
     public void FixedUpdate()

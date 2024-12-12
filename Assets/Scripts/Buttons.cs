@@ -20,11 +20,53 @@ public class Buttons : MonoBehaviourPunCallbacks
     private GameObject _isNearby;
     [SerializeField] private GameObject Door;
     private bool _isDoorOpen = false;
-    public static bool _botaoAtivado = false;
+    private bool _botaoAtivado = false;
 
     #endregion
 
     #region Unity Methods
+    
+    // private void Update()
+    // {
+    //     if (_isNearby != null && !_botaoAtivado)
+    //     {
+    //         PhotonView playerPhotonView = _isNearby.GetComponent<PhotonView>();
+    //     
+    //         if (playerPhotonView != null)
+    //         {
+    //             if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Dora>() != null)
+    //             {
+    //                 if (Input.GetKey(KeyCode.E))
+    //                 {
+    //                     photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
+    //
+    //                 }
+    //             }
+    //             else if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Don>() != null && Input.GetKey(KeyCode.E))
+    //             {
+    //                 Debug.Log("Você nao pode ativar esse botão.");
+    //             }
+    //             
+    //             if (typeBtn == typeBtn.Don && _isNearby.GetComponent<Don>() != null)
+    //             {
+    //                 if (Input.GetKey(KeyCode.E))
+    //                 {
+    //                     photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
+    //
+    //                 }
+    //             }
+    //             else if (typeBtn == typeBtn.Don && _isNearby.GetComponent<Dora>() != null && Input.GetKey(KeyCode.E))
+    //             {
+    //                 Debug.Log("Você nao pode ativar esse botão.");
+    //             }
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError("O jogador próximo não tem um PhotonView!");
+    //         }
+    //     }
+    // }
+    
     
     private void Update()
     {
@@ -32,37 +74,20 @@ public class Buttons : MonoBehaviourPunCallbacks
         {
             PhotonView playerPhotonView = _isNearby.GetComponent<PhotonView>();
         
-            if (playerPhotonView != null)
+            if (playerPhotonView != null && playerPhotonView.IsMine) // Garantir que só o dono do PhotonView pode ativar
             {
-                if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Dora>() != null)
+                if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Dora>() != null && Input.GetKey(KeyCode.E))
                 {
-                    if (Input.GetKey(KeyCode.E))
-                    {
-                        photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
-
-                    }
+                    photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
                 }
-                else if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Don>() != null && Input.GetKey(KeyCode.E))
+                else if (typeBtn == typeBtn.Don && _isNearby.GetComponent<Don>() != null && Input.GetKey(KeyCode.E))
                 {
-                    Debug.Log("Você nao pode ativar esse botão.");
+                    photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
                 }
-                
-                if (typeBtn == typeBtn.Don && _isNearby.GetComponent<Don>() != null)
+                else if (Input.GetKey(KeyCode.E))
                 {
-                    if (Input.GetKey(KeyCode.E))
-                    {
-                        photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
-
-                    }
+                    Debug.Log("Você não pode ativar esse botão.");
                 }
-                else if (typeBtn == typeBtn.Don && _isNearby.GetComponent<Dora>() != null && Input.GetKey(KeyCode.E))
-                {
-                    Debug.Log("Você nao pode ativar esse botão.");
-                }
-            }
-            else
-            {
-                Debug.LogError("O jogador próximo não tem um PhotonView!");
             }
         }
     }

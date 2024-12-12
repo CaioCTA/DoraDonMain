@@ -316,7 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31297129fbd27f04181c78acff1b3317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 6.5
+  _moveSpeed: 2.5
   _jumpForce: 3
   _namePlayer: {fileID: 5204506532641698049}
   typeBtn: 0

@@ -11,7 +11,7 @@ public class ChatManager : MonoBehaviourPunCallbacks
 
     #region Private Var
 
-
+    public static ChatManager Instance;
     
     [SerializeField] private TMP_InputField _inputMessage;
     [SerializeField] private GameObject _content;
@@ -27,6 +27,15 @@ public class ChatManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region Unity Methods
+    
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+    
     void Start()
     {
         _photonView = GetComponent<PhotonView>();
@@ -80,6 +89,11 @@ public class ChatManager : MonoBehaviourPunCallbacks
 
         _inputMessage.text = "";
 
+    }
+
+    public bool ChatAtivo()
+    {
+        return _inputMessage.isFocused;
     }
     
     // [PunRPC]
