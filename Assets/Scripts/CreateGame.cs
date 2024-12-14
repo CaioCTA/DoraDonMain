@@ -14,8 +14,10 @@ public class CreateGame : MonoBehaviourPunCallbacks
     
     #region Variables
     
+    public float displayTime = 3f;
     [SerializeField] private TMP_InputField _nickName;
     [SerializeField] private TMP_InputField _roomID;
+    [SerializeField] private TMP_Text _noNickname;
     private RoomOptions _roomOptions = new RoomOptions();
     
     #endregion
@@ -59,6 +61,7 @@ public class CreateGame : MonoBehaviourPunCallbacks
         if (_nickName.text == "")
         {
             Debug.Log("Obrigatorio um nickname.");
+            StartCoroutine(DisplayTextNoNickname());
         }
         else
         {
@@ -76,6 +79,7 @@ public class CreateGame : MonoBehaviourPunCallbacks
         if (_nickName.text == "")
         {
             Debug.Log("Obrigatorio um nickname.");
+            StartCoroutine(DisplayTextNoNickname());
         }
         else
         {
@@ -95,6 +99,7 @@ public class CreateGame : MonoBehaviourPunCallbacks
         if (_nickName.text == "")
         {
             Debug.Log("Obrigatorio um nickname.");
+            StartCoroutine(DisplayTextNoNickname());
         }
         else
         {
@@ -118,6 +123,17 @@ public class CreateGame : MonoBehaviourPunCallbacks
     {
         Debug.Log("Entrou na sala: " + PhotonNetwork.CurrentRoom.Name);
         PhotonNetwork.LoadLevel("Lobby");
+    }
+
+    #endregion
+
+    #region IEnumerator
+
+    IEnumerator DisplayTextNoNickname()
+    {
+        _noNickname.text = "Necessario inserir um apelido.";
+        yield return new WaitForSeconds(displayTime);
+        _noNickname.text = string.Empty;
     }
 
     #endregion

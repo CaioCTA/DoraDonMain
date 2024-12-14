@@ -105,11 +105,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             }
             
             _rb.velocity = new Vector2(moveH * _moveSpeed, _rb.velocity.y);
-            bool jump = Input.GetKeyDown(KeyCode.Space);
+            bool jump = Input.GetKeyDown(KeyCode.UpArrow);
             
             if (jump && isGrounded)
             {
-                photonView.RPC("Pular", RpcTarget.All);
+                Pular();
             }
             
             Movement = new Vector2(moveH * _moveSpeed, _rb.velocity.y);
@@ -180,7 +180,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
             if (go.CompareTag("Morte"))
             {
-                photonView.RPC("Morte", RpcTarget.All);
+                photonView.RPC("Morte", RpcTarget.AllBuffered);
             }
 
             if (go.CompareTag("Final"))
@@ -204,7 +204,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     #endregion
     
     #region Player Methods
-    [PunRPC]
     public void Pular()
     {
         _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
@@ -213,31 +212,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     public void Morte()
     {
-        isGrounded = true;
         PhotonNetwork.LoadLevel("GameScene");
+        isGrounded = true;
     }
-
-    // public void Win()
-    // {
-    //
-    //     _winners = true;
-    //
-    //     if (PhotonNetwork.LocalPlayer.CustomProperties.ContainsKey("Win"))
-    //     {
-    //         _winners = (bool)PhotonNetwork.LocalPlayer.CustomProperties["Win"];
-    //     }
-    //
-    //     var jaGanhou = new ExitGames.Client.Photon.Hashtable();
-    //     jaGanhou.TryAdd("Win", _winners);
-    //     PhotonNetwork.LocalPlayer.SetCustomProperties(jaGanhou);
-    //
-    // }
-    //
-    // public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
-    // {
-    //     Debug.Log((bool)PhotonNetwork.LocalPlayer.CustomProperties["Win"]);
-    // }
-
 
     #endregion
 

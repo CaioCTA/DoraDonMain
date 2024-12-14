@@ -26,48 +26,6 @@ public class Buttons : MonoBehaviourPunCallbacks
 
     #region Unity Methods
     
-    // private void Update()
-    // {
-    //     if (_isNearby != null && !_botaoAtivado)
-    //     {
-    //         PhotonView playerPhotonView = _isNearby.GetComponent<PhotonView>();
-    //     
-    //         if (playerPhotonView != null)
-    //         {
-    //             if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Dora>() != null)
-    //             {
-    //                 if (Input.GetKey(KeyCode.E))
-    //                 {
-    //                     photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
-    //
-    //                 }
-    //             }
-    //             else if (typeBtn == typeBtn.Dora && _isNearby.GetComponent<Don>() != null && Input.GetKey(KeyCode.E))
-    //             {
-    //                 Debug.Log("Você nao pode ativar esse botão.");
-    //             }
-    //             
-    //             if (typeBtn == typeBtn.Don && _isNearby.GetComponent<Don>() != null)
-    //             {
-    //                 if (Input.GetKey(KeyCode.E))
-    //                 {
-    //                     photonView.RPC("AtivarButton", RpcTarget.AllBuffered);
-    //
-    //                 }
-    //             }
-    //             else if (typeBtn == typeBtn.Don && _isNearby.GetComponent<Dora>() != null && Input.GetKey(KeyCode.E))
-    //             {
-    //                 Debug.Log("Você nao pode ativar esse botão.");
-    //             }
-    //         }
-    //         else
-    //         {
-    //             Debug.LogError("O jogador próximo não tem um PhotonView!");
-    //         }
-    //     }
-    // }
-    
-    
     private void Update()
     {
         if (_isNearby != null && !_botaoAtivado)
@@ -101,15 +59,6 @@ public class Buttons : MonoBehaviourPunCallbacks
         if (other.CompareTag("Player")) // Certifique-se de que o jogador tenha a tag correta
         {
             _isNearby = other.gameObject; // Marca o jogador como próximo
-
-            // if (_botaoAtivado)
-            // {
-            //     Debug.Log("Botão já ativado!");
-            // }
-            // else
-            // {
-            //     Debug.Log("Pressione 'E' para ativar o botão.");
-            // }
 
             // Valida se o jogador tem o componente esperado
             if (_isNearby.GetComponent<PhotonView>() == null)

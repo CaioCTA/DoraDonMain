@@ -44,12 +44,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
 
-
-    // public override void OnPlayerLeftRoom(Player otherPlayer)
-    // {
-    //     base.OnPlayerLeftRoom(otherPlayer);
-    // }
-
     [PunRPC]
     public void CheckWinner()
     {

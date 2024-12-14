@@ -98,23 +98,6 @@ public class ChatManager : MonoBehaviourPunCallbacks
         return _inputMessage.isFocused;
     }
     
-    // [PunRPC]
-    // public void ReceiveMessage(string messageReceived)
-    // {
-    //     
-    //     if (_filaMessage.Count <= _numeroMaxMessage)
-    //     {
-    //         _filaMessage.Enqueue(CriaMessage(messageReceived));
-    //     }
-    //     else
-    //     {
-    //         GameObject smsRemoved = _filaMessage.Dequeue();
-    //         Destroy(smsRemoved);
-    //         _filaMessage.Enqueue(CriaMessage(messageReceived));
-    //     }
-    //     
-    // }
-    
     [PunRPC]
     public void RecebeMensagem(string mensagemRecebida)
     {
