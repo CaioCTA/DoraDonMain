@@ -200,9 +200,28 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             }
         }
     }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        GameObject go = collision.gameObject;
+
+        if (photonView.IsMine)
+        {
+            if (go.CompareTag("Final"))
+            {
+                GameManager.Instance.player1 = false;
+            }
+            else
+            {
+                GameManager.Instance.player2 = false;
+            }
+        }
+
+        
+
+    }
 
     #endregion
-    
+
     #region Player Methods
     public void Pular()
     {
