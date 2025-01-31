@@ -86,7 +86,7 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         }
 
-        if (PhotonNetwork.IsMasterClient && _playersCount == 2)
+        if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LoadLevel("GameScene");
         }
