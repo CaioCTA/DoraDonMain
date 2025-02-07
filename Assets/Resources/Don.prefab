@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: -5416475645041350772}
   - component: {fileID: -4691982681392614705}
   - component: {fileID: 6510087965300599019}
+  - component: {fileID: 1863514685064241583}
   - component: {fileID: 2646995621659342397}
   - component: {fileID: 2151184408635049651}
   m_Layer: 0
@@ -305,6 +306,41 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.34328613, y: 0.6082628}
   m_EdgeRadius: 0
+--- !u!70 &1863514685064241583
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4114354980830581767}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.052042525, y: -0.013308515}
+  m_Size: {x: 0.70918113, y: 0.3475584}
+  m_Direction: 1
 --- !u!114 &2646995621659342397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,6 +357,8 @@ MonoBehaviour:
   _jumpForce: 3.8
   _namePlayer: {fileID: 5204506532641698049}
   typeBtn: 1
+  _boxCollider: {fileID: 6510087965300599019}
+  _capsuleCollider: {fileID: 1863514685064241583}
 --- !u!95 &2151184408635049651
 Animator:
   serializedVersion: 5

@@ -10,12 +10,14 @@ public class Don : PlayerController, IPunObservable
 {
     #region Variables
     public typeBtn typeBtn;
+    //X - 0.3432861
+    //Y - 0.6082628
 
     private bool _isInWater = false;
     private GameObject _isNearby;
     private float _waterSpeed = 4f;
-    private float _normalGravityScale = 7f; // Gravidade normal fora da água
-    private float _waterGravityScale = 1f; // Gravidade reduzida dentro da água
+    private float _normalGravityScale = 1f; // Gravidade normal fora da água
+    private float _waterGravityScale = 7f; // Gravidade reduzida dentro da água
     private float _gravityTransitionSpeed = 6f; // Velocidade da transição de gravidade
     private float _jumpOutWater = 7.5f;
     private float _enterWaterSpeedReduction = 5f; // Fator de redução de velocidade ao entrar na água
@@ -26,27 +28,31 @@ public class Don : PlayerController, IPunObservable
     private bool _syncIsWalking;
     private bool _syncIsJumping;
     private bool _syncIsSwimming;
-    
-    private BoxCollider2D _collider; // Referência ao BoxCollider2D
-    private Vector2 _originalColliderSize; // Tamanho original do Collider
-    private Vector2 _originalColliderOffset; // Posição original do Collider
-    private Vector2 _swimmingColliderSize = new Vector2(0.6105328f, 0.3484398f); // Tamanho do Collider ao nadar
-    private Vector2 _swimmingColliderOffset = new Vector2(0.04801339f, 0.001848817f); // Posição do Collider ao nadar
-    
+
+    [SerializeField] private BoxCollider2D _boxCollider;
+    [SerializeField] private CapsuleCollider2D _capsuleCollider;
+
+
+    //private BoxCollider2D _collider; // Referência ao BoxCollider2D
+    //private Vector2 _originalColliderSize; // Tamanho original do Collider
+    //private Vector2 _originalColliderOffset; // Posição original do Collider
+    //private Vector2 _swimmingColliderSize = new Vector2(0.5f, 0.5f); // Tamanho do Collider ao nadar
+    //private Vector2 _swimmingColliderOffset = new Vector2(0.5f, 0.5f); // Posição do Collider ao nadar
+
     #endregion
 
     #region Unity Methods
     protected override void Start()
     {
+        _boxCollider = GetComponent<BoxCollider2D>();
+        _capsuleCollider = GetComponent<CapsuleCollider2D>();
+
+        _capsuleCollider.enabled = false;
+        _boxCollider.enabled = true;
+
         _rb = GetComponent<Rigidbody2D>();
         _animDon = GetComponent<Animator>();
-        _collider = GetComponent<BoxCollider2D>();
-        
-        if (_collider != null)
-        {
-            _originalColliderSize = _collider.size;
-            _originalColliderOffset = _collider.offset;
-
+       
 
         if (photonView.IsMine)
         {
@@ -58,13 +64,14 @@ public class Don : PlayerController, IPunObservable
             _namePlayer.text = _nickName;
             
         
-            }
+        
         }
         else
         {
             _namePlayer.text = _nickName;
         }
-    }
+   }
+
 
     protected override void Update()
     {
@@ -208,34 +215,32 @@ public class Don : PlayerController, IPunObservable
         if (other.CompareTag("Water"))
         {
             _isInWater = true;
+            StartCoroutine("ChangeCollider");
+
 
             // Reduz a velocidade vertical ao entrar na água para evitar impacto
             _rb.velocity = new Vector2(_rb.velocity.x, _rb.velocity.y * _enterWaterSpeedReduction);
 
             // // Aplica uma pequena força para cima para simular flutuação inicial
             _rb.AddForce(Vector2.up * 2f, ForceMode2D.Impulse);
-            
-            if (_collider != null)
-            {
-                _collider.size = _swimmingColliderSize;
-                _collider.offset = _swimmingColliderOffset;
-            }
-            
+
+          
+
         }
     }
+
 
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.CompareTag("Water"))
         {
+            
+            
             _isInWater = false;
             _rb.velocity = new Vector2(_rb.velocity.x, _jumpOutWater);
-            
-            if (_collider != null)
-            {
-                _collider.size = _originalColliderSize;
-                _collider.offset = _originalColliderOffset;
-            }
+            StartCoroutine("ChangeColliderOut");
+
+
         }
     }
     #endregion
@@ -259,6 +264,25 @@ public class Don : PlayerController, IPunObservable
         }
         
         SetAnimationState("isSwimming", true);
+        
     }
+
+    IEnumerable ChangeCollider()
+    {
+        Debug.Log("Aloo");
+        yield return new WaitForSeconds(1);
+        _boxCollider.enabled = false;
+        _capsuleCollider.enabled = true;
+
+    }
+
+    IEnumerable ChangeColliderOut()
+    {
+        yield return new WaitForSeconds(1);
+        _boxCollider.enabled = true;       
+        _capsuleCollider.enabled = false;
+
+    }
+
 }
 

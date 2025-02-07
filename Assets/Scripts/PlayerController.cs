@@ -107,6 +107,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             }
             
             _rb.velocity = new Vector2(moveH * _moveSpeed, _rb.velocity.y);
+
             bool jump = Input.GetKeyDown(KeyCode.UpArrow);
             
             if (jump && isGrounded)
