@@ -159,6 +159,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             Debug.Log("Precisa apertar os botões para abrir a porta");
         }
+
+        if (go.CompareTag("Espinhos"))
+        {
+            photonView.RPC("Morte", RpcTarget.AllBuffered);
+        }
         
     }
     
@@ -179,11 +184,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
         if (photonView.IsMine)
         {
-
-            if (go.CompareTag("Morte"))
-            {
-                photonView.RPC("Morte", RpcTarget.AllBuffered);
-            }
 
             if (go.CompareTag("Final"))
             {
@@ -225,7 +225,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     #endregion
 
     #region Player Methods
-    public void Pular()
+    protected void Pular()
     {
         _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
     }

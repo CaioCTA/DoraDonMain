@@ -12,6 +12,7 @@ TagManager:
   - Morte
   - Final
   - Water
+  - Espinhos
   layers:
   - Default
   - TransparentFX
