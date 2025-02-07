@@ -20,8 +20,10 @@ public class Don : PlayerController
     private float _waterGravityScale = 7f; // Gravidade reduzida dentro da água
     private float _gravityTransitionSpeed = 6f; // Velocidade da transição de gravidade
     private float _jumpOutWater = 7.5f;
-    private float _enterWaterSpeedReduction = 5f; // Fator de redução de velocidade ao entrar na água
-
+    private float _enterWaterSpeedReduction = 5f; // Fator de redução de velocidade ao entrar na ág
+    
+    private Animator _animDon;
+    
     #endregion
     
     #region Unity Methods
@@ -30,6 +32,8 @@ public class Don : PlayerController
     {
         
         _rb = GetComponent<Rigidbody2D>();
+        _animDon = GetComponent<Animator>();
+        
         if (photonView.IsMine)
         {
             if (LocalPlayerInstance == null)
@@ -79,9 +83,26 @@ public class Don : PlayerController
                 Nadar();
             }
             
+            
+            bool isWalking = Mathf.Abs(moveH) > 0 && !_isInWater; // Verifica se o jogador está se movendo horizontalmente
+            _animDon.SetBool("isWalking", isWalking); // Atualiza o parâmetro "isWalking" no Animator
+            _animDon.SetBool("isSwimming", _isInWater);
+            // Inverte a direção do sprite com base na direção do movimento
+            if (moveH > 0)
+            {
+                // Olha para a direita
+                transform.localScale = new Vector3(2.951194f, 2.951194f, 2.951194f);
+            }
+            else if (moveH < 0)
+            {
+                // Olha para a esquerda
+                transform.localScale = new Vector3(-2.951194f, 2.951194f, 2.951194f);
+            }
+            
             float targetGravityScale = _isInWater ? _waterGravityScale : _normalGravityScale;
             _rb.gravityScale = Mathf.Lerp(_rb.gravityScale, targetGravityScale, _gravityTransitionSpeed);
-
+            
+            
         }
     }
 
@@ -140,6 +161,16 @@ public class Don : PlayerController
         
         // Aplica amortecimento ao movimento
         _rb.velocity = new Vector2(moveX * _waterSpeed, moveY * _waterSpeed);
+        
+        // Inverte a escala do Transform com base na direção do movimento na água
+        if (moveX > 0)
+        {
+            transform.localScale = new Vector3(2.951194f, 2.951194f, 2.951194f); // Olha para a direita
+        }
+        else if (moveX < 0)
+        {
+            transform.localScale = new Vector3(-2.951194f, 2.951194f, 2.951194f); // Olha para a esquerda
+        }
     }
     
 }

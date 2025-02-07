@@ -28,6 +28,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     protected Rigidbody2D _rb;
     protected string _nickName;
     private Vector2 _playerMovement;
+    
 
     public bool PodeMover { get; private set; }
 
