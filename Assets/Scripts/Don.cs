@@ -15,6 +15,12 @@ public class Don : PlayerController
 
     private bool _isInWater =  false;
     private GameObject _isNearby;
+    private float _waterSpeed = 4f;
+    private float _normalGravityScale = 1f; // Gravidade normal fora da água
+    private float _waterGravityScale = 7f; // Gravidade reduzida dentro da água
+    private float _gravityTransitionSpeed = 6f; // Velocidade da transição de gravidade
+    private float _jumpOutWater = 7.5f;
+    private float _enterWaterSpeedReduction = 5f; // Fator de redução de velocidade ao entrar na água
 
     #endregion
     
@@ -45,14 +51,38 @@ public class Don : PlayerController
     protected override void Update()
     {
         base.Update();
+
+
         if (photonView.IsMine)
         {
-            if (_isInWater)
-            {
-                //Nadar();
-            }
-        }
 
+            float moveH = 0f;
+
+            if (!_isInWater)
+            {
+                
+                if (Input.GetKey(KeyCode.RightArrow))
+                {
+                    moveH = 1 * _moveSpeed;
+                }
+
+                if (Input.GetKey(KeyCode.LeftArrow))
+                {
+                    moveH = -1 * _moveSpeed;
+                }
+
+                _rb.velocity = new Vector2(moveH * _moveSpeed, _rb.velocity.y);
+                _rb.gravityScale = 1f;
+            }
+            else
+            {
+                Nadar();
+            }
+            
+            float targetGravityScale = _isInWater ? _waterGravityScale : _normalGravityScale;
+            _rb.gravityScale = Mathf.Lerp(_rb.gravityScale, targetGravityScale, _gravityTransitionSpeed);
+
+        }
     }
 
     #endregion
@@ -64,10 +94,6 @@ public class Don : PlayerController
         GameObject don = collision.gameObject;
         
         base.OnCollisionEnter2D(collision);
-        // if (don.CompareTag("Water"))
-        // {
-        //     _isInWater = true;
-        // }
     }
     
     protected override void OnCollisionExit2D(Collision2D collision)
@@ -75,15 +101,45 @@ public class Don : PlayerController
         GameObject don = collision.gameObject;
         
         base.OnCollisionExit2D(collision);
-        // if (don.CompareTag("Water"))
-        // {
-        //     _isInWater = false;
-        // }
         
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        GameObject don = other.gameObject;
 
+        if (don.CompareTag("Water"))
+        {
+            _isInWater = true;
+            
+            // Reduz a velocidade vertical ao entrar na água para evitar impacto
+            _rb.velocity = new Vector2(_rb.velocity.x, _rb.velocity.y * _enterWaterSpeedReduction);
+
+            // Aplica uma pequena força para cima para simular flutuação inicial
+            _rb.AddForce(Vector2.up * 2f, ForceMode2D.Impulse);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        GameObject don = other.gameObject;
+
+        if (don.CompareTag("Water"))
+        {
+            _isInWater = false;
+            _rb.velocity = new Vector2(_rb.velocity.x, _jumpOutWater);
+        }
+    }
 
     #endregion
 
+    void Nadar()
+    {
+        float moveX = Input.GetAxis("Horizontal");
+        float moveY = Input.GetAxis("Vertical");
+        
+        // Aplica amortecimento ao movimento
+        _rb.velocity = new Vector2(moveX * _waterSpeed, moveY * _waterSpeed);
+    }
+    
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
@@ -192,8 +193,14 @@ public class Dora : PlayerController
         }
     }
 
-    
-    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Water"))
+        {
+            // photonView.RPC("Morte", RpcTarget.AllBuffered);
+            MorteOffline();
+        }
+    }
 
     #endregion
 }

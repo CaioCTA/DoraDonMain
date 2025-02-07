@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using System.Linq;
 using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
@@ -232,6 +233,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public void Morte()
     {
         PhotonNetwork.LoadLevel("GameScene");
+        isGrounded = true;
+    }
+    
+    public void MorteOffline()
+    {
+        SceneManager.LoadScene("Cena TEste");
         isGrounded = true;
     }
 
