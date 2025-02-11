@@ -271,9 +271,9 @@ public class Don : PlayerController, IPunObservable
 
     IEnumerator ChangeCollider()
     {
-        yield return new WaitForSeconds(0.7f);
-        _originalColliderOffset = new Vector2(5f, 5f);
-        _originalColliderSize = new Vector2(5f, 5f);
+        yield return new WaitForSeconds(0.6f);
+        _boxCollider.size = new Vector2(0.65f, 0.35f);
+        _boxCollider.offset = new Vector2(0.07f, -0.01f);
         //_capsuleCollider.enabled = true;
         //yield return new WaitForSeconds(0.5f);
         //_boxCollider.enabled = false;
@@ -285,12 +285,9 @@ public class Don : PlayerController, IPunObservable
 
     IEnumerator ChangeColliderOut()
     {
-        yield return new WaitForSeconds(0.7f);
-        _originalColliderOffset = _boxCollider.offset;
-        _originalColliderSize = _boxCollider.size;
-        //_capsuleCollider.enabled = false;
-        //yield return new WaitForSeconds(0.1f);
-        //_boxCollider.enabled = true;
+        yield return new WaitForSeconds(0.6f);
+        _boxCollider.size = _originalColliderSize;
+        _boxCollider.offset = _originalColliderOffset;
 
 
     }
