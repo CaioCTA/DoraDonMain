@@ -354,18 +354,24 @@ public class Don : MonoBehaviour, IPunObservable
     [SerializeField] private float _jumpForce = 500f;
     private bool isGrounded;
     
+    //Nado
+    private bool _isSwimming;
+    
     
     private Rigidbody2D _rb;
-    
+    private Animator _anim;
     
     //Sync
     private float lastUpdate;
     private Vector2 latestPosition;
+    private Quaternion latestRotation;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         lastUpdate = Time.time;
+        latestRotation = transform.rotation;
+        latestPosition = transform.position;
         
         if (!GetComponent<PhotonView>().IsMine)
         {
@@ -388,22 +394,7 @@ public class Don : MonoBehaviour, IPunObservable
         PhotonNetwork.SerializationRate = 30;
         
     }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
-    }
     
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
-    }
 
     void MovePlayer()
     {
@@ -419,6 +410,7 @@ public class Don : MonoBehaviour, IPunObservable
             _rb.AddForce(new Vector2(0f, _jumpForce), ForceMode2D.Impulse);
         }
     }
+    
     private void SmoothMove()
     {
         if (latestPosition != null)
@@ -426,6 +418,22 @@ public class Don : MonoBehaviour, IPunObservable
             transform.position = Vector2.Lerp(transform.position, latestPosition, Time.deltaTime * 5f);
         }
         
+    }
+    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+    
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
