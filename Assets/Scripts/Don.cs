@@ -21,6 +21,7 @@ public class Don : PlayerController, IPunObservable
     private float _gravityTransitionSpeed = 6f; // Velocidade da transição de gravidade
     private float _jumpOutWater = 7.5f;
     private float _enterWaterSpeedReduction = 5f; // Fator de redução de velocidade ao entrar na água
+    private Vector2 _networkingPosition;
 
     private Animator _animDon;
 
@@ -90,6 +91,7 @@ public class Don : PlayerController, IPunObservable
             UpdateAnimator();
         }
     }
+    
 
     private void HandleInput()
     {
@@ -164,23 +166,7 @@ public class Don : PlayerController, IPunObservable
         _animDon.SetBool(parameter, value);
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            // Envia os estados locais para outros jogadores
-            stream.SendNext(_syncIsWalking);
-            stream.SendNext(_syncIsJumping);
-            stream.SendNext(_syncIsSwimming);
-        }
-        else
-        {
-            // Recebe os estados de outros jogadores
-            _syncIsWalking = (bool)stream.ReceiveNext();
-            _syncIsJumping = (bool)stream.ReceiveNext();
-            _syncIsSwimming = (bool)stream.ReceiveNext();
-        }
-    }
+    
     #endregion
 
     #region 2D Methods
@@ -190,9 +176,31 @@ public class Don : PlayerController, IPunObservable
         SyncAnimationState("isJumping", true);
     }
 
-    protected override void OnCollisionEnter2D(Collision2D collision)
+    // protected override void OnCollisionEnter2D(Collision2D collision)
+    // {
+    //     base.OnCollisionEnter2D(collision);
+    //
+    //     if (collision.gameObject.CompareTag("Ground"))
+    //     {
+    //         isGrounded = true;
+    //         _syncIsJumping = false; // Desativa a animação de pular ao tocar o chão
+    //         SetAnimationState("isJumping", false);
+    //         SetAnimationState("isSwimming", false);
+    //     }
+    // }
+    //
+    // protected override void OnCollisionExit2D(Collision2D collision)
+    // {
+    //     base.OnCollisionExit2D(collision);
+    //
+    //     if (collision.gameObject.CompareTag("Ground"))
+    //     {
+    //         isGrounded = false;
+    //     }
+    // }
+    
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        base.OnCollisionEnter2D(collision);
 
         if (collision.gameObject.CompareTag("Ground"))
         {
@@ -203,9 +211,8 @@ public class Don : PlayerController, IPunObservable
         }
     }
 
-    protected override void OnCollisionExit2D(Collision2D collision)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        base.OnCollisionExit2D(collision);
 
         if (collision.gameObject.CompareTag("Ground"))
         {
@@ -292,6 +299,49 @@ public class Don : PlayerController, IPunObservable
 
     }
 
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        // if (stream.IsWriting)
+        // {
+        //     // Envia os estados locais para outros jogadores
+        //     stream.SendNext(_syncIsWalking);
+        //     stream.SendNext(_syncIsJumping);
+        //     stream.SendNext(_syncIsSwimming);
+        // }
+        // else
+        // {
+        //     // Recebe os estados de outros jogadores
+        //     _syncIsWalking = (bool)stream.ReceiveNext();
+        //     _syncIsJumping = (bool)stream.ReceiveNext();
+        //     _syncIsSwimming = (bool)stream.ReceiveNext();
+        // }
+        
+        if (stream.IsWriting)
+        {
+            // Envia os estados locais e a posição para outros jogadores
+            stream.SendNext(transform.position);
+            stream.SendNext(_syncIsWalking);
+            stream.SendNext(_syncIsJumping);
+            stream.SendNext(_syncIsSwimming);
+            stream.SendNext(_isInWater);
+            stream.SendNext(_rb.gravityScale);
+            stream.SendNext(_rb.velocity);
+            stream.SendNext(transform.localScale);
+        }
+        else
+        {
+            // Recebe os estados e a posição de outros jogadores
+            _networkingPosition = (Vector2)stream.ReceiveNext();
+            _syncIsWalking = (bool)stream.ReceiveNext();
+            _syncIsJumping = (bool)stream.ReceiveNext();
+            _syncIsSwimming = (bool)stream.ReceiveNext();
+            _isInWater = (bool)stream.ReceiveNext();
+            _rb.gravityScale = (float)stream.ReceiveNext();
+        }
+        
+    }
+    
 
 }
+
 

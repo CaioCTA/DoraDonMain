@@ -8,6 +8,7 @@ using UnityEngine;
 public class Dora : PlayerController, IPunObservable
 {
     #region Variables
+
     public typeBtn typeBtn;
 
     private GameObject _isNearby;
@@ -20,26 +21,29 @@ public class Dora : PlayerController, IPunObservable
 
     private Animator _animDora;
     private bool isGrounded = true; // Variável para verificar se o jogador está no chão
-    
+
     private bool _syncIsWalking;
     private bool _syncIsJumping;
     private bool _syncIsFlying;
     
+    private Vector2 _networkingPosition;
+
     private BoxCollider2D _collider; // Referência ao BoxCollider2D
     private Vector2 _originalColliderSize; // Tamanho original do Collider
     private Vector2 _originalColliderOffset; // Posição original do Collider
     private Vector2 _flyingColliderSize = new Vector2(0.5054458f, 0.3472958f); // Tamanho do Collider ao voar
     private Vector2 _flyingColliderOffset = new Vector2(-0.05403954f, -0.04566178f); // Posição do Collider ao voar
-    
+
     #endregion
 
     #region Unity Methods
+
     protected override void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _animDora = GetComponent<Animator>();
         _collider = GetComponent<BoxCollider2D>();
-        
+
         if (_collider != null)
         {
             _originalColliderSize = _collider.size;
@@ -52,6 +56,7 @@ public class Dora : PlayerController, IPunObservable
             {
                 LocalPlayerInstance = this.gameObject;
             }
+
             _nickName = PhotonNetwork.LocalPlayer.NickName;
             _namePlayer.text = _nickName;
 
@@ -61,7 +66,7 @@ public class Dora : PlayerController, IPunObservable
         {
             _namePlayer.text = _nickName;
         }
-        
+
     }
 
     protected override void Update()
@@ -76,7 +81,7 @@ public class Dora : PlayerController, IPunObservable
             // Para outros jogadores, apenas atualiza o Animator com base nos estados sincronizados
             UpdateAnimator();
         }
-        
+
     }
 
     private void HandleInput()
@@ -91,6 +96,7 @@ public class Dora : PlayerController, IPunObservable
                 {
                     moveH = 1 * _moveSpeed;
                 }
+
                 if (Input.GetKey(KeyCode.LeftArrow))
                 {
                     moveH = -1 * _moveSpeed;
@@ -110,7 +116,7 @@ public class Dora : PlayerController, IPunObservable
                 float moveX = Input.GetAxis("Horizontal");
                 float moveY = Input.GetAxis("Vertical");
                 _rb.velocity = new Vector2(moveX * _flySpeed, moveY * _flySpeed);
-                
+
                 if (moveX > 0)
                 {
                     transform.localScale = new Vector3(2.951194f, 2.951194f, 2.951194f); // Olha para a direita
@@ -163,7 +169,7 @@ public class Dora : PlayerController, IPunObservable
         }
     }
 
-    
+
     private void UpdateAnimator()
     {
         // Atualiza o Animator com base nos estados sincronizados
@@ -171,7 +177,7 @@ public class Dora : PlayerController, IPunObservable
         _animDora.SetBool("isFlying", _syncIsFlying);
         _animDora.SetBool("isJumping", _syncIsJumping);
     }
-    
+
     private void SetAnimationState(string parameter, bool value)
     {
         _animDora.SetBool(parameter, value);
@@ -186,13 +192,36 @@ public class Dora : PlayerController, IPunObservable
         // Atualiza o estado da animação para outros jogadores
         _animDora.SetBool(parameter, value);
     }
-    
+
     #endregion
 
     #region 2D Methods
-    protected override void OnCollisionEnter2D(Collision2D collision)
+
+    // protected override void OnCollisionEnter2D(Collision2D collision)
+    // {
+    //     base.OnCollisionEnter2D(collision);
+    //     GameObject go = collision.gameObject;
+    //
+    //     if (go.CompareTag("Ground"))
+    //     {
+    //         isGrounded = true;
+    //         _flyQuant = 1; // Restaura a quantidade de voos ao tocar o chão
+    //         SetAnimationState("isJumping", false); // Desativa a animação de pular
+    //     }
+    // }
+    //
+    // protected override void OnCollisionExit2D(Collision2D collision)
+    // {
+    //     base.OnCollisionExit2D(collision);
+    //     if (collision.gameObject.CompareTag("Ground"))
+    //     {
+    //         isGrounded = false; // Indica que o jogador não está mais no chão
+    //     }
+    // }
+
+    
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        base.OnCollisionEnter2D(collision);
         GameObject go = collision.gameObject;
 
         if (go.CompareTag("Ground"))
@@ -203,17 +232,18 @@ public class Dora : PlayerController, IPunObservable
         }
     }
 
-    protected override void OnCollisionExit2D(Collision2D collision)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        base.OnCollisionExit2D(collision);
         if (collision.gameObject.CompareTag("Ground"))
         {
             isGrounded = false; // Indica que o jogador não está mais no chão
         }
     }
+    
     #endregion
 
     #region Fly Methods
+
     private void StartFlying()
     {
         if (!_isFlying)
@@ -223,14 +253,14 @@ public class Dora : PlayerController, IPunObservable
             _rb.gravityScale = 0f; // Desativa a gravidade
             _rb.velocity = Vector2.zero; // Reseta a velocidade
             _flyQuant--;
-            
-            
+
+
             // Ativa o texto do timer
             if (_flyTextTimer != null)
             {
                 _flyTextTimer.text = $"Fly Time: {currentFlyTime.ToString("F1")}";
             }
-            
+
             // Ajusta o Collider para a orientação de voo
             if (_collider != null)
             {
@@ -249,14 +279,14 @@ public class Dora : PlayerController, IPunObservable
         {
             _isFlying = false;
             _rb.gravityScale = 1f; // Reativa a gravidade
-            
+
 
             // Oculta o texto do timer
             if (_flyTextTimer != null)
             {
                 _flyTextTimer.text = "";
             }
-            
+
             // Restaura o Collider para a orientação original
             if (_collider != null)
             {
@@ -291,6 +321,7 @@ public class Dora : PlayerController, IPunObservable
         base.Pular();
         _animDora.SetBool("isJumping", true); // Ativa a animação de pular
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Water"))
@@ -298,6 +329,7 @@ public class Dora : PlayerController, IPunObservable
             photonView.RPC("Morte", RpcTarget.AllBuffered);
         }
     }
+
     #endregion
 
     #region Photon Serialize
@@ -318,8 +350,31 @@ public class Dora : PlayerController, IPunObservable
             _syncIsJumping = (bool)stream.ReceiveNext();
             _syncIsFlying = (bool)stream.ReceiveNext();
         }
-    }
 
-    #endregion
-    
+        if (stream.IsWriting)
+        {
+            stream.SendNext(transform.position);
+            stream.SendNext(_syncIsWalking);
+            stream.SendNext(_syncIsJumping);
+            stream.SendNext(_syncIsFlying);
+            stream.SendNext(_isFlying);
+            stream.SendNext(_rb.gravityScale);
+            stream.SendNext(_rb.velocity);
+            stream.SendNext(transform.localScale);
+        }
+        else
+        {
+            _networkingPosition = (Vector2)stream.ReceiveNext();
+            _syncIsWalking = (bool)stream.ReceiveNext();
+            _syncIsJumping = (bool)stream.ReceiveNext();
+            _syncIsFlying = (bool)stream.ReceiveNext();
+            _isFlying = (bool)stream.ReceiveNext();
+
+        }
+
+        #endregion
+    }
 }
+
+
+

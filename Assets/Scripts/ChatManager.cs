@@ -40,7 +40,7 @@ public class ChatManager : MonoBehaviourPunCallbacks
     void Start()
     {
         _photonView = GetComponent<PhotonView>();
-        bloqueioMovimento = PlayerController.Instance.HabilitaMovimentacao;
+        // bloqueioMovimento = PlayerController.Instance.HabilitaMovimentacao;
 
     }
     

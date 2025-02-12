@@ -427,6 +427,7 @@ namespace Photon.Pun
     /// \ingroup publicApi
     public struct PhotonMessageInfo
     {
+        private const bool Message = false;
         private readonly int timeInt;
         /// <summary>The sender of a message / event. May be null.</summary>
         public readonly Player Sender;
