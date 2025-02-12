@@ -378,29 +378,35 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using Photon.Pun.UtilityScripts;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 public class Dora : MonoBehaviour, IPunObservable
 {
     [SerializeField] private float _movSpeed = 200f;
+    [SerializeField] private float _jumpForce = 500f;
+    private bool isGrounded;
+    //Voo
+    private bool _isFlying;
+    [SerializeField] private float maxFlyTime = 2f; // Tempo máximo de voo em segundos
+    [SerializeField] private float _flySpeed = 6.0f;
+    private float currentFlyTime = 0f; // Variável para controlar o tempo de voo restante
+    [SerializeField] private int _flyQuant = 1;
+
     private Rigidbody2D _rb;
-    
-    
+
     //Sync
     private float lastUpdate;
     private Vector2 latestPosition;
-
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         lastUpdate = Time.time;
-
         if (!GetComponent<PhotonView>().IsMine)
         {
             _rb.simulated = false; // Desativa a física para jogadores remotos
         }
     }
-
     private void Update()
     {
         if (GetComponent<PhotonView>().IsMine)
@@ -412,26 +418,85 @@ public class Dora : MonoBehaviour, IPunObservable
             //Suavizar o mov remoto
             SmoothMove();
         }
-
         PhotonNetwork.SerializationRate = 30;
     }
 
     void MovePlayer()
     {
-        float moveX = Input.GetAxis("Horizontal") * _movSpeed * Time.deltaTime;
-        float moveY = Input.GetAxis("Vertical") * _movSpeed * Time.deltaTime;
-        Vector2 newPosition = _rb.position + new Vector2(moveX, moveY);
-        _rb.MovePosition(newPosition);
-    }
+        if (GetComponent<PhotonView>().IsMine)
+        {
+            float moveH = Input.GetAxis("Horizontal");
 
+            if (!_isFlying)
+            {
+                // Movimento horizontal no chão
+                _rb.velocity = new Vector2(moveH * _movSpeed * Time.deltaTime, _rb.velocity.y);
+                
+                //Verifica se o Jogador esta pulando
+                if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+                {
+                    _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce * Time.deltaTime);
+                }
+                
+            }
+            else
+            {
+                float moveX = Input.GetAxis("Horizontal");
+                float moveY = Input.GetAxis("Vertical");
+                _rb.velocity = new Vector2(moveX * _flySpeed, moveY * _flySpeed) * Time.deltaTime;
+
+                if (moveX > 0)
+                {
+                    transform.localScale = new Vector3(2.951194f, 2.951194f, 2.951194f); // Olha para a direita
+                }
+                else if (moveX < 0)
+                {
+                    transform.localScale = new Vector3(-2.951194f, 2.951194f, 2.951194f); // Olha para a esquerda
+                }
+            }
+            
+            //Alterna entre voar e andar
+            if (Input.GetKeyDown(KeyCode.Space) && !_isFlying && !isGrounded && _flyQuant == 1)
+            {
+                StartFlying();
+            }
+
+            if (_isFlying)
+            {
+                currentFlyTime -= Time.deltaTime;
+
+                if (currentFlyTime <= 0)
+                {
+                    StopFlying();
+                }
+                
+            }
+            
+        }
+    }
     private void SmoothMove()
     {
         if (latestPosition != null)
         {
             transform.position = Vector2.Lerp(transform.position, latestPosition, Time.deltaTime * 5f);
         }
-        
     }
+    
+       private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Ground"))
+            {
+                isGrounded = true;
+                _flyQuant = 1; // Restaura a quantidade de voo
+            }
+        }
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.gameObject.CompareTag("Ground"))
+            {
+                isGrounded = false;
+            }
+        }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -441,10 +506,69 @@ public class Dora : MonoBehaviour, IPunObservable
         }
         else
         {
-            latestPosition = (Vector2)stream.ReceiveNext();
-            
+            latestPosition = (Vector3)stream.ReceiveNext();
             //Calcula o tempo desde a ultima atualizacao
             lastUpdate = Time.time;
         }
     }
+    
+    
+    #region Fly Methods
+
+     private void StartFlying()
+     {
+         if (!_isFlying)
+         {
+             _isFlying = true;
+             currentFlyTime = maxFlyTime;
+             _rb.gravityScale = 0f; // Desativa a gravidade
+             _rb.velocity = Vector2.zero; // Reseta a velocidade
+             _flyQuant--;
+
+
+             // // Ativa o texto do timer
+             // if (_flyTextTimer != null)
+             // {
+             //     _flyTextTimer.text = $"Fly Time: {currentFlyTime.ToString("F1")}";
+             // }
+             //
+             // // Ajusta o Collider para a orientação de voo
+             // if (_collider != null)
+             // {
+             //     _collider.size = _flyingColliderSize;
+             //     _collider.offset = _flyingColliderOffset;
+             // }
+             //
+             // // Sincroniza o estado de voo
+             // SetAnimationState("isFlying", true);
+         }
+     }
+
+     private void StopFlying()
+     {
+         if (_isFlying)
+         {
+             _isFlying = false;
+             _rb.gravityScale = 1f; // Reativa a gravidade
+
+
+             // // Oculta o texto do timer
+             // if (_flyTextTimer != null)
+             // {
+             //     _flyTextTimer.text = "";
+             // }
+             //
+             // // Restaura o Collider para a orientação original
+             // if (_collider != null)
+             // {
+             //     _collider.size = _originalColliderSize;
+             //     _collider.offset = _originalColliderOffset;
+             // }
+             //
+             // // Sincroniza o estado de voo
+             // SetAnimationState("isFlying", false);
+         }
+     }
+     #endregion
+    
 }

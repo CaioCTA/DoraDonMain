@@ -1780,6 +1780,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2892037498713541472, guid: d95a73b34e3609c43af20117720f5eff, type: 3}
+      propertyPath: _movSpeed
+      value: 1500
+      objectReference: {fileID: 0}
+    - target: {fileID: 2892037498713541472, guid: d95a73b34e3609c43af20117720f5eff, type: 3}
+      propertyPath: _jumpForce
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4114354980830581767, guid: d95a73b34e3609c43af20117720f5eff, type: 3}
       propertyPath: m_Name
       value: Dora

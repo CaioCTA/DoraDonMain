@@ -216,7 +216,7 @@ MonoBehaviour:
   - {fileID: -5416475645041350772}
   - {fileID: 2892037498713541472}
   - {fileID: 8665488126470002395}
-  sceneViewId: 0
+  sceneViewId: 6
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &-5416475645041350772
@@ -319,7 +319,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978177276099814409a0e74e5e5674c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movSpeed: 200
+  _movSpeed: 1500
+  _jumpForce: 5
+  maxFlyTime: 2
+  _flySpeed: 6
+  _flyQuant: 1
 --- !u!95 &5001681217232499091
 Animator:
   serializedVersion: 5

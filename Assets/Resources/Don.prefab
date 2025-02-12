@@ -216,7 +216,6 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: -5416475645041350772}
   - {fileID: 2646995621659342397}
-  - {fileID: 0}
   - {fileID: 9143128132643269183}
   sceneViewId: 0
   InstantiationId: 0
@@ -356,12 +355,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31297129fbd27f04181c78acff1b3317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 2.5
-  _jumpForce: 3.8
-  _namePlayer: {fileID: 5204506532641698049}
-  typeBtn: 1
-  _boxCollider: {fileID: 6510087965300599019}
-  _capsuleCollider: {fileID: 4527868170948994920}
+  _movSpeed: 1500
+  _jumpForce: 5
 --- !u!95 &2151184408635049651
 Animator:
   serializedVersion: 5

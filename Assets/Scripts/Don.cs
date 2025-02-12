@@ -351,6 +351,10 @@ using UnityEngine.EventSystems;
 public class Don : MonoBehaviour, IPunObservable
 {
     [SerializeField] private float _movSpeed = 200f;
+    [SerializeField] private float _jumpForce = 500f;
+    private bool isGrounded;
+    
+    
     private Rigidbody2D _rb;
     
     
@@ -385,14 +389,36 @@ public class Don : MonoBehaviour, IPunObservable
         
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = true;
+        }
+    }
+    
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
+    }
+
     void MovePlayer()
     {
         float moveX = Input.GetAxis("Horizontal") * _movSpeed * Time.deltaTime;
-        float moveY = Input.GetAxis("Vertical") * _movSpeed * Time.deltaTime;
-        Vector2 newPosition = _rb.position + new Vector2(moveX, moveY);
-        _rb.MovePosition(newPosition);
+        
+        _rb.velocity = new Vector2(moveX, _rb.velocity.y);
+        
+        //Pulo
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            isGrounded = false;
+            _rb.velocity = new Vector2(_rb.velocity.x, 0); // Zera a velocidade vertical antes de pular
+            _rb.AddForce(new Vector2(0f, _jumpForce), ForceMode2D.Impulse);
+        }
     }
-
     private void SmoothMove()
     {
         if (latestPosition != null)
@@ -410,7 +436,7 @@ public class Don : MonoBehaviour, IPunObservable
         }
         else
         {
-            latestPosition = (Vector2)stream.ReceiveNext();
+            latestPosition = (Vector3)stream.ReceiveNext();
             
             //Calcula o tempo desde a ultima atualizacao
             lastUpdate = Time.time;
