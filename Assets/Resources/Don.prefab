@@ -119,6 +119,7 @@ GameObject:
   - component: {fileID: 4527868170948994920}
   - component: {fileID: 2646995621659342397}
   - component: {fileID: 2151184408635049651}
+  - component: {fileID: 9143128132643269183}
   m_Layer: 0
   m_Name: Don
   m_TagString: Player
@@ -215,6 +216,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: -5416475645041350772}
   - {fileID: 2646995621659342397}
+  - {fileID: 0}
+  - {fileID: 9143128132643269183}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -380,6 +383,33 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &9143128132643269183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4114354980830581767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 4
+    SynchronizeType: 1
+    Name: isWalking
+  - Type: 4
+    SynchronizeType: 1
+    Name: isSwimming
+  - Type: 4
+    SynchronizeType: 1
+    Name: isJumping
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!1 &6747223821561338405
 GameObject:
   m_ObjectHideFlags: 0
