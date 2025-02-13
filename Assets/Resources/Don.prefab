@@ -357,6 +357,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movSpeed: 1500
   _jumpForce: 5
+  _waterSpeed: 4
+  _jumpOutWater: 7.5
 --- !u!95 &2151184408635049651
 Animator:
   serializedVersion: 5
