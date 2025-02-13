@@ -320,7 +320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movSpeed: 3500
-  _jumpForce: 3000
+  _jumpForce: 5
   maxFlyTime: 2
   _flySpeed: 3500
   _flyQuant: 1
