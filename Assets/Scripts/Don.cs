@@ -8,13 +8,13 @@ using UnityEngine.EventSystems;
 
 public class Don : MonoBehaviour, IPunObservable
 {
-    [SerializeField] private float _movSpeed = 1200f;
-    [SerializeField] private float _jumpForce = 900f;
+    [SerializeField] private float _movSpeed = 3500f;
+    [SerializeField] private float _jumpForce = 2700f;
     private bool isGrounded;
     
     //Nado
     private bool _isSwimming;
-    [SerializeField] private float _waterSpeed = 1000f;
+    [SerializeField] private float _waterSpeed = 3200f;
     private float _normalGravityScale = 1f; // Gravidade normal fora da água
     private float _waterGravityScale = 7f; // Gravidade reduzida dentro da água
     private float _gravityTransitionSpeed = 6f; // Velocidade da transição de gravidade
