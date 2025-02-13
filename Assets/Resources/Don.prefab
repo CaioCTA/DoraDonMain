@@ -355,9 +355,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31297129fbd27f04181c78acff1b3317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movSpeed: 1500
-  _jumpForce: 5
-  _waterSpeed: 4
+  _movSpeed: 1200
+  _jumpForce: 900
+  _waterSpeed: 1000
   _jumpOutWater: 7.5
 --- !u!95 &2151184408635049651
 Animator:
