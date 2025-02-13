@@ -18,7 +18,7 @@ public class Don : MonoBehaviour, IPunObservable
     private float _normalGravityScale = 1f; // Gravidade normal fora da água
     private float _waterGravityScale = 7f; // Gravidade reduzida dentro da água
     private float _gravityTransitionSpeed = 6f; // Velocidade da transição de gravidade
-    [SerializeField] private float _jumpOutWater = 7.5f;
+    private float _jumpOutWater = 7.5f;
     private float _enterWaterSpeedReduction = 5f; // Fator de redução de velocidade ao entrar na água
     
     
@@ -78,7 +78,8 @@ public class Don : MonoBehaviour, IPunObservable
                 //Verifica se o Jogador esta pulando
                 if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
                 {
-                    _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce * Time.deltaTime);
+                    //_rb.velocity = new Vector2(_rb.velocity.x, _jumpForce * Time.deltaTime);
+                    _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
                     _anim.SetBool("isJumping", true);
                 }
                 
@@ -189,6 +190,7 @@ public class Don : MonoBehaviour, IPunObservable
         {
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
+            stream.SendNext(_rb.velocity.y); //Teste pulo
             stream.SendNext(transform.localScale.x > 0 ? 1 : -1);
         }
         else
@@ -196,13 +198,14 @@ public class Don : MonoBehaviour, IPunObservable
             latestPosition = (Vector3)stream.ReceiveNext();
             latestRotation = (Quaternion)stream.ReceiveNext();
             int direction = (int)stream.ReceiveNext();
+            float receivedVelocityY = (float)stream.ReceiveNext();
 
             transform.localScale = new Vector3(
                 direction * Mathf.Abs(transform.localScale.x),
                 transform.localScale.y,
                 transform.localScale.z);
-             
-             
+
+            _rb.velocity = new Vector2(_rb.velocity.x, receivedVelocityY);
             //Calcula o tempo desde a ultima atualizacao
             lastUpdate = Time.time;
         }
