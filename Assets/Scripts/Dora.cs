@@ -8,13 +8,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 public class Dora : MonoBehaviour, IPunObservable
 {
-    [SerializeField] private float _movSpeed = 1200f;
-    [SerializeField] private float _jumpForce = 900f;
+    [SerializeField] private float _movSpeed = 3500f;
+    [SerializeField] private float _jumpForce = 3000f;
     private bool isGrounded;
     //Voo
     private bool _isFlying;
     [SerializeField] private float maxFlyTime = 2f; // Tempo máximo de voo em segundos
-    [SerializeField] private float _flySpeed = 1200f;
+    [SerializeField] private float _flySpeed = 3500f;
     private float currentFlyTime = 0f; // Variável para controlar o tempo de voo restante
     [SerializeField] private int _flyQuant = 1;
 
