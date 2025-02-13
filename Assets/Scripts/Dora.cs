@@ -176,6 +176,8 @@ public class Dora : MonoBehaviour, IPunObservable
         }
     }
 
+    //para fazer com que o outro player reaja a morte do outro, usar o if(photonView.IsMine) e ter um bool public(?) para verificar a morte.
+
     #region Fly Methods
 
     private void StartFlying()
