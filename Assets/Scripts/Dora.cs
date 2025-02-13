@@ -166,10 +166,19 @@ public class Dora : MonoBehaviour, IPunObservable
                 isGrounded = false;
             }
         }
-        
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Water") || collision.CompareTag("Espinhos"))
+        {
+            //Courotine de morte
+            PhotonNetwork.LoadLevel("GameScene");
+        }
+    }
+
     #region Fly Methods
 
-     private void StartFlying()
+    private void StartFlying()
      {
          if (!_isFlying)
          {

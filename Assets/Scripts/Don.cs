@@ -166,6 +166,13 @@ public class Don : MonoBehaviour, IPunObservable
              Debug.Log("To na agua");
 
          }
+
+         if (other.CompareTag("Espinhos"))
+        {
+            PhotonNetwork.LoadLevel("GameScene");
+        }
+
+
      }
 
      private void OnTriggerExit2D(Collider2D other)
