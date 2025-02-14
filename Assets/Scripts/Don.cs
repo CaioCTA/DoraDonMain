@@ -29,12 +29,21 @@ public class Don : MonoBehaviour, IPunObservable
     private float lastUpdate;
     private Vector2 latestPosition;
     private Quaternion latestRotation;
+    
+    //BoxColliderSwimming
+    private BoxCollider2D _boxCollider2D;
+    
+    private Vector2 _originalBoxColliderSize;
+    private Vector2 _originalBoxColliderOffset;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
+        _boxCollider2D = GetComponent<BoxCollider2D>();
         
+        _originalBoxColliderSize = _boxCollider2D.size;
+        _originalBoxColliderOffset = _boxCollider2D.offset;
         
         lastUpdate = Time.time;
         latestRotation = transform.rotation;
@@ -142,6 +151,11 @@ public class Don : MonoBehaviour, IPunObservable
             isGrounded = true;
             _anim.SetBool("isJumping", false);
         }
+
+        if (collision.gameObject.CompareTag("Espinhos"))
+        {
+            PhotonNetwork.LoadLevel("GameScene");
+        }
     }
     
     private void OnCollisionExit2D(Collision2D collision)
@@ -157,7 +171,7 @@ public class Don : MonoBehaviour, IPunObservable
          if (other.CompareTag("Water"))
          {
              _isSwimming = true;
-             // StartCoroutine(ChangeCollider());
+             StartCoroutine(ChangeCollider());
              // Reduz a velocidade vertical ao entrar na água para evitar impacto
              _rb.velocity = new Vector2(_rb.velocity.x, _rb.velocity.y * _enterWaterSpeedReduction);
              // Aplica uma pequena força para cima para simular flutuação inicial
@@ -166,13 +180,18 @@ public class Don : MonoBehaviour, IPunObservable
              Debug.Log("To na agua");
 
          }
-
-         if (other.CompareTag("Espinhos"))
-        {
-            PhotonNetwork.LoadLevel("GameScene");
-        }
-
-
+         
+         if (other.gameObject.CompareTag("Final"))
+         {
+             if (PhotonNetwork.IsMasterClient)
+             {
+                 GameManager.Instance.player1 = true;
+             }
+             else
+             {
+                 GameManager.Instance.player2 = true;
+             }
+         }
      }
 
      private void OnTriggerExit2D(Collider2D other)
@@ -182,13 +201,39 @@ public class Don : MonoBehaviour, IPunObservable
 
              _isSwimming = false;
              _rb.velocity = new Vector2(_rb.velocity.x, _jumpOutWater);
-             // StartCoroutine(ChangeColliderOut());
+             StartCoroutine(ChangeColliderOut());
 
 
              Debug.Log("Sai da agua");
 
 
          }
+         
+         if (other.gameObject.CompareTag("Final"))
+         {
+             if (PhotonNetwork.IsMasterClient)
+             {
+                 GameManager.Instance.player1 = false;
+             }
+             else
+             {
+                 GameManager.Instance.player2 = false;
+             }
+         }
+     }
+     
+     IEnumerator ChangeCollider()
+     {
+         yield return new WaitForSeconds(0.7f);
+         _boxCollider2D.size = new Vector2(0.6123964f, 0.3612713f);
+         _boxCollider2D.offset = new Vector2(0.04708159f, -0.004111208f);
+     }
+
+     IEnumerator ChangeColliderOut()
+     {
+         yield return new WaitForSeconds(0.7f);
+         _boxCollider2D.size = _originalBoxColliderSize;
+         _boxCollider2D.offset = _originalBoxColliderOffset;
      }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -218,4 +263,5 @@ public class Don : MonoBehaviour, IPunObservable
             lastUpdate = Time.time;
         }
     }
+    
 }

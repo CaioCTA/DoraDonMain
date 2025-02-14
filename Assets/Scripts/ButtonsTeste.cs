@@ -5,13 +5,8 @@ using Photon.Pun;
 using UnityEngine;
 
 
-public enum typeBtn
-{
-    Dora,Don
-}
 
-
-public class Buttons : MonoBehaviourPunCallbacks
+public class ButtonsTeste : MonoBehaviourPunCallbacks
 {
     #region Variables
 
@@ -103,6 +98,7 @@ public class Buttons : MonoBehaviourPunCallbacks
             Debug.Log("Botao Ativado!");
             DestroyDoor();
             _botaoAtivado = true;
+            _anim.SetBool("isPressed", true);
         }
 
     }

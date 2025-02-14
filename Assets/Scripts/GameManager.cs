@@ -33,15 +33,31 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.Instantiate("Dora", player1SpawnerPosition.position, Quaternion.identity);
+                PhotonNetwork.Instantiate("Don", player1SpawnerPosition.position, Quaternion.identity);
             }
             else
             {
-                PhotonNetwork.Instantiate("Don", player2SpawnerPosition.position, Quaternion.identity);
+                PhotonNetwork.Instantiate("Dora", player2SpawnerPosition.position, Quaternion.identity);
             }
             
         }
 
+    }
+
+    private void Update()
+    {
+
+        if (player1)
+        {
+            Debug.Log("Player 1 is active");
+        }
+
+        if (player2)
+        {
+            Debug.Log("Player 2 is active"); 
+        }
+        
+        photonView.RPC("CheckWinner", RpcTarget.AllBuffered);
     }
 
     [PunRPC]
@@ -54,10 +70,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 PhotonNetwork.LoadLevel("Win");
             }
-        }
-        else
-        {
-            Debug.Log("Precisa do dois players.");
         }
     }
 

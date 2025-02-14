@@ -158,6 +158,12 @@ public class Dora : MonoBehaviour, IPunObservable
                 _flyQuant = 1; // Restaura a quantidade de voo
                 _anim.SetBool("isJumping", false);
             }
+
+            if (collision.gameObject.CompareTag("Espinhos"))
+            {
+                PhotonNetwork.LoadLevel("GameScene");
+            }
+            
         }
         private void OnCollisionExit2D(Collision2D collision)
         {
@@ -169,10 +175,37 @@ public class Dora : MonoBehaviour, IPunObservable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Water") || collision.CompareTag("Espinhos"))
+        if (collision.CompareTag("Water"))
         {
             //Courotine de morte
             PhotonNetwork.LoadLevel("GameScene");
+        }
+
+        if (collision.gameObject.CompareTag("Final"))
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                GameManager.Instance.player1 = true;
+            }
+            else
+            {
+                GameManager.Instance.player2 = true;
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Final"))
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                GameManager.Instance.player1 = false;
+            }
+            else
+            {
+                GameManager.Instance.player2 = false;
+            }
         }
     }
 

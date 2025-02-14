@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3414c5b4af7af2b44978d6f53e9779f7
+guid: 27600299ede14e244b304e4c04168b9a
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: icons8-internet-24 1_0
+      name: botao 2_0
       rect:
         serializedVersion: 2
-        x: 13
-        y: 6
-        width: 137
-        height: 144
+        x: 0
+        y: 0
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,8 +124,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 720a9d49d594ffb4aab2cff6b65d3723
-      internalID: -1080419297
+      spriteID: 2bbbfdc589ce4944c89c95f666d84365
+      internalID: 284351944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: botao 2_1
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 0
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b097434df40ff94381b66cf0031d5ea
+      internalID: -472770905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: botao 2_2
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e3bd98e1d868274898e7407499c75e9
+      internalID: 293254239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: botao 2_3
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 0
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5e2d441811f5ff40826ca0a199ce5cf
+      internalID: -883797544
       vertices: []
       indices: 
       edges: []
@@ -141,7 +204,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      icons8-internet-24 1_0: -1080419297
+      botao 2_0: 284351944
+      botao 2_1: -472770905
+      botao 2_2: 293254239
+      botao 2_3: -883797544
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
