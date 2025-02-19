@@ -6,8 +6,11 @@ using Photon.Pun.UtilityScripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-public class Dora : MonoBehaviour, IPunObservable
+public class Dora : MonoBehaviourPunCallbacks, IPunObservable
 {
+    public static Dora DoraInstance;
+    public static GameObject LocalDoraInstance;
+    
     [SerializeField] private float _movSpeed = 3500f;
     [SerializeField] private float _jumpForce = 3000f;
     private bool isGrounded;
@@ -20,6 +23,12 @@ public class Dora : MonoBehaviour, IPunObservable
 
     private Rigidbody2D _rb;
     private Animator _anim;
+    
+    //BoxColliderFlying
+    private BoxCollider2D _boxCollider2D;
+    
+    private Vector2 _originalBoxColliderSize;
+    private Vector2 _originalBoxColliderOffset;
 
     //Sync
     private float lastUpdate;
@@ -29,6 +38,10 @@ public class Dora : MonoBehaviour, IPunObservable
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
+        _boxCollider2D = GetComponent<BoxCollider2D>();
+        
+        _originalBoxColliderSize = _boxCollider2D.size;
+        _originalBoxColliderOffset = _boxCollider2D.offset;
         
         lastUpdate = Time.time;
         latestPosition = transform.position;
@@ -121,6 +134,7 @@ public class Dora : MonoBehaviour, IPunObservable
             if (Input.GetKeyDown(KeyCode.Space) && !_isFlying && !isGrounded && _flyQuant == 1)
             {
                 StartFlying();
+                StartCoroutine(ChangeCollider());
             }
 
             if (_isFlying)
@@ -130,6 +144,7 @@ public class Dora : MonoBehaviour, IPunObservable
                 if (currentFlyTime <= 0)
                 {
                     StopFlying();
+                    StartCoroutine(ChangeColliderOut());
                 }
                 
             }
@@ -150,6 +165,21 @@ public class Dora : MonoBehaviour, IPunObservable
         
     }
     
+    [PunRPC]
+    private void Death()
+        {
+            if (photonView.IsMine)
+            {
+                PhotonNetwork.Destroy(gameObject);
+                PhotonNetwork.LoadLevel("GameScene");
+
+            }
+            else
+            {
+                PhotonNetwork.Destroy(Don.LocalDonInstance);
+            }
+        }
+    
        private void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Ground"))
@@ -161,7 +191,7 @@ public class Dora : MonoBehaviour, IPunObservable
 
             if (collision.gameObject.CompareTag("Espinhos"))
             {
-                PhotonNetwork.LoadLevel("GameScene");
+                photonView.RPC("Death", RpcTarget.All);
             }
             
         }
@@ -178,7 +208,7 @@ public class Dora : MonoBehaviour, IPunObservable
         if (collision.CompareTag("Water"))
         {
             //Courotine de morte
-            PhotonNetwork.LoadLevel("GameScene");
+            photonView.RPC("Death", RpcTarget.All);
         }
 
         if (collision.gameObject.CompareTag("Final"))
@@ -208,6 +238,7 @@ public class Dora : MonoBehaviour, IPunObservable
             }
         }
     }
+    
 
     //para fazer com que o outro player reaja a morte do outro, usar o if(photonView.IsMine) e ter um bool public(?) para verificar a morte.
 
@@ -215,6 +246,7 @@ public class Dora : MonoBehaviour, IPunObservable
 
     private void StartFlying()
      {
+         
          if (!_isFlying)
          {
              _isFlying = true;
@@ -244,11 +276,13 @@ public class Dora : MonoBehaviour, IPunObservable
 
      private void StopFlying()
      {
+         
          if (_isFlying)
          {
              _isFlying = false;
              _rb.gravityScale = 1f; // Reativa a gravidade
              _anim.SetBool("isFlying", false);
+             
 
 
              // // Oculta o texto do timer
@@ -270,21 +304,35 @@ public class Dora : MonoBehaviour, IPunObservable
      }
      #endregion
      
+     IEnumerator ChangeCollider()
+     {
+         yield return new WaitForSeconds(0.3f);
+         _boxCollider2D.size = new Vector2(0.6485293f, 0.4182276f);
+         _boxCollider2D.offset = new Vector2(-0.05495566f, -0.02544083f);
+     }
+
+     IEnumerator ChangeColliderOut()
+     {
+         yield return new WaitForSeconds(0.3f);
+         _boxCollider2D.size = _originalBoxColliderSize;
+         _boxCollider2D.offset = _originalBoxColliderOffset;
+     }
+     
      public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
      {
          if (stream.IsWriting)
          {
              stream.SendNext(transform.position);
              stream.SendNext(transform.rotation);
-             stream.SendNext(_rb.velocity.y); //Teste pulo
+             // stream.SendNext(_rb.velocity.y); //Teste pulo
              stream.SendNext(transform.localScale.x > 0 ? 1 : -1);
          }
          else
          {
              latestPosition = (Vector3)stream.ReceiveNext();
              latestRotation = (Quaternion)stream.ReceiveNext();
-            float receivedVelocityY = (float)stream.ReceiveNext();
-            int direction = (int)stream.ReceiveNext();
+             // float receivedVelocityY = (float)stream.ReceiveNext();
+             int direction = (int)stream.ReceiveNext();
              
 
             transform.localScale = new Vector3(
@@ -292,7 +340,7 @@ public class Dora : MonoBehaviour, IPunObservable
                  transform.localScale.y,
                  transform.localScale.z);
 
-            _rb.velocity = new Vector2(_rb.velocity.x, receivedVelocityY);
+            // _rb.velocity = new Vector2(_rb.velocity.x, receivedVelocityY);
             //Calcula o tempo desde a ultima atualizacao
             lastUpdate = Time.time;
          }

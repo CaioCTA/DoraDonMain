@@ -6,8 +6,11 @@ using Photon.Pun.UtilityScripts;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Don : MonoBehaviour, IPunObservable
+public class Don : MonoBehaviourPunCallbacks, IPunObservable
 {
+    public static Don DonInstance;
+    public static GameObject LocalDonInstance;
+    
     [SerializeField] private float _movSpeed = 3500f;
     [SerializeField] private float _jumpForce = 2700f;
     private bool isGrounded;
@@ -143,6 +146,21 @@ public class Don : MonoBehaviour, IPunObservable
         }
         
     }
+
+    [PunRPC]
+    private void Death()
+    {
+        if (photonView.IsMine)
+        {
+            PhotonNetwork.Destroy(gameObject);
+            PhotonNetwork.LoadLevel("GameScene");
+
+        }
+        else
+        {
+            PhotonNetwork.Destroy(Dora.LocalDoraInstance);
+        }
+    }
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -154,7 +172,7 @@ public class Don : MonoBehaviour, IPunObservable
 
         if (collision.gameObject.CompareTag("Espinhos"))
         {
-            PhotonNetwork.LoadLevel("GameScene");
+            photonView.RPC("Death", RpcTarget.All);
         }
     }
     
@@ -242,14 +260,14 @@ public class Don : MonoBehaviour, IPunObservable
         {
             stream.SendNext(transform.position);
             stream.SendNext(transform.rotation);
-            stream.SendNext(_rb.velocity.y); //Teste pulo
+            // stream.SendNext(_rb.velocity.y); //Teste pulo
             stream.SendNext(transform.localScale.x > 0 ? 1 : -1);
         }
         else
         {
             latestPosition = (Vector3)stream.ReceiveNext();
             latestRotation = (Quaternion)stream.ReceiveNext();
-            float receivedVelocityY = (float)stream.ReceiveNext();
+            // float receivedVelocityY = (float)stream.ReceiveNext();
             int direction = (int)stream.ReceiveNext();
             
 
@@ -258,7 +276,7 @@ public class Don : MonoBehaviour, IPunObservable
                 transform.localScale.y,
                 transform.localScale.z);
 
-            _rb.velocity = new Vector2(_rb.velocity.x, receivedVelocityY);
+            // _rb.velocity = new Vector2(_rb.velocity.x, receivedVelocityY);
             //Calcula o tempo desde a ultima atualizacao
             lastUpdate = Time.time;
         }

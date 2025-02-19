@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Start()
     {
 
-        if (PlayerController.LocalPlayerInstance == null)
+        if (Dora.LocalDoraInstance == null && Don.LocalDonInstance == null)
         {
             if (PhotonNetwork.IsMasterClient)
             {
@@ -43,24 +43,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
     }
-
-    private void Update()
-    {
-
-        if (player1)
-        {
-            Debug.Log("Player 1 is active");
-        }
-
-        if (player2)
-        {
-            Debug.Log("Player 2 is active"); 
-        }
-        
-        photonView.RPC("CheckWinner", RpcTarget.AllBuffered);
-    }
-
-    [PunRPC]
+    
+    
     public void CheckWinner()
     {
         

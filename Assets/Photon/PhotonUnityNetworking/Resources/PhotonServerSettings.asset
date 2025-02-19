@@ -50,6 +50,7 @@ MonoBehaviour:
   - RecebeMensagem
   - SyncAnimationState
   - SetAnimationState
+  - Death
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
