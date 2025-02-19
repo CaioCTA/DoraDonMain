@@ -39,6 +39,7 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
     private Vector2 _originalBoxColliderSize;
     private Vector2 _originalBoxColliderOffset;
 
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -56,9 +57,19 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
         {
             _rb.simulated = false; // Desativa a física para jogadores remotos
         }
+        else
+        {
+            Debug.Log(photonView.ViewID);
+        }
     }
 
     private void Update()
+    {
+       
+        
+    }
+
+    private void FixedUpdate()
     {
         if (GetComponent<PhotonView>().IsMine)
         {
@@ -69,11 +80,10 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
             //Suavizar o mov remoto
             SmoothMove();
         }
-        
+
         PhotonNetwork.SerializationRate = 30;
-        
     }
-    
+
 
     void MovePlayer()
     {
@@ -150,16 +160,13 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void Death()
     {
-        if (photonView.IsMine)
-        {
-            PhotonNetwork.Destroy(gameObject);
-            PhotonNetwork.LoadLevel("GameScene");
 
-        }
-        else
-        {
-            PhotonNetwork.Destroy(Dora.LocalDoraInstance);
-        }
+        //PhotonNetwork.Destroy(gameObject);
+        //PhotonNetwork.LoadLevel("GameScene");
+        PhotonNetwork.Destroy(GameManager.player2Obj);
+        GameManager.PlayerDeath();
+
+
     }
     
     private void OnCollisionEnter2D(Collision2D collision)
@@ -172,7 +179,7 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
 
         if (collision.gameObject.CompareTag("Espinhos"))
         {
-            photonView.RPC("Death", RpcTarget.All);
+            photonView.RPC("Death", RpcTarget.AllBuffered);
         }
     }
     
@@ -267,9 +274,9 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
         {
             latestPosition = (Vector3)stream.ReceiveNext();
             latestRotation = (Quaternion)stream.ReceiveNext();
-            // float receivedVelocityY = (float)stream.ReceiveNext();
+            float receivedVelocityY = (float)stream.ReceiveNext();
             int direction = (int)stream.ReceiveNext();
-            
+
 
             transform.localScale = new Vector3(
                 direction * Mathf.Abs(transform.localScale.x),

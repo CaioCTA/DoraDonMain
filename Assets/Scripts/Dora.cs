@@ -52,10 +52,15 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
         {
             _rb.simulated = false; // Desativa a física para jogadores remotos
         }
+        else
+        {
+            Debug.Log(photonView.ViewID);
+        }
     }
-    private void Update()
+
+    private void FixedUpdate()
     {
-        if (GetComponent<PhotonView>().IsMine)
+        if (photonView.IsMine)
         {
             MovePlayer();
         }
@@ -64,6 +69,7 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
             //Suavizar o mov remoto
             SmoothMove();
         }
+
         PhotonNetwork.SerializationRate = 30;
     }
 
@@ -111,16 +117,7 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
              _anim.SetBool("isWalking", isWalking); // Atualiza o parâmetro "isWalking" no Animator
 
              _anim.SetBool("isFlying", _isFlying);
-            // Inverte a direção do jogador com base na direção do movimento
-             // if (moveH > 0)
-             // {
-             //     transform.localScale = new Vector3(2.951194f, 2.951194f, 2.951194f); // Olha para a direita
-             // }
-             // else if (moveH < 0)
-             // {
-             //     transform.localScale = new Vector3(-2.951194f, 2.951194f, 2.951194f); // Olha para a esquerda
-             // }
-             
+           
              if (moveH > 0)
              {
                  transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z); // Direita
@@ -167,48 +164,46 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
     
     [PunRPC]
     private void Death()
-        {
-            if (photonView.IsMine)
-            {
-                PhotonNetwork.Destroy(gameObject);
-                PhotonNetwork.LoadLevel("GameScene");
+    {
+        //PhotonNetwork.Destroy(gameObject);
 
-            }
-            else
-            {
-                PhotonNetwork.Destroy(Don.LocalDonInstance);
-            }
-        }
+        PhotonNetwork.Destroy(GameManager.player1Obj);
+        GameManager.PlayerDeath();
+
+        
+        
+        
+    }
     
-       private void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
         {
-            if (collision.gameObject.CompareTag("Ground"))
-            {
-                isGrounded = true;
-                _flyQuant = 1; // Restaura a quantidade de voo
-                _anim.SetBool("isJumping", false);
-            }
+            isGrounded = true;
+            _flyQuant = 1; // Restaura a quantidade de voo
+            _anim.SetBool("isJumping", false);
+        }
 
-            if (collision.gameObject.CompareTag("Espinhos"))
-            {
-                photonView.RPC("Death", RpcTarget.All);
-            }
-            
-        }
-        private void OnCollisionExit2D(Collision2D collision)
+        if (collision.gameObject.CompareTag("Espinhos"))
         {
-            if (collision.gameObject.CompareTag("Ground"))
-            {
-                isGrounded = false;
-            }
+            photonView.RPC("Death", RpcTarget.AllBuffered);
         }
+            
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isGrounded = false;
+        }
+    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Water"))
         {
             //Courotine de morte
-            photonView.RPC("Death", RpcTarget.All);
+            photonView.RPC("Death", RpcTarget.AllBuffered);
         }
 
         if (collision.gameObject.CompareTag("Final"))
@@ -322,18 +317,18 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
      {
          if (stream.IsWriting)
          {
-             stream.SendNext(transform.position);
-             stream.SendNext(transform.rotation);
-             // stream.SendNext(_rb.velocity.y); //Teste pulo
-             stream.SendNext(transform.localScale.x > 0 ? 1 : -1);
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+            // stream.SendNext(_rb.velocity.y); //Teste pulo
+            stream.SendNext(transform.localScale.x > 0 ? 1 : -1);
          }
          else
          {
-             latestPosition = (Vector3)stream.ReceiveNext();
-             latestRotation = (Quaternion)stream.ReceiveNext();
-             // float receivedVelocityY = (float)stream.ReceiveNext();
-             int direction = (int)stream.ReceiveNext();
-             
+            latestPosition = (Vector3)stream.ReceiveNext();
+            latestRotation = (Quaternion)stream.ReceiveNext();
+            // float receivedVelocityY = (float)stream.ReceiveNext();
+            int direction = (int)stream.ReceiveNext();
+
 
             transform.localScale = new Vector3(
                  direction * Mathf.Abs(transform.localScale.x),

@@ -319,10 +319,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 978177276099814409a0e74e5e5674c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movSpeed: 1000
+  _movSpeed: 3500
   _jumpForce: 5
   maxFlyTime: 2
-  _flySpeed: 950
+  _flySpeed: 3500
   _flyQuant: 1
 --- !u!95 &5001681217232499091
 Animator:

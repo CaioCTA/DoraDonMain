@@ -14,6 +14,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     [SerializeField] Transform player1SpawnerPosition;
     [SerializeField] Transform player2SpawnerPosition;
 
+    public static GameObject player1Obj;
+    public static GameObject player2Obj;
+
     public bool player1 = false;
     public bool player2 = false;
 
@@ -29,22 +32,30 @@ public class GameManager : MonoBehaviourPunCallbacks
     void Start()
     {
 
-        if (Dora.LocalDoraInstance == null && Don.LocalDonInstance == null)
+        if (player1Obj == null && player2Obj == null)
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.Instantiate("Don", player1SpawnerPosition.position, Quaternion.identity);
+                player1Obj = PhotonNetwork.Instantiate("Dora", player1SpawnerPosition.position, Quaternion.identity);
             }
             else
             {
-                PhotonNetwork.Instantiate("Dora", player2SpawnerPosition.position, Quaternion.identity);
+                player2Obj = PhotonNetwork.Instantiate("Don", player2SpawnerPosition.position, Quaternion.identity);
             }
             
         }
 
     }
-    
-    
+
+    public static void PlayerDeath()
+    {
+        if (player1Obj == null || player2Obj == null)
+        {
+            PhotonNetwork.LoadLevel("GameScene");
+        }
+    }
+
+
     public void CheckWinner()
     {
         
