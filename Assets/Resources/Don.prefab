@@ -395,10 +395,10 @@ MonoBehaviour:
   ShowParameterInspector: 1
   m_SynchronizeParameters:
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: isWalking
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: isSwimming
   - Type: 4
     SynchronizeType: 1

@@ -321,7 +321,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movSpeed: 350
   _jumpForce: 5
-  maxFlyTime: 2
+  maxFlyTime: 4
   _flySpeed: 350
   _flyQuant: 1
 --- !u!95 &5001681217232499091
@@ -367,7 +367,7 @@ MonoBehaviour:
     SynchronizeType: 1
     Name: isJumping
   - Type: 4
-    SynchronizeType: 1
+    SynchronizeType: 2
     Name: isFlying
   m_SynchronizeLayers:
   - SynchronizeType: 0
