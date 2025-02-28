@@ -75,6 +75,8 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
             }
         }
         
+        MovePlayer();
+        
     }
 
     private void FixedUpdate()
@@ -324,14 +326,14 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
      
      IEnumerator ChangeCollider()
      {
-         yield return new WaitForSeconds(0.3f);
+         yield return new WaitForSeconds(0.2f);
          _boxCollider2D.size = new Vector2(0.6485293f, 0.4182276f);
          _boxCollider2D.offset = new Vector2(-0.05495566f, -0.02544083f);
      }
 
      IEnumerator ChangeColliderOut()
      {
-         yield return new WaitForSeconds(0.3f);
+         yield return new WaitForSeconds(0.1f);
          _boxCollider2D.size = _originalBoxColliderSize;
          _boxCollider2D.offset = _originalBoxColliderOffset;
      }

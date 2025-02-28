@@ -65,7 +65,12 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Update()
     {
-       
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            //_rb.velocity = new Vector2(_rb.velocity.x, _jumpForce * Time.deltaTime);
+            _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
+            _anim.SetBool("isJumping", true);
+        }
         
     }
 
@@ -98,12 +103,12 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
                 _anim.SetBool("isWalking", true);
                 
                 //Verifica se o Jogador esta pulando
-                if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
-                {
-                    //_rb.velocity = new Vector2(_rb.velocity.x, _jumpForce * Time.deltaTime);
-                    _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
-                    _anim.SetBool("isJumping", true);
-                }
+                // if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+                // {
+                //     //_rb.velocity = new Vector2(_rb.velocity.x, _jumpForce * Time.deltaTime);
+                //     _rb.velocity = new Vector2(_rb.velocity.x, _jumpForce);
+                //     _anim.SetBool("isJumping", true);
+                // }
                 
             }
             else
