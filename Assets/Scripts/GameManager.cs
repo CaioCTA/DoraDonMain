@@ -56,7 +56,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
 
-    public void CheckWinner()
+    [PunRPC]
+    public virtual void CheckWinner()
     {
         
         if (player1 && player2)

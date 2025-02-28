@@ -211,10 +211,12 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
              if (PhotonNetwork.IsMasterClient)
              {
                  GameManager.Instance.player1 = true;
+                 Debug.Log("Sou o player1");
              }
              else
              {
                  GameManager.Instance.player2 = true;
+                 Debug.Log("Sou o player2");
              }
          }
      }
@@ -238,11 +240,13 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
          {
              if (PhotonNetwork.IsMasterClient)
              {
-                 GameManager.Instance.player1 = false;
+                 GameManager.Instance.player1 = true;
+                 Debug.Log("Saiu o player1");
              }
              else
              {
-                 GameManager.Instance.player2 = false;
+                 GameManager.Instance.player2 = true;
+                 Debug.Log("Saiu o player2");
              }
          }
      }

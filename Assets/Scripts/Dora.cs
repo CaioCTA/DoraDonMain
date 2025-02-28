@@ -58,6 +58,25 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    private void Update()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (GameManager.Instance.player1 && GameManager.Instance.player2)
+            {
+                photonView.RPC("CheckWinner", RpcTarget.AllBuffered);
+            }
+        }
+        else
+        {
+            if (GameManager.Instance.player1 && GameManager.Instance.player2)
+            {
+                photonView.RPC("CheckWinner", RpcTarget.AllBuffered);
+            }
+        }
+        
+    }
+
     private void FixedUpdate()
     {
         if (photonView.IsMine)
@@ -211,10 +230,12 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
             if (PhotonNetwork.IsMasterClient)
             {
                 GameManager.Instance.player1 = true;
+                Debug.Log("Sou o player1");
             }
             else
             {
                 GameManager.Instance.player2 = true;
+                Debug.Log("Sou o player2");
             }
         }
     }
@@ -225,11 +246,13 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                GameManager.Instance.player1 = false;
+                GameManager.Instance.player1 = true;
+                Debug.Log("Saiu o player1");
             }
             else
             {
-                GameManager.Instance.player2 = false;
+                GameManager.Instance.player2 = true;
+                Debug.Log("Saiu o player2");
             }
         }
     }
