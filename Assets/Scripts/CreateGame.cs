@@ -40,7 +40,7 @@ public class CreateGame : MonoBehaviourPunCallbacks
     
     
     #region Public Methods
-
+    
     public string GeraID()
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -123,6 +123,11 @@ public class CreateGame : MonoBehaviourPunCallbacks
     {
         Debug.Log("Entrou na sala: " + PhotonNetwork.CurrentRoom.Name);
         PhotonNetwork.LoadLevel("Lobby");
+    }
+
+    public void SairMenu()
+    {
+        PhotonNetwork.LoadLevel("Menu");
     }
 
     #endregion

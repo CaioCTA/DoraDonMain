@@ -116,6 +116,7 @@ GameObject:
   - component: {fileID: -5416475645041350772}
   - component: {fileID: -4691982681392614705}
   - component: {fileID: 6510087965300599019}
+  - component: {fileID: 1157719892935310211}
   - component: {fileID: 2892037498713541472}
   - component: {fileID: 5001681217232499091}
   - component: {fileID: 8665488126470002395}
@@ -269,7 +270,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4114354980830581767}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 6200000, guid: a3be465e40b128746b51ac9ce5cb949e, type: 2}
   m_IncludeLayers:
@@ -307,6 +308,41 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.3075969, y: 0.56475306}
   m_EdgeRadius: 0
+--- !u!70 &1157719892935310211
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4114354980830581767}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.01287243, y: -0.15566868}
+  m_Size: {x: 0.34392717, y: 0.6208979}
+  m_Direction: 0
 --- !u!114 &2892037498713541472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,6 +360,7 @@ MonoBehaviour:
   maxFlyTime: 4.5
   _flySpeed: 350
   _flyQuant: 1
+  flyTime_Text: {fileID: 0}
 --- !u!95 &5001681217232499091
 Animator:
   serializedVersion: 5

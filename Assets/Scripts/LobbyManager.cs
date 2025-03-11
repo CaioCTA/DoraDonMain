@@ -86,12 +86,23 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
         }
 
-        if (PhotonNetwork.IsMasterClient && _playersCount == 2)
+        if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.LoadLevel("GameScene");
         }
 
         
+    }
+
+   
+
+    public void SairSala()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            PhotonNetwork.LoadLevel("CreateGame");
+            PhotonNetwork.LeaveRoom();
+        }
     }
 
     

@@ -34,7 +34,7 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
     private Quaternion latestRotation;
     
     //BoxColliderSwimming
-    private BoxCollider2D _boxCollider2D;
+    private CapsuleCollider2D _capsuleCollider2D;
     
     private Vector2 _originalBoxColliderSize;
     private Vector2 _originalBoxColliderOffset;
@@ -44,10 +44,10 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
-        _boxCollider2D = GetComponent<BoxCollider2D>();
+        _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
         
-        _originalBoxColliderSize = _boxCollider2D.size;
-        _originalBoxColliderOffset = _boxCollider2D.offset;
+        _originalBoxColliderSize = _capsuleCollider2D.size;
+        _originalBoxColliderOffset = _capsuleCollider2D.offset;
         
         lastUpdate = Time.time;
         latestRotation = transform.rotation;
@@ -259,15 +259,15 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
      IEnumerator ChangeCollider()
      {
          yield return new WaitForSeconds(0.7f);
-         _boxCollider2D.size = new Vector2(0.6123964f, 0.3612713f);
-         _boxCollider2D.offset = new Vector2(0.04708159f, -0.004111208f);
+         _capsuleCollider2D.size = new Vector2(0.6123964f, 0.3612713f);
+         _capsuleCollider2D.offset = new Vector2(0.04708159f, -0.004111208f);
      }
 
      IEnumerator ChangeColliderOut()
      {
          yield return new WaitForSeconds(0.7f);
-         _boxCollider2D.size = _originalBoxColliderSize;
-         _boxCollider2D.offset = _originalBoxColliderOffset;
+         _capsuleCollider2D.size = _originalBoxColliderSize;
+         _capsuleCollider2D.offset = _originalBoxColliderOffset;
      }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

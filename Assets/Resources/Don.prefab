@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: -5416475645041350772}
   - component: {fileID: -4691982681392614705}
   - component: {fileID: 6510087965300599019}
-  - component: {fileID: 4527868170948994920}
+  - component: {fileID: -5449031106259301183}
   - component: {fileID: 2646995621659342397}
   - component: {fileID: 2151184408635049651}
   - component: {fileID: 9143128132643269183}
@@ -270,7 +270,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4114354980830581767}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 6200000, guid: a3be465e40b128746b51ac9ce5cb949e, type: 2}
   m_IncludeLayers:
@@ -308,19 +308,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.34328613, y: 0.6082628}
   m_EdgeRadius: 0
---- !u!70 &4527868170948994920
+--- !u!70 &-5449031106259301183
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4114354980830581767}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 16
+    m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -340,9 +340,9 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.09511938, y: -0.0057504214}
-  m_Size: {x: 0.7185034, y: 0.33594248}
-  m_Direction: 1
+  m_Offset: {x: 0.17767955, y: -0.036016125}
+  m_Size: {x: 0.4045336, y: 0.62063026}
+  m_Direction: 0
 --- !u!114 &2646995621659342397
 MonoBehaviour:
   m_ObjectHideFlags: 0

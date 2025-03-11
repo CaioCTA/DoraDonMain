@@ -16,7 +16,8 @@ public class PlayFabLogin : MonoBehaviour
     public static string PlayFabID;
     public string Nickname;
 
-    public TMP_Text statusText;
+    public TMP_Text statusTextCreate;
+    public TMP_Text statusTextLogin;
 
     public string userEmail;
     public string userPassword;
@@ -54,7 +55,7 @@ public class PlayFabLogin : MonoBehaviour
         if (string.IsNullOrEmpty(inputUserEmailLogin.text) || string.IsNullOrEmpty(inputUserPasswordLogin.text))
         {
             Debug.Log("Preencha os dados corretamente!");
-            statusText.text = "Preencha os dados corretamente!";
+            statusTextLogin.text = "Preencha os dados corretamente!";
         }
         else
         {
@@ -73,7 +74,7 @@ public class PlayFabLogin : MonoBehaviour
         if (string.IsNullOrEmpty(inputUsername.text) || string.IsNullOrEmpty(inputEmail.text) || string.IsNullOrEmpty(inputPassword.text))
         {
             Debug.Log("Preencha os dados corretamente!");
-            statusText.text = "Preencha os dados corretamente!";
+            statusTextCreate.text = "Preencha os dados corretamente!";
         }
         else
         {
@@ -91,7 +92,7 @@ public class PlayFabLogin : MonoBehaviour
     public void SucessoLogin(LoginResult resulto)
     {
         Debug.Log("Login foi feito com sucesso!");
-        statusText.text = "Login foi feito com sucesso!";
+        statusTextLogin.text = "Login foi feito com sucesso!";
         loginPanel.SetActive(false);
         SceneManager.LoadScene("Loading");
     }
@@ -99,18 +100,18 @@ public class PlayFabLogin : MonoBehaviour
     public void FalhaLogin(PlayFabError error)
     {
         Debug.Log("Não foi possível fazer login!");
-        statusText.text = "Não foi possível fazer login!";
+        statusTextLogin.text = "Não foi possível fazer login!";
 
         switch (error.Error)
         {
             case PlayFabErrorCode.AccountNotFound:
-                statusText.text = "Não foi possível efetuar o login!\nConta não existe.";
+                statusTextLogin.text = "Não foi possível efetuar o login!\nConta não existe.";
                 break;
             case PlayFabErrorCode.InvalidEmailOrPassword:
-                statusText.text = "Não foi possível efetuar o login!\nE-mail ou senha inválidos.";
+                statusTextLogin.text = "Não foi possível efetuar o login!\nE-mail ou senha inválidos.";
                 break;
             default:
-                statusText.text = "Não foi possível efetuar o login!\nVerifique os dados infomados.";
+                statusTextLogin.text = "Não foi possível efetuar o login!\nVerifique os dados infomados.";
                 break;
 
         }
@@ -119,21 +120,21 @@ public class PlayFabLogin : MonoBehaviour
     public void FalhaCriarConta(PlayFabError error)
     {
         Debug.Log("Falhou a tentativa de criar uma conta nova");
-        statusText.text = "Falhou a tentativa de criar uma conta nova";
+        statusTextCreate.text = "Falhou a tentativa de criar uma conta nova";
 
         switch (error.Error)
         {
             case PlayFabErrorCode.InvalidEmailAddress:
-                statusText.text = "Já possui um conta com esse email!";
+                statusTextCreate.text = "Já possui um conta com esse email!";
                 break;
             case PlayFabErrorCode.InvalidUsername:
-                statusText.text = "Username já está em uso.";
+                statusTextCreate.text = "Username já está em uso.";
                 break;
             case PlayFabErrorCode.InvalidParams:
-                statusText.text = "Não foi possível criar um conta! \nVerifique os dados informados";
+                statusTextCreate.text = "Não foi possível criar um conta! \nVerifique os dados informados";
                 break;
             default:
-                statusText.text = "Não foi possível efetuar o login!\nVerifique os dados infomados.";
+                statusTextCreate.text = "Não foi possível efetuar o login!\nVerifique os dados infomados.";
                 Debug.Log(error.ErrorMessage);
                 break;
         }
@@ -142,7 +143,7 @@ public class PlayFabLogin : MonoBehaviour
     public void SucessoCriarConta(RegisterPlayFabUserResult result)
     {
         Debug.Log("Sucesso ao criar uma conta nova!");
-        statusText.text = "Sucesso ao criar uma conta nova!";
+        statusTextCreate.text = "Sucesso ao criar uma conta nova!";
     }
 
     #endregion

@@ -20,12 +20,13 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private float _flySpeed = 3500f;
     private float currentFlyTime = 0f; // Variável para controlar o tempo de voo restante
     [SerializeField] private int _flyQuant = 1;
+    public TMP_Text flyTime_Text;
 
     private Rigidbody2D _rb;
     private Animator _anim;
     
     //BoxColliderFlying
-    private BoxCollider2D _boxCollider2D;
+    private CapsuleCollider2D _capsuleCollider2D;
     
     private Vector2 _originalBoxColliderSize;
     private Vector2 _originalBoxColliderOffset;
@@ -38,10 +39,10 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
-        _boxCollider2D = GetComponent<BoxCollider2D>();
+        _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
         
-        _originalBoxColliderSize = _boxCollider2D.size;
-        _originalBoxColliderOffset = _boxCollider2D.offset;
+        _originalBoxColliderSize = _capsuleCollider2D.size;
+        _originalBoxColliderOffset = _capsuleCollider2D.offset;
         
         lastUpdate = Time.time;
         latestPosition = transform.position;
@@ -152,17 +153,20 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
             if (Input.GetKeyDown(KeyCode.Space) && !_isFlying && !isGrounded && _flyQuant == 1)
             {
                 StartFlying();
-                StartCoroutine(ChangeCollider());
+                ChangeCollider();
             }
 
             if (_isFlying)
             {
                 currentFlyTime -= Time.deltaTime;
+                string v = currentFlyTime.ToString("00:00");
+                flyTime_Text.text = $"Timer: {v}";
 
                 if (currentFlyTime <= 0)
                 {
                     StopFlying();
-                    StartCoroutine(ChangeColliderOut());
+                    ChangeColliderOut();
+                    flyTime_Text.text = "";
                 }
                 
             }
@@ -324,21 +328,33 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
      }
      #endregion
      
-     IEnumerator ChangeCollider()
-     {
-         yield return new WaitForSeconds(0.2f);
-         _boxCollider2D.size = new Vector2(0.6485293f, 0.4182276f);
-         _boxCollider2D.offset = new Vector2(-0.05495566f, -0.02544083f);
-     }
+     //IEnumerator ChangeCollider()
+     //{
+     //    yield return new WaitForSeconds(0.2f);
+     //    _boxCollider2D.size = new Vector2(0.6485293f, 0.4182276f);
+     //    _boxCollider2D.offset = new Vector2(-0.05495566f, -0.02544083f);
+     //}
 
-     IEnumerator ChangeColliderOut()
-     {
-         yield return new WaitForSeconds(0.1f);
-         _boxCollider2D.size = _originalBoxColliderSize;
-         _boxCollider2D.offset = _originalBoxColliderOffset;
-     }
-     
-     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+     //IEnumerator ChangeColliderOut()
+     //{
+     //    yield return new WaitForSeconds(0.1f);
+     //    _boxCollider2D.size = _originalBoxColliderSize;
+     //    _boxCollider2D.offset = _originalBoxColliderOffset;
+     //}
+
+    void ChangeCollider()
+    {
+        _capsuleCollider2D.size = new Vector2(0.6485293f, 0.4182276f);
+        _capsuleCollider2D.offset = new Vector2(-0.05495566f, -0.02544083f);
+    }
+
+    void ChangeColliderOut()
+    {
+        _capsuleCollider2D.size = _originalBoxColliderSize;
+        _capsuleCollider2D.offset = _originalBoxColliderOffset;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
      {
          if (stream.IsWriting)
          {
