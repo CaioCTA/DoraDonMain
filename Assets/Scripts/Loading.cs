@@ -8,18 +8,24 @@ using TMPro;
 public class Loading : MonoBehaviourPunCallbacks
 {
     #region Variables
-    
+
+    static Loading loading;
     [SerializeField] private TMP_Text loadingText;
 
     #endregion
 
     #region Unity Methods
 
-    private void Start()
+    public void Connect()
     {
         loadingText.text = "Carregando...";
         PhotonNetwork.ConnectUsingSettings();
     }
+
+    //private void Start()
+    //{
+        
+    //}
 
     #endregion
     

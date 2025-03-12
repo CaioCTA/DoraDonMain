@@ -8,6 +8,8 @@ using Photon.Realtime;
 using UnityEngine.UIElements;
 using System;
 using Random = UnityEngine.Random;
+using static UnityEditor.Progress;
+using WebSocketSharp;
 
 public class CreateGame : MonoBehaviourPunCallbacks
 {
@@ -17,6 +19,7 @@ public class CreateGame : MonoBehaviourPunCallbacks
     public float displayTime = 3f;
     [SerializeField] private TMP_InputField _nickName;
     [SerializeField] private TMP_InputField _roomID;
+    public string _roomName;
     [SerializeField] private TMP_Text _noNickname;
     private RoomOptions _roomOptions = new RoomOptions();
     
@@ -34,6 +37,8 @@ public class CreateGame : MonoBehaviourPunCallbacks
         _roomOptions.MaxPlayers = 2;
         _roomOptions.IsVisible = true;
         _roomOptions.IsOpen = true;
+
+        _nickName.text = PlayFabLogin.PFL.Nickname;
     }
 
     #endregion
@@ -55,58 +60,66 @@ public class CreateGame : MonoBehaviourPunCallbacks
         return code;
     }
 
-    public void CriarSala()
-    {
+    //public void CriarSala()
+    //{
 
-        if (_nickName.text == "")
+    //    if (_nickName.text == "")
+    //    {
+    //        Debug.Log("Obrigatorio um nickname.");
+    //        StartCoroutine(DisplayTextNoNickname());
+    //    }
+    //    else
+    //    {
+    //        string roomName = GeraID();
+    //        Debug.Log("Sala Criada: " + roomName);
+    //        PhotonNetwork.CreateRoom(roomName, _roomOptions);
+    //    }
+
+
+    //}
+
+    public void CriarSala(string roomName = "")
+    {
+        roomName = !roomName.IsNullOrEmpty() ? roomName : GeraID();
+
+        Debug.Log("SALA CRIADA");
+
+        PhotonNetwork.CreateRoom(roomName, _roomOptions);
+    }
+
+
+    public void CriarOuEntrarSala(bool isHost, string nomeSala)
+    {
+        if (isHost)
         {
-            Debug.Log("Obrigatorio um nickname.");
-            StartCoroutine(DisplayTextNoNickname());
+            PhotonNetwork.CreateRoom(nomeSala, _roomOptions);
         }
         else
         {
-            string roomName = GeraID();
-            Debug.Log("Sala Criada: " + roomName);
-            PhotonNetwork.CreateRoom(roomName, _roomOptions);
+            PhotonNetwork.JoinRoom(nomeSala);
         }
-        
-        
+
     }
 
     public void JoinRoom()
     {
-        
-        if (_nickName.text == "")
-        {
-            Debug.Log("Obrigatorio um nickname.");
-            StartCoroutine(DisplayTextNoNickname());
-        }
-        else
-        {
-            if (_roomID == null)
-            {
-                return;
-            }
 
-            PhotonNetwork.JoinRoom(_roomID.text);
+
+        if (_roomID == null)
+        {
+            return;
         }
+
+        PhotonNetwork.JoinRoom(_roomID.text);
+       
 
     }
 
     public void JoinRandomRoom()
     {
-        
-        if (_nickName.text == "")
-        {
-            Debug.Log("Obrigatorio um nickname.");
-            StartCoroutine(DisplayTextNoNickname());
-        }
-        else
-        {
-            PhotonNetwork.JoinRandomRoom();
-        }
-        
-        
+
+        PhotonNetwork.JoinRandomRoom();
+
     }
 
     public void MudaNome()
@@ -114,34 +127,45 @@ public class CreateGame : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.NickName = _nickName.text;
         Debug.Log(_nickName.text);
     }
-    
+    public void SairMenu()
+    {
+        PhotonNetwork.LoadLevel("Menu");
+    }
+
+
     #endregion
 
     #region Photon Callbacks
 
     public override void OnJoinedRoom()
     {
+        MudaNome();
+
         Debug.Log("Entrou na sala: " + PhotonNetwork.CurrentRoom.Name);
         PhotonNetwork.LoadLevel("Lobby");
     }
 
-    public void SairMenu()
+    public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        PhotonNetwork.LoadLevel("Menu");
+        Debug.Log($"[PhotonNetwork] Falha ao entrar na sala, erro {returnCode}: {message}, vamos tentar novamente em 2s.");
+
+        // coroutine para ficar tentando entrar na sala
+        StartCoroutine(TentaEntrarSala(_roomName));
     }
 
     #endregion
 
     #region IEnumerator
 
-    IEnumerator DisplayTextNoNickname()
+    private IEnumerator TentaEntrarSala(string nomeSala)
     {
-        _noNickname.text = "Necessario inserir um apelido.";
-        yield return new WaitForSeconds(displayTime);
-        _noNickname.text = string.Empty;
+        yield return new WaitForSeconds(2f);
+        Debug.Log($"[PhotonNetwork] Tentando entrar na sala {nomeSala}");
+        PhotonNetwork.JoinRoom(nomeSala);
     }
 
+
     #endregion
-    
-    
+
+
 }
