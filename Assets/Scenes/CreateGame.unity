@@ -1812,6 +1812,7 @@ GameObject:
   m_Component:
   - component: {fileID: 736355171}
   - component: {fileID: 736355170}
+  - component: {fileID: 736355172}
   m_Layer: 0
   m_Name: CreateGame
   m_TagString: Untagged
@@ -1834,6 +1835,7 @@ MonoBehaviour:
   displayTime: 3
   _nickName: {fileID: 1263207435}
   _roomID: {fileID: 124581825}
+  _roomName: 
   _noNickname: {fileID: 1614521506}
 --- !u!4 &736355171
 Transform:
@@ -1850,6 +1852,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &736355172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 736355169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c9d26a13f26f3b47b6bfdf8061a29b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityId: 
+  ticketId: 
+  nomeFila: mpecddqueue
+  roomName: 
+  isHost: 0
 --- !u!1 &792926310
 GameObject:
   m_ObjectHideFlags: 0
