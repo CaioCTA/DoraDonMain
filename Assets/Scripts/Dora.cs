@@ -35,6 +35,9 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
     private float lastUpdate;
     private Vector2 latestPosition;
     private Quaternion latestRotation;
+
+
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();

@@ -13,6 +13,7 @@ TagManager:
   - Final
   - Water
   - Espinhos
+  - MovingPlatform
   layers:
   - Default
   - TransparentFX
