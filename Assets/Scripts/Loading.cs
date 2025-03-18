@@ -16,19 +16,20 @@ public class Loading : MonoBehaviourPunCallbacks
 
     #region Unity Methods
 
-    public void Connect()
+    //public void Connect()
+    //{
+    //    PhotonNetwork.LoadLevel("Loading");
+        
+    //}
+
+    private void Start()
     {
         loadingText.text = "Carregando...";
         PhotonNetwork.ConnectUsingSettings();
     }
 
-    //private void Start()
-    //{
-        
-    //}
-
     #endregion
-    
+
     #region Callbacks Photon
 
     public override void OnConnectedToMaster()

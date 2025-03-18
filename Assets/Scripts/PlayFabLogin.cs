@@ -9,6 +9,7 @@ using TMPro;
 using Unity.VisualScripting;
 using ExitGames.Client.Photon;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public class PlayFabLogin : MonoBehaviour
 {
@@ -36,7 +37,7 @@ public class PlayFabLogin : MonoBehaviour
 
     public GameObject loginPanel;
 
-    public Loading loadManager;
+    static Loading loadManager;
 
     public static PlayFabLogin PFL;
 
@@ -91,6 +92,10 @@ public class PlayFabLogin : MonoBehaviour
         {
             Debug.Log("Preencha os dados corretamente!");
             statusTextCreate.text = "Preencha os dados corretamente!";
+            if (inputUsername.text.Contains("@") || inputUsername.text.Contains("!") || inputUsername.text.Contains("$"))
+            {
+                statusTextCreate.text = "Caracteres especiais não são permitidos no nome de usuário!";
+            }
         }
         else
         {
@@ -103,6 +108,8 @@ public class PlayFabLogin : MonoBehaviour
             // Requisição
             PlayFabClientAPI.RegisterPlayFabUser(request, SucessoCriarConta, FalhaCriarConta);
         }
+
+
     }
 
     //public void SucessoLogin(LoginResult resulto)
@@ -141,7 +148,8 @@ public class PlayFabLogin : MonoBehaviour
         }
 
         // carrega nova cena e conecta no photon
-        loadManager.Connect();
+        //loadManager.Connect();
+        PhotonNetwork.LoadLevel("Loading");
     }
 
     public void FalhaLogin(PlayFabError error)
@@ -191,6 +199,10 @@ public class PlayFabLogin : MonoBehaviour
     {
         Debug.Log("Sucesso ao criar uma conta nova!");
         statusTextCreate.text = "Sucesso ao criar uma conta nova!";
+
+        inputEmail.text = "";
+        inputPassword.text = "";
+        inputUsername.text = "";
     }
 
     #endregion
@@ -248,4 +260,63 @@ public class PlayFabLogin : MonoBehaviour
         },
         error => Debug.Log(error.ErrorMessage));
     }
+
+
+
+
+    //Teste LeaderBoard
+
+    public void UpdatePlayerScore(int score)
+    {
+        var request = new UpdatePlayerStatisticsRequest
+        {
+            Statistics = new List<StatisticUpdate> {
+            new StatisticUpdate {
+                StatisticName = "Score",
+                Value = score
+            }
+        }
+        };
+
+        PlayFabClientAPI.UpdatePlayerStatistics(request, OnStatisticsUpdated, OnStatisticsUpdateFailed);
+    }
+
+    void OnStatisticsUpdated(UpdatePlayerStatisticsResult result)
+    {
+        Debug.Log("Pontuação atualizada com sucesso!");
+    }
+
+    void OnStatisticsUpdateFailed(PlayFabError error)
+    {
+        Debug.LogError("Erro ao atualizar pontuação: " + error.GenerateErrorReport());
+    }
+
+
+    public void GetLeaderboard()
+    {
+        var request = new GetLeaderboardRequest
+        {
+            StatisticName = "Score",
+            StartPosition = 0,
+            MaxResultsCount = 10
+        };
+
+        PlayFabClientAPI.GetLeaderboard(request, OnLeaderboardReceived, OnLeaderboardError);
+    }
+
+    void OnLeaderboardReceived(GetLeaderboardResult result)
+    {
+        Debug.Log("Placar de líderes recebido:");
+        foreach (var entry in result.Leaderboard)
+        {
+            Debug.Log($"{entry.Position + 1}. {entry.DisplayName} - {entry.StatValue}");
+        }
+    }
+
+    void OnLeaderboardError(PlayFabError error)
+    {
+        Debug.LogError("Erro ao obter placar de líderes: " + error.GenerateErrorReport());
+    }
+
+
 }

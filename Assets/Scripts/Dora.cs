@@ -40,6 +40,7 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
 
     private void Start()
     {
+
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
