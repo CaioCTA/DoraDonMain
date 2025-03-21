@@ -261,6 +261,7 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
          yield return new WaitForSeconds(0.7f);
          _capsuleCollider2D.size = new Vector2(0.6123964f, 0.3612713f);
          _capsuleCollider2D.offset = new Vector2(0.04708159f, -0.004111208f);
+        _capsuleCollider2D.direction = CapsuleDirection2D.Horizontal;
      }
 
      IEnumerator ChangeColliderOut()
@@ -268,7 +269,8 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
          yield return new WaitForSeconds(0.7f);
          _capsuleCollider2D.size = _originalBoxColliderSize;
          _capsuleCollider2D.offset = _originalBoxColliderOffset;
-     }
+        _capsuleCollider2D.direction = CapsuleDirection2D.Vertical;
+    }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
