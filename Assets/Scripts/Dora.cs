@@ -350,12 +350,14 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
     {
         _capsuleCollider2D.size = new Vector2(0.6485293f, 0.4182276f);
         _capsuleCollider2D.offset = new Vector2(-0.05495566f, -0.02544083f);
+        _capsuleCollider2D.direction = CapsuleDirection2D.Horizontal;
     }
 
     void ChangeColliderOut()
     {
         _capsuleCollider2D.size = _originalBoxColliderSize;
         _capsuleCollider2D.offset = _originalBoxColliderOffset;
+        _capsuleCollider2D.direction = CapsuleDirection2D.Vertical;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)

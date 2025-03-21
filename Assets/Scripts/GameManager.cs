@@ -28,7 +28,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
 
-    
+    private void Update()
+    {
+        CheckWinner();
+    }
+
+
     void Start()
     {
 

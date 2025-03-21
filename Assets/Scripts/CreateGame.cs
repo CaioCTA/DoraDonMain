@@ -8,7 +8,6 @@ using Photon.Realtime;
 using UnityEngine.UIElements;
 using System;
 using Random = UnityEngine.Random;
-using static UnityEditor.Progress;
 using WebSocketSharp;
 
 public class CreateGame : MonoBehaviourPunCallbacks
