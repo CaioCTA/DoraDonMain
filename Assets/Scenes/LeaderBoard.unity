@@ -1066,7 +1066,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _LBTransform: {fileID: 1983978594}
-  _LBRow: {fileID: 0}
+  _LBRow: {fileID: 367081847943313296, guid: e87c54ff6fdc4734791a937913969874, type: 3}
   _LBEntries: []
 --- !u!4 &1815984197
 Transform:

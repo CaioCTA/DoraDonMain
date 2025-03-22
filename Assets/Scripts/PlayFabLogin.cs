@@ -62,24 +62,24 @@ public class PlayFabLogin : MonoBehaviour
         }
         else
         {
-            // credenciais para autenticação
+            // credenciais para autenticaï¿½ï¿½o
             usernameOrEmail = inputUserEmailLogin.text;
             userPassword = inputUserPasswordLogin.text;
 
             if (usernameOrEmail.Contains("@"))
             {
-                //payload de requisição
+                //payload de requisiï¿½ï¿½o
                 var requestEmail = new LoginWithEmailAddressRequest { Email = usernameOrEmail, Password = userPassword };
 
-                // Requisição
+                // Requisiï¿½ï¿½o
                 PlayFabClientAPI.LoginWithEmailAddress(requestEmail, SucessoLogin, FalhaLogin);
             }
             else
             {
-                //payload de requisição
+                //payload de requisiï¿½ï¿½o
                 var requestUsername = new LoginWithPlayFabRequest { Username = usernameOrEmail, Password = userPassword };
 
-                // Requisição
+                // Requisiï¿½ï¿½o
                 PlayFabClientAPI.LoginWithPlayFab(requestUsername, SucessoLogin, FalhaLogin);
 
             }
@@ -94,7 +94,7 @@ public class PlayFabLogin : MonoBehaviour
             statusTextCreate.text = "Preencha os dados corretamente!";
             if (inputUsername.text.Contains("@") || inputUsername.text.Contains("!") || inputUsername.text.Contains("$"))
             {
-                statusTextCreate.text = "Caracteres especiais não são permitidos no nome de usuário!";
+                statusTextCreate.text = "Caracteres especiais nï¿½o sï¿½o permitidos no nome de usuï¿½rio!";
             }
         }
         else
@@ -103,9 +103,9 @@ public class PlayFabLogin : MonoBehaviour
             usernameOrEmail = inputEmail.text;
             userPassword = inputPassword.text;
 
-            // payload da requisição
+            // payload da requisiï¿½ï¿½o
             var request = new RegisterPlayFabUserRequest { Email = usernameOrEmail, Password = userPassword, Username = username };
-            // Requisição
+            // Requisiï¿½ï¿½o
             PlayFabClientAPI.RegisterPlayFabUser(request, SucessoCriarConta, FalhaCriarConta);
         }
 
@@ -144,29 +144,29 @@ public class PlayFabLogin : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("O LoginResult não retornou EntityToken. Talvez seja preciso chamar GetEntityToken separadamente.");
+            Debug.LogWarning("O LoginResult nï¿½o retornou EntityToken. Talvez seja preciso chamar GetEntityToken separadamente.");
         }
 
         // carrega nova cena e conecta no photon
         //loadManager.Connect();
-        PhotonNetwork.LoadLevel("Loading");
+        PhotonNetwork.LoadLevel("LeaderBoard");
     }
 
     public void FalhaLogin(PlayFabError error)
     {
-        Debug.Log("Não foi possível fazer login!");
-        statusTextLogin.text = "Não foi possível fazer login!";
+        Debug.Log("Nï¿½o foi possï¿½vel fazer login!");
+        statusTextLogin.text = "Nï¿½o foi possï¿½vel fazer login!";
 
         switch (error.Error)
         {
             case PlayFabErrorCode.AccountNotFound:
-                statusTextLogin.text = "Não foi possível efetuar o login!\nConta não existe.";
+                statusTextLogin.text = "Nï¿½o foi possï¿½vel efetuar o login!\nConta nï¿½o existe.";
                 break;
             case PlayFabErrorCode.InvalidEmailOrPassword:
-                statusTextLogin.text = "Não foi possível efetuar o login!\nE-mail ou senha inválidos.";
+                statusTextLogin.text = "Nï¿½o foi possï¿½vel efetuar o login!\nE-mail ou senha invï¿½lidos.";
                 break;
             default:
-                statusTextLogin.text = "Não foi possível efetuar o login!\nVerifique os dados infomados.";
+                statusTextLogin.text = "Nï¿½o foi possï¿½vel efetuar o login!\nVerifique os dados infomados.";
                 break;
 
         }
@@ -180,16 +180,16 @@ public class PlayFabLogin : MonoBehaviour
         switch (error.Error)
         {
             case PlayFabErrorCode.InvalidEmailAddress:
-                statusTextCreate.text = "Já possui um conta com esse email!";
+                statusTextCreate.text = "Jï¿½ possui um conta com esse email!";
                 break;
             case PlayFabErrorCode.InvalidUsername:
-                statusTextCreate.text = "Username já está em uso.";
+                statusTextCreate.text = "Username jï¿½ estï¿½ em uso.";
                 break;
             case PlayFabErrorCode.InvalidParams:
-                statusTextCreate.text = "Não foi possível criar um conta! \nVerifique os dados informados";
+                statusTextCreate.text = "Nï¿½o foi possï¿½vel criar um conta! \nVerifique os dados informados";
                 break;
             default:
-                statusTextCreate.text = "Não foi possível efetuar o login!\nVerifique os dados infomados.";
+                statusTextCreate.text = "Nï¿½o foi possï¿½vel efetuar o login!\nVerifique os dados infomados.";
                 Debug.Log(error.ErrorMessage);
                 break;
         }
@@ -209,7 +209,7 @@ public class PlayFabLogin : MonoBehaviour
 
     public void PegaDadosJogador(string id)
     {
-        // requisição para pegar dados do jogador
+        // requisiï¿½ï¿½o para pegar dados do jogador
         PlayFabClientAPI.GetUserData(new GetUserDataRequest()
         {
             PlayFabId = PlayFabID,
@@ -218,7 +218,7 @@ public class PlayFabLogin : MonoBehaviour
 
             if (result.Data == null || !result.Data.ContainsKey(id))
             {
-                Debug.Log("Conteúdo vazio!");
+                Debug.Log("Conteï¿½do vazio!");
             }
 
             else if (result.Data.ContainsKey(id))
@@ -283,12 +283,12 @@ public class PlayFabLogin : MonoBehaviour
 
     void OnStatisticsUpdated(UpdatePlayerStatisticsResult result)
     {
-        Debug.Log("Pontuação atualizada com sucesso!");
+        Debug.Log("Pontuaï¿½ï¿½o atualizada com sucesso!");
     }
 
     void OnStatisticsUpdateFailed(PlayFabError error)
     {
-        Debug.LogError("Erro ao atualizar pontuação: " + error.GenerateErrorReport());
+        Debug.LogError("Erro ao atualizar pontuaï¿½ï¿½o: " + error.GenerateErrorReport());
     }
 
 
@@ -306,7 +306,7 @@ public class PlayFabLogin : MonoBehaviour
 
     void OnLeaderboardReceived(GetLeaderboardResult result)
     {
-        Debug.Log("Placar de líderes recebido:");
+        Debug.Log("Placar de lï¿½deres recebido:");
         foreach (var entry in result.Leaderboard)
         {
             Debug.Log($"{entry.Position + 1}. {entry.DisplayName} - {entry.StatValue}");
@@ -315,7 +315,7 @@ public class PlayFabLogin : MonoBehaviour
 
     void OnLeaderboardError(PlayFabError error)
     {
-        Debug.LogError("Erro ao obter placar de líderes: " + error.GenerateErrorReport());
+        Debug.LogError("Erro ao obter placar de lï¿½deres: " + error.GenerateErrorReport());
     }
 
 
