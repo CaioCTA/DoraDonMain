@@ -16,7 +16,7 @@ public class CreateGame : MonoBehaviourPunCallbacks
     #region Variables
     
     public float displayTime = 3f;
-    [SerializeField] private TMP_InputField _nickName;
+    [SerializeField] private TMP_Text _nickName;
     [SerializeField] private TMP_InputField _roomID;
     public string _roomName;
     [SerializeField] private TMP_Text _noNickname;
@@ -37,7 +37,7 @@ public class CreateGame : MonoBehaviourPunCallbacks
         _roomOptions.IsVisible = true;
         _roomOptions.IsOpen = true;
 
-        _nickName.text = PlayFabLogin.PFL.Nickname;
+        _nickName.text = $"Olá, {PlayFabLogin.PFL.Nickname}.";
     }
 
     #endregion

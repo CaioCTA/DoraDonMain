@@ -198,7 +198,8 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
 
         PhotonNetwork.Destroy(GameManager.player1Obj);
         GameManager.PlayerDeath();
-
+        PlayFabLeaderBoard leaderBoard = FindAnyObjectByType<PlayFabLeaderBoard>();
+        leaderBoard.UpdateLeaderBoard(30);
         
         
         

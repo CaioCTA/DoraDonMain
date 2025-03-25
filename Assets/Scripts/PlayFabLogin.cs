@@ -53,75 +53,39 @@ public class PlayFabLogin : MonoBehaviour
 
     #region Login
 
-    // public void Login()
-    // {
-    //     if (string.IsNullOrEmpty(inputUserEmailLogin.text) || string.IsNullOrEmpty(inputUserPasswordLogin.text))
-    //     {
-    //         Debug.Log("Preencha os dados corretamente!");
-    //         statusTextLogin.text = "Preencha os dados corretamente!";
-    //     }
-    //     else
-    //     {
-    //         // credenciais para autentica��o
-    //         usernameOrEmail = inputUserEmailLogin.text;
-    //         userPassword = inputUserPasswordLogin.text;
-    //
-    //         if (usernameOrEmail.Contains("@"))
-    //         {
-    //             //payload de requisi��o
-    //             var requestEmail = new LoginWithEmailAddressRequest { Email = usernameOrEmail, Password = userPassword };
-    //
-    //             // Requisi��o
-    //             PlayFabClientAPI.LoginWithEmailAddress(requestEmail, SucessoLogin, FalhaLogin);
-    //         }
-    //         else
-    //         {
-    //             //payload de requisi��o
-    //             var requestUsername = new LoginWithPlayFabRequest { Username = usernameOrEmail, Password = userPassword };
-    //
-    //             // Requisi��o
-    //             PlayFabClientAPI.LoginWithPlayFab(requestUsername, SucessoLogin, FalhaLogin);
-    //
-    //         }
-    //     }
-    // }
-    
     public void Login()
     {
         if (string.IsNullOrEmpty(inputUserEmailLogin.text) || string.IsNullOrEmpty(inputUserPasswordLogin.text))
         {
+            Debug.Log("Preencha os dados corretamente!");
             statusTextLogin.text = "Preencha os dados corretamente!";
-            return;
-        }
-
-        // Primeiro faz o login normalmente
-        usernameOrEmail = inputUserEmailLogin.text;
-        userPassword = inputUserPasswordLogin.text;
-
-        if (usernameOrEmail.Contains("@"))
-        {
-            var request = new LoginWithEmailAddressRequest { 
-                Email = usernameOrEmail, 
-                Password = userPassword,
-                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams {
-                    GetUserData = true
-                }
-            };
-            PlayFabClientAPI.LoginWithEmailAddress(request, SucessoLogin, FalhaLogin);
         }
         else
         {
-            var request = new LoginWithPlayFabRequest { 
-                Username = usernameOrEmail, 
-                Password = userPassword,
-                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams {
-                    GetUserData = true
-                }
-            };
-            PlayFabClientAPI.LoginWithPlayFab(request, SucessoLogin, FalhaLogin);
+            // credenciais para autentica��o
+            usernameOrEmail = inputUserEmailLogin.text;
+            userPassword = inputUserPasswordLogin.text;
+
+            if (usernameOrEmail.Contains("@"))
+            {
+                //payload de requisi��o
+                var requestEmail = new LoginWithEmailAddressRequest { Email = usernameOrEmail, Password = userPassword };
+
+                // Requisi��o
+                PlayFabClientAPI.LoginWithEmailAddress(requestEmail, SucessoLogin, FalhaLogin);
+            }
+            else
+            {
+                //payload de requisi��o
+                var requestUsername = new LoginWithPlayFabRequest { Username = usernameOrEmail, Password = userPassword };
+
+                // Requisi��o
+                PlayFabClientAPI.LoginWithPlayFab(requestUsername, SucessoLogin, FalhaLogin);
+
+            }
         }
     }
-    
+
 
     public void CriarConta()
     {
@@ -149,71 +113,35 @@ public class PlayFabLogin : MonoBehaviour
 
     }
 
-    // public void SucessoLogin(LoginResult result)
-    // {
-    //     // captura o playfabID
-    //     PlayFabID = result.PlayFabId;
-    //
-    //     // Mensagens de status
-    //     Debug.Log("Login foi feito com sucesso!");
-    //     statusTextLogin.text = "Login foi feito com sucesso!";
-    //
-    //     // desabilita o painel de login
-    //     loginPanel.SetActive(false);
-    //
-    //     // captura do nickname
-    //     PegaDisplayName(PlayFabID);
-    //
-    //     if (result.EntityToken != null && result.EntityToken.Entity != null)
-    //     {
-    //         EntityID = result.EntityToken.Entity.Id;
-    //         EntityType = result.EntityToken.Entity.Type;
-    //
-    //         Debug.Log($"EntityID: {EntityID}, EntityType: {EntityType}");
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning("O LoginResult n�o retornou EntityToken. Talvez seja preciso chamar GetEntityToken separadamente.");
-    //     }
-    //
-    //     // carrega nova cena e conecta no photon
-    //     //loadManager.Connect();
-    //     PhotonNetwork.LoadLevel("LeaderBoard");
-    // }
-    
     public void SucessoLogin(LoginResult result)
     {
-        // Verifica se já está logado em outro dispositivo
-        if (result.InfoResultPayload != null && 
-            result.InfoResultPayload.UserData != null &&
-            result.InfoResultPayload.UserData.ContainsKey("ActiveLogin") &&
-            result.InfoResultPayload.UserData["ActiveLogin"].Value == "true")
-        {
-            Debug.Log("AVISO: Conta já está em uso em outro dispositivo!");
-            statusTextLogin.text = "Esta conta já está logada em outro dispositivo!";
-        
-            // Faz logout imediato
-            PlayFabClientAPI.ForgetAllCredentials();
-            return;
-        }
-
-        // Marca a conta como ativa
-        PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest {
-            Data = new Dictionary<string, string> { { "ActiveLogin", "true" } }
-        }, null, null);
-
-        // Processo normal de login
+        // captura o playfabID
         PlayFabID = result.PlayFabId;
-        statusTextLogin.text = "Login feito com sucesso!";
+
+        // Mensagens de status
+        Debug.Log("Login foi feito com sucesso!");
+        statusTextLogin.text = "Login foi feito com sucesso!";
+
+        // desabilita o painel de login
         loginPanel.SetActive(false);
+
+        // captura do nickname
         PegaDisplayName(PlayFabID);
 
-        if (result.EntityToken != null)
+        if (result.EntityToken != null && result.EntityToken.Entity != null)
         {
             EntityID = result.EntityToken.Entity.Id;
             EntityType = result.EntityToken.Entity.Type;
+
+            Debug.Log($"EntityID: {EntityID}, EntityType: {EntityType}");
+        }
+        else
+        {
+            Debug.LogWarning("O LoginResult n�o retornou EntityToken. Talvez seja preciso chamar GetEntityToken separadamente.");
         }
 
+        // carrega nova cena e conecta no photon
+        //loadManager.Connect();
         PhotonNetwork.LoadLevel("LeaderBoard");
     }
 
@@ -280,7 +208,8 @@ public class PlayFabLogin : MonoBehaviour
         {
             PlayFabId = PlayFabID,
             Keys = null
-        }, result => {
+        }, result =>
+        {
 
             if (result.Data == null || !result.Data.ContainsKey(id))
             {
@@ -292,7 +221,8 @@ public class PlayFabLogin : MonoBehaviour
                 PlayerPrefs.SetString(id, result.Data[id].Value);
             }
 
-        }, (error) => {
+        }, (error) =>
+        {
             Debug.Log(error.GenerateErrorReport());
         });
     }
@@ -306,7 +236,8 @@ public class PlayFabLogin : MonoBehaviour
             }
         },
         result => Debug.Log("Dados do jogador atualizados com sucesso!"),
-        error => {
+        error =>
+        {
             Debug.Log(error.GenerateErrorReport());
         });
     }
@@ -321,87 +252,10 @@ public class PlayFabLogin : MonoBehaviour
                 ShowDisplayName = true
             }
         },
-        result => {
+        result =>
+        {
             Nickname = result.PlayerProfile.DisplayName;
         },
         error => Debug.Log(error.ErrorMessage));
     }
-
-
-    
-    #region Gerenciamento de Sessão
-
-    private void OnApplicationQuit()
-    {
-        LogoutSession();
-    }
-    private void LogoutSession()
-    {
-        if (!string.IsNullOrEmpty(PlayFabID))
-        {
-            PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest {
-                Data = new Dictionary<string, string> { { "ActiveLogin", "false" } }
-            }, null, null);
-        }
-    }
-
-    #endregion
-    
-
-
-    //Teste LeaderBoard
-
-    public void UpdatePlayerScore(int score)
-    {
-        var request = new UpdatePlayerStatisticsRequest
-        {
-            Statistics = new List<StatisticUpdate> {
-            new StatisticUpdate {
-                StatisticName = "Score",
-                Value = score
-            }
-        }
-        };
-
-        PlayFabClientAPI.UpdatePlayerStatistics(request, OnStatisticsUpdated, OnStatisticsUpdateFailed);
-    }
-
-    void OnStatisticsUpdated(UpdatePlayerStatisticsResult result)
-    {
-        Debug.Log("Pontuacao atualizada com sucesso!");
-    }
-
-    void OnStatisticsUpdateFailed(PlayFabError error)
-    {
-        Debug.LogError("Erro ao atualizar pontuacao: " + error.GenerateErrorReport());
-    }
-
-
-    public void GetLeaderboard()
-    {
-        var request = new GetLeaderboardRequest
-        {
-            StatisticName = "Score",
-            StartPosition = 0,
-            MaxResultsCount = 10
-        };
-
-        PlayFabClientAPI.GetLeaderboard(request, OnLeaderboardReceived, OnLeaderboardError);
-    }
-
-    void OnLeaderboardReceived(GetLeaderboardResult result)
-    {
-        Debug.Log("Placar de lideres recebido:");
-        foreach (var entry in result.Leaderboard)
-        {
-            Debug.Log($"{entry.Position + 1}. {entry.DisplayName} - {entry.StatValue}");
-        }
-    }
-
-    void OnLeaderboardError(PlayFabError error)
-    {
-        Debug.LogError("Erro ao obter placar de lideres: " + error.GenerateErrorReport());
-    }
-
-
 }
