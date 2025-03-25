@@ -11,7 +11,7 @@ public class PlayFabMatchmaking : MonoBehaviour
 
     public string entityId;
     public string ticketId;
-    public string nomeFila = "mpecddqueue";
+    public string nomeFila = "doradonqueue";
     private IEnumerator coroutine;
 
     public string roomName;
@@ -19,7 +19,7 @@ public class PlayFabMatchmaking : MonoBehaviour
 
     public void StartPlayFabMatchmaking()
     {
-        Debug.Log("[Matchmaker] Começando o emparalhamento!");
+        Debug.Log("[Matchmaker] Comeï¿½ando o emparalhamento!");
 
         entityId = PlayFabLogin.PFL.EntityID;
 
@@ -36,6 +36,16 @@ public class PlayFabMatchmaking : MonoBehaviour
                 {
                     Id = entityId,
                     Type = "title_player_account"
+                },
+                Attributes = new MatchmakingPlayerAttributes
+                {
+                    DataObject = new
+                    {
+                        Latency =  new Dictionary<string, int>
+                        {
+                            { "sa", 120 }
+                        }
+                    }
                 }
             },
             QueueName = nomeFila,
@@ -44,8 +54,10 @@ public class PlayFabMatchmaking : MonoBehaviour
 
         PlayFabMultiplayerAPI.CreateMatchmakingTicket(request, OnMatchmakingTicketCreated, OnMatchmakingError);
     }
+    
+    // MÃ©todo para obter latÃªncia (exemplo simplificado)
 
-    // callback sucesso criação ticket
+    // callback sucesso criaï¿½ï¿½o ticket
     private void OnMatchmakingTicketCreated(CreateMatchmakingTicketResult result)
     {
         // captura o ticket token
@@ -61,13 +73,13 @@ public class PlayFabMatchmaking : MonoBehaviour
         StartCoroutine(coroutine);
     }
 
-    // callback de erro em requisições do playfabs
+    // callback de erro em requisiï¿½ï¿½es do playfabs
     private void OnMatchmakingError(PlayFabError error)
     {
         Debug.LogError($"[Matchmaker] PlayFab erro: {error.Error} | {error.ErrorMessage}");
     }
 
-    // Coroutine para o polling - verificação periódica da fila
+    // Coroutine para o polling - verificaï¿½ï¿½o periï¿½dica da fila
     private IEnumerator WaitAndGetMatchmakingTicket(float waitTime)
     {
         while (true)
@@ -79,7 +91,7 @@ public class PlayFabMatchmaking : MonoBehaviour
 
     private void GetMatchmakingTicket()
     {
-        // requisição para monitorar a fila/tickets
+        // requisiï¿½ï¿½o para monitorar a fila/tickets
         PlayFabMultiplayerAPI.GetMatchmakingTicket(
             new GetMatchmakingTicketRequest
             {
@@ -112,7 +124,7 @@ public class PlayFabMatchmaking : MonoBehaviour
 
     private void OnGetMatched(GetMatchResult result)
     {
-        // futura implementação
+        // futura implementaï¿½ï¿½o
         // capturar o matchID para criar sala no Photon
         Debug.Log($"[Matchmaker] MatchId: {result.MatchId}");
         Debug.Log($"[Matchmaker] Arranjo da Partida: {result.ArrangementString}");
@@ -128,12 +140,12 @@ public class PlayFabMatchmaking : MonoBehaviour
         if (entityId == result.Members[0].Entity.Id)
         {
             isHost = true;
-            Debug.Log($"[Matchmaker] Você é o host da sala!");
+            Debug.Log($"[Matchmaker] Vocï¿½ ï¿½ o host da sala!");
         }
         else
         {
             isHost = false;
-            Debug.Log($"[Matchmaker] Você é apenas mais um..");
+            Debug.Log($"[Matchmaker] Vocï¿½ ï¿½ apenas mais um..");
         }
 
         // Passo 3) Criar ou entrar na sala

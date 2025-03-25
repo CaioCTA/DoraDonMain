@@ -39,11 +39,31 @@ public class PlayFabLeaderBoard : MonoBehaviour
         
                         // limpar a tabela antes de fazer a rotinha de mostrar os novos resultados
                         
+                        if (_LBEntries != null && _LBEntries.Length > 0)
+                        {
+                            foreach (GameObject entry in _LBEntries)
+                            {
+                                if (entry != null) Destroy(entry); // Destrói cada linha
+                            }
+                            _LBEntries = new GameObject[0]; // "Limpa" o array (cria um vazio)
+                        }
         
                         // fazer um laço para destruir os registros, SE HOUVER registros
                         
+                        if (_LBEntries != null && _LBEntries.Length > 0) // Verifica se o array não é nulo e tem elementos
+                        {
+                            for (int i = 0; i < _LBEntries.Length; i++)
+                            {
+                                if (_LBEntries[i] != null) // Verifica se o objeto não é nulo
+                                {
+                                    Destroy(_LBEntries[i]); // Destrói cada linha da UI
+                                }
+                            }
+                            _LBEntries = new GameObject[0]; // Reseta o array para vazio
+                        }
         
                         // limpar a lista/array _LBEntries
+                        _LBEntries = new GameObject[0];
                         
         
                         // inicializar o array de linhas da tabela

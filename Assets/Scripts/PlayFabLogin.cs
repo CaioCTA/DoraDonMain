@@ -94,32 +94,7 @@ public class PlayFabLogin : MonoBehaviour
             return;
         }
 
-        // Primeiro verifica se a conta já está em uso
-        var checkRequest = new GetUserDataRequest {
-            PlayFabId = null, // Verifica antes de saber o ID
-            Keys = new List<string> { "ActiveLogin" }
-        };
-
-        PlayFabClientAPI.GetUserData(checkRequest, checkResult => {
-            if (checkResult.Data != null && checkResult.Data.ContainsKey("ActiveLogin") && 
-                checkResult.Data["ActiveLogin"].Value == "true")
-            {
-                Debug.Log("AVISO: Conta já está em uso em outro dispositivo!");
-                statusTextLogin.text = "Esta conta já está logada em outro dispositivo!";
-                return; // Bloqueia o login
-            }
-
-            // Se não estiver logada, prossegue com autenticação
-            AuthenticateUser();
-
-        }, error => {
-            // Se falhar a verificação, tenta login normalmente
-            AuthenticateUser();
-        });
-    }
-
-    private void AuthenticateUser()
-    {
+        // Primeiro faz o login normalmente
         usernameOrEmail = inputUserEmailLogin.text;
         userPassword = inputUserPasswordLogin.text;
 
@@ -127,7 +102,10 @@ public class PlayFabLogin : MonoBehaviour
         {
             var request = new LoginWithEmailAddressRequest { 
                 Email = usernameOrEmail, 
-                Password = userPassword 
+                Password = userPassword,
+                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams {
+                    GetUserData = true
+                }
             };
             PlayFabClientAPI.LoginWithEmailAddress(request, SucessoLogin, FalhaLogin);
         }
@@ -135,11 +113,15 @@ public class PlayFabLogin : MonoBehaviour
         {
             var request = new LoginWithPlayFabRequest { 
                 Username = usernameOrEmail, 
-                Password = userPassword 
+                Password = userPassword,
+                InfoRequestParameters = new GetPlayerCombinedInfoRequestParams {
+                    GetUserData = true
+                }
             };
             PlayFabClientAPI.LoginWithPlayFab(request, SucessoLogin, FalhaLogin);
         }
     }
+    
 
     public void CriarConta()
     {
@@ -201,10 +183,24 @@ public class PlayFabLogin : MonoBehaviour
     
     public void SucessoLogin(LoginResult result)
     {
+        // Verifica se já está logado em outro dispositivo
+        if (result.InfoResultPayload != null && 
+            result.InfoResultPayload.UserData != null &&
+            result.InfoResultPayload.UserData.ContainsKey("ActiveLogin") &&
+            result.InfoResultPayload.UserData["ActiveLogin"].Value == "true")
+        {
+            Debug.Log("AVISO: Conta já está em uso em outro dispositivo!");
+            statusTextLogin.text = "Esta conta já está logada em outro dispositivo!";
+        
+            // Faz logout imediato
+            PlayFabClientAPI.ForgetAllCredentials();
+            return;
+        }
+
         // Marca a conta como ativa
         PlayFabClientAPI.UpdateUserData(new UpdateUserDataRequest {
             Data = new Dictionary<string, string> { { "ActiveLogin", "true" } }
-        }, null, null); // Não precisa tratar o resultado
+        }, null, null);
 
         // Processo normal de login
         PlayFabID = result.PlayFabId;
@@ -339,12 +335,6 @@ public class PlayFabLogin : MonoBehaviour
     {
         LogoutSession();
     }
-
-    private void OnDestroy()
-    {
-        LogoutSession();
-    }
-
     private void LogoutSession()
     {
         if (!string.IsNullOrEmpty(PlayFabID))
