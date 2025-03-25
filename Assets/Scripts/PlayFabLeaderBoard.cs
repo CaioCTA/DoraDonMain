@@ -74,9 +74,9 @@ public class PlayFabLeaderBoard : MonoBehaviour
                         {
                             _LBEntries[i] = Instantiate(_LBRow, _LBTransform);
                             TMP_Text[] colunas = _LBEntries[i].GetComponentsInChildren<TMP_Text>();
-                            colunas[0].text = result.Leaderboard[i].Position.ToString(); // valor da posição do ranking
-                            colunas[1].text = result.Leaderboard[i].DisplayName; // nome do player ou player id
-                            colunas[2].text = result.Leaderboard[i].StatValue.ToString(); // valor do estatística
+                            colunas[0].text = result.Leaderboard[i].DisplayName; 
+                            colunas[1].text = result.Leaderboard[i].StatValue.ToString(); 
+                            colunas[2].text = result.Leaderboard[i].Position.ToString(); 
                         }
                     },
                     error => 

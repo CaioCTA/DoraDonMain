@@ -271,7 +271,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 4114354980830581767}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: a3be465e40b128746b51ac9ce5cb949e, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -310,8 +310,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movSpeed: 350
-  _jumpForce: 6.5
-  maxFlyTime: 4.5
+  _jumpForce: 5
+  maxFlyTime: 5.5
   _flySpeed: 350
   _flyQuant: 1
   flyTime_Text: {fileID: 5204506532641698049}

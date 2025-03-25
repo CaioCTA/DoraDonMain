@@ -131,7 +131,7 @@ public class PlayFabLogin : MonoBehaviour
             statusTextCreate.text = "Preencha os dados corretamente!";
             if (inputUsername.text.Contains("@") || inputUsername.text.Contains("!") || inputUsername.text.Contains("$"))
             {
-                statusTextCreate.text = "Caracteres especiais n�o s�o permitidos no nome de usu�rio!";
+                statusTextCreate.text = "Caracteres especiais nao sao permitidos no nome de usuario!";
             }
         }
         else
@@ -220,19 +220,19 @@ public class PlayFabLogin : MonoBehaviour
 
     public void FalhaLogin(PlayFabError error)
     {
-        Debug.Log("N�o foi poss�vel fazer login!");
-        statusTextLogin.text = "N�o foi poss�vel fazer login!";
+        Debug.Log("Nao foi possivel fazer login!");
+        statusTextLogin.text = "Nao foi possivel fazer login!";
 
         switch (error.Error)
         {
             case PlayFabErrorCode.AccountNotFound:
-                statusTextLogin.text = "N�o foi poss�vel efetuar o login!\nConta n�o existe.";
+                statusTextLogin.text = "N�o foi possivel efetuar o login!\nConta nao existe.";
                 break;
             case PlayFabErrorCode.InvalidEmailOrPassword:
-                statusTextLogin.text = "N�o foi poss�vel efetuar o login!\nE-mail ou senha inv�lidos.";
+                statusTextLogin.text = "N�o foi possivel efetuar o login!\nE-mail ou senha invilidos.";
                 break;
             default:
-                statusTextLogin.text = "N�o foi poss�vel efetuar o login!\nVerifique os dados infomados.";
+                statusTextLogin.text = "N�o foi possivel efetuar o login!\nVerifique os dados infomados.";
                 break;
 
         }
@@ -284,7 +284,7 @@ public class PlayFabLogin : MonoBehaviour
 
             if (result.Data == null || !result.Data.ContainsKey(id))
             {
-                Debug.Log("Conte�do vazio!");
+                Debug.Log("Conteudo vazio!");
             }
 
             else if (result.Data.ContainsKey(id))
@@ -368,12 +368,12 @@ public class PlayFabLogin : MonoBehaviour
 
     void OnStatisticsUpdated(UpdatePlayerStatisticsResult result)
     {
-        Debug.Log("Pontua��o atualizada com sucesso!");
+        Debug.Log("Pontuacao atualizada com sucesso!");
     }
 
     void OnStatisticsUpdateFailed(PlayFabError error)
     {
-        Debug.LogError("Erro ao atualizar pontua��o: " + error.GenerateErrorReport());
+        Debug.LogError("Erro ao atualizar pontuacao: " + error.GenerateErrorReport());
     }
 
 
@@ -391,7 +391,7 @@ public class PlayFabLogin : MonoBehaviour
 
     void OnLeaderboardReceived(GetLeaderboardResult result)
     {
-        Debug.Log("Placar de l�deres recebido:");
+        Debug.Log("Placar de lideres recebido:");
         foreach (var entry in result.Leaderboard)
         {
             Debug.Log($"{entry.Position + 1}. {entry.DisplayName} - {entry.StatValue}");
@@ -400,7 +400,7 @@ public class PlayFabLogin : MonoBehaviour
 
     void OnLeaderboardError(PlayFabError error)
     {
-        Debug.LogError("Erro ao obter placar de l�deres: " + error.GenerateErrorReport());
+        Debug.LogError("Erro ao obter placar de lideres: " + error.GenerateErrorReport());
     }
 
 
