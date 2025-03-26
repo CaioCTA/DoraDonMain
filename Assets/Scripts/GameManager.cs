@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public virtual void CheckWinner()
     {
         
-        if (player1)
+        if (player1 && player2)
         {
             if (PhotonNetwork.IsMasterClient)
             {

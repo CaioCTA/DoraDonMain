@@ -4,10 +4,13 @@ using UnityEngine;
 using PlayFab;
 using PlayFab.MultiplayerModels;
 using System;
+using TMPro;
 using Unity.VisualScripting;
 
 public class PlayFabMatchmaking : MonoBehaviour
 {
+    
+    public TMP_Text matchmakingText;
 
     public string entityId;
     public string ticketId;
@@ -20,6 +23,7 @@ public class PlayFabMatchmaking : MonoBehaviour
     public void StartPlayFabMatchmaking()
     {
         Debug.Log("[Matchmaker] Come�ando o emparalhamento!");
+        matchmakingText.text = "[Matchmaker] Come�ando o emparalhamento!";
 
         entityId = PlayFabLogin.PFL.EntityID;
 
@@ -65,6 +69,7 @@ public class PlayFabMatchmaking : MonoBehaviour
 
         // mensagem de status
         Debug.Log($"[Matchmaker] Ticket criado com sucesso: {ticketId}");
+        matchmakingText.text = $"[Matchmaker] Ticket criado com sucesso: {ticketId}";
 
         // inicializa a coroutine
         coroutine = WaitAndGetMatchmakingTicket(5.0f);
@@ -77,6 +82,7 @@ public class PlayFabMatchmaking : MonoBehaviour
     private void OnMatchmakingError(PlayFabError error)
     {
         Debug.LogError($"[Matchmaker] PlayFab erro: {error.Error} | {error.ErrorMessage}");
+        matchmakingText.text = $"[Matchmaker] PlayFab erro: {error.Error} | {error.ErrorMessage}";
     }
 
     // Coroutine para o polling - verifica��o peri�dica da fila
@@ -107,7 +113,8 @@ public class PlayFabMatchmaking : MonoBehaviour
 
     private void OnGetMatchmakingTicket(GetMatchmakingTicketResult result)
     {
-        Debug.Log($"v Ticker status: {result.Status}");
+        Debug.Log($"Ticker status: {result.Status}");
+        matchmakingText.text = $"Ticker status: {result.Status}";
 
         // ["WaitingForMatch", "Matched"]
         if (result.Status.Equals("Matched"))

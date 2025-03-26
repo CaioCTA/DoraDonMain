@@ -1999,6 +1999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c9d26a13f26f3b47b6bfdf8061a29b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  matchmakingText: {fileID: 1652059416}
   entityId: 
   ticketId: 
   nomeFila: doradonqueue
