@@ -18,7 +18,7 @@ public class PlayFabLeaderBoard : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Tab))
         {
-            UpdateLeaderBoard();
+            UpdateLeaderBoard(30);
             RecuperarLeaderBoard();
         }
     }

@@ -105,7 +105,7 @@ public class PlayFabLogin : MonoBehaviour
             userPassword = inputPassword.text;
 
             // payload da requisi��o
-            var request = new RegisterPlayFabUserRequest { Email = usernameOrEmail, Password = userPassword, Username = username };
+            var request = new RegisterPlayFabUserRequest { Email = usernameOrEmail, Password = userPassword, Username = username, DisplayName = username };
             // Requisi��o
             PlayFabClientAPI.RegisterPlayFabUser(request, SucessoCriarConta, FalhaCriarConta);
         }

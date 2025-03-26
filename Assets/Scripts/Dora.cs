@@ -36,6 +36,9 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
     private Vector2 latestPosition;
     private Quaternion latestRotation;
 
+    //Coins
+    public CoinRewardSystem coinReward;
+
 
 
     private void Start()
@@ -44,6 +47,7 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
+        coinReward = FindAnyObjectByType<CoinRewardSystem>();
         
         _originalBoxColliderSize = _capsuleCollider2D.size;
         _originalBoxColliderOffset = _capsuleCollider2D.offset;
@@ -241,11 +245,15 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
             if (PhotonNetwork.IsMasterClient)
             {
                 GameManager.Instance.player1 = true;
+                coinReward.CompleteLevel();
+                Debug.Log("Fase concluída! Moedas ganhas.");
                 Debug.Log("Sou o player1");
             }
             else
             {
                 GameManager.Instance.player2 = true;
+                coinReward.CompleteLevel();
+                Debug.Log("Fase concluída! Moedas ganhas.");
                 Debug.Log("Sou o player2");
             }
         }

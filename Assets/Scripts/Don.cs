@@ -39,6 +39,8 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
     private Vector2 _originalBoxColliderSize;
     private Vector2 _originalBoxColliderOffset;
 
+    //Coins
+    public CoinRewardSystem coinReward;
 
     private void Start()
     {
@@ -216,12 +218,16 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
              if (PhotonNetwork.IsMasterClient)
              {
                  GameManager.Instance.player1 = true;
-                 Debug.Log("Sou o player1");
+                coinReward.CompleteLevel();
+                Debug.Log("Fase concluída! Moedas ganhas.");
+                Debug.Log("Sou o player1");
              }
              else
              {
                  GameManager.Instance.player2 = true;
-                 Debug.Log("Sou o player2");
+                coinReward.CompleteLevel();
+                Debug.Log("Fase concluída! Moedas ganhas.");
+                Debug.Log("Sou o player2");
              }
          }
      }

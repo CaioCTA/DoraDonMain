@@ -315,6 +315,7 @@ MonoBehaviour:
   _flySpeed: 350
   _flyQuant: 1
   flyTime_Text: {fileID: 5204506532641698049}
+  coinReward: {fileID: 0}
 --- !u!95 &5001681217232499091
 Animator:
   serializedVersion: 5
