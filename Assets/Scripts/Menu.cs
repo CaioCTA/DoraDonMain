@@ -22,6 +22,23 @@ public class Menu : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel("CreateGame");
         Debug.Log("Load Level");
     }
+    
+    public void Credits()
+    {
+        PhotonNetwork.LoadLevel("Credits");
+    }
+    
+    public void Sair()
+    {
+        Application.Quit();
+    }
+
+    public void BackMenu()
+    {
+        PhotonNetwork.LoadLevel("Menu");
+    }
+    
+    
 
     #endregion
 

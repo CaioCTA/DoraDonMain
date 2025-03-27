@@ -218,15 +218,15 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
              if (PhotonNetwork.IsMasterClient)
              {
                  GameManager.Instance.player1 = true;
-                coinReward.CompleteLevel();
-                Debug.Log("Fase concluída! Moedas ganhas.");
+                // coinReward.CompleteLevel();
+                // Debug.Log("Fase concluída! Moedas ganhas.");
                 Debug.Log("Sou o player1");
              }
              else
              {
                  GameManager.Instance.player2 = true;
-                coinReward.CompleteLevel();
-                Debug.Log("Fase concluída! Moedas ganhas.");
+                // coinReward.CompleteLevel();
+                // Debug.Log("Fase concluída! Moedas ganhas.");
                 Debug.Log("Sou o player2");
              }
          }
