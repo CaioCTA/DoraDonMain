@@ -1,89 +1,180 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GeniusGame : MonoBehaviour
 {
-    // Lista de cores (ou botões) disponíveis
-    public List<GameObject> colorButtons; // GameObjects que representam as cores
-    public List<int> sequence = new List<int>(); // Armazena a sequência gerada
-    private int playerStep = 0; // Contador para o passo atual do jogador
+    [Header("Progresso")]
+    [SerializeField] private int sequenciasAcertadas = 0;
+    [SerializeField] private int sequenciasParaVencer = 3; 
+    
+    [Header("Fases")]
+    [SerializeField] private int faseAtual = 1;
+    [SerializeField] private int[] tamanhoPorFase = { 3, 5, 8 };
+    
+    [Header("Botão de Reinício")]
+    [SerializeField] private Button botaoReiniciar;
+    
+    [Header("Cores quando pisca")]
+    [SerializeField] private Color[] coresPiscar;
+    
+    [Header("Objetos da Sequência")]
+    [SerializeField] private GameObject[] sequenciaObjects;
+    [SerializeField] private Color[] sequenciaColors;
 
-    void Start()
+    [Header("Botões do Jogador")]
+    [SerializeField] private Button[] playerButtons;
+
+    [Header("Configurações")]
+    [SerializeField] private float delayBetweenSteps = 1f;
+    [SerializeField] private AudioClip correctSound, wrongSound, completeSound;
+    private AudioSource audioSource;
+
+    private List<int> sequenciaAtual = new List<int>();
+    private int playerStep = 0;
+    private bool inputEnabled = false;
+    private bool esperandoReinicio = false;
+
+    private void Start()
     {
-        StartGame();
+        audioSource = GetComponent<AudioSource>();
+        IniciarJogo();
     }
 
-    void StartGame()
+    private void IniciarJogo()
     {
-        sequence.Clear(); // Limpa a sequência anterior
-        playerStep = 0; // Reinicia o contador do jogador
-        AddNewStep(); // Adiciona o primeiro passo à sequência
-        StartCoroutine(PlaySequence()); // Mostra a sequência ao jogador
-    }
+        // Reinicia todos os valores para o estado inicial
+        faseAtual = 1;
+        sequenciasAcertadas = 0;
+        playerStep = 0;
+        sequenciaAtual.Clear();
+        inputEnabled = false;
+        esperandoReinicio = false;
+        botaoReiniciar.gameObject.SetActive(false);
 
-    void AddNewStep()
-    {
-        int randomColor = Random.Range(0, colorButtons.Count); // Gera um número aleatório entre 0 e o número de cores
-        sequence.Add(randomColor); // Adiciona o número à sequência
-    }
-
-    IEnumerator PlaySequence()
-    {
-        foreach (int colorIndex in sequence)
+        // Configura os botões
+        foreach (Button btn in playerButtons)
         {
-            yield return new WaitForSeconds(0.5f); // Espera meio segundo antes de mostrar a próxima cor
-            HighlightButton(colorIndex); // Destaca o botão correspondente
-            yield return new WaitForSeconds(0.5f); // Mantém o botão destacado por meio segundo
-            DimButton(colorIndex); // Volta o botão ao normal
+            btn.onClick.RemoveAllListeners();
         }
-    }
-
-    void HighlightButton(int index)
-    {
-        // Aqui você pode mudar a cor, escala ou qualquer efeito visual para destacar o botão
-        colorButtons[index].GetComponent<Renderer>().material.color = Color.white; // Exemplo: muda a cor para branco
-    }
-
-    void DimButton(int index)
-    {
-        // Volta o botão ao estado normal
-        colorButtons[index].GetComponent<Renderer>().material.color = GetDefaultColor(index); // Restaura a cor original
-    }
-
-    Color GetDefaultColor(int index)
-    {
-        // Define as cores padrão para cada botão
-        switch (index)
+        
+        for (int i = 0; i < playerButtons.Length; i++)
         {
-            case 0: return Color.green; // Verde
-            case 1: return Color.red;    // Vermelho
-            case 2: return Color.yellow; // Amarelo
-            case 3: return Color.blue;  // Azul
-            default: return Color.black; // Cor padrão (não deve acontecer)
+            int index = i;
+            playerButtons[i].onClick.AddListener(() => OnPlayerButtonClick(index));
         }
+
+        botaoReiniciar.onClick.RemoveAllListeners();
+        botaoReiniciar.onClick.AddListener(ReiniciarJogoCompleto);
+
+        GerarSequencia();
     }
 
-    public void PlayerInput(int colorIndex)
+    private void GerarSequencia()
     {
-        Debug.Log("Jogador clicou na cor: " + colorIndex);
-
-        if (colorIndex == sequence[playerStep])
+        sequenciaAtual.Clear();
+        int tamanhoSequencia = tamanhoPorFase[faseAtual - 1];
+        
+        for (int i = 0; i < tamanhoSequencia; i++)
         {
-            playerStep++; // Avança para o próximo passo
+            sequenciaAtual.Add(Random.Range(0, sequenciaObjects.Length));
+        }
+        
+        StartCoroutine(MostrarSequencia());
+    }
 
-            if (playerStep == sequence.Count) // Verifica se o jogador completou a sequência
+    private IEnumerator MostrarSequencia()
+    {
+        inputEnabled = false;
+        foreach (int index in sequenciaAtual)
+        {
+            yield return new WaitForSeconds(0.5f);
+            yield return StartCoroutine(PiscarObjeto(index));
+            Debug.Log(index);
+        }
+        inputEnabled = true;
+    }
+
+    private IEnumerator PiscarObjeto(int index)
+    {
+        GameObject obj = sequenciaObjects[index];
+        SpriteRenderer sprite = obj.GetComponent<SpriteRenderer>();
+        sprite.enabled = true;
+
+        Color originalColor = sprite.color;
+        originalColor.a = 1f;
+
+        Color corPiscar = coresPiscar[index];
+        corPiscar.a = 1f;
+
+        sprite.color = corPiscar;
+        audioSource.PlayOneShot(correctSound);
+    
+        yield return new WaitForSeconds(0.5f);
+    
+        sprite.color = originalColor;
+    }
+
+    private void OnPlayerButtonClick(int buttonIndex)
+    {
+        if (!inputEnabled || esperandoReinicio) return;
+
+        if (buttonIndex == sequenciaAtual[playerStep])
+        {
+            playerStep++;
+            audioSource.PlayOneShot(correctSound);
+
+            if (playerStep >= sequenciaAtual.Count)
             {
-                Debug.Log("Sequência correta! Próximo nível.");
-                playerStep = 0; // Reinicia o contador do jogador
-                AddNewStep(); // Adiciona um novo passo à sequência
-                StartCoroutine(PlaySequence()); // Mostra a nova sequência
+                sequenciasAcertadas++;
+                audioSource.PlayOneShot(completeSound);
+                playerStep = 0;
+                inputEnabled = false;
+
+                if (sequenciasAcertadas >= sequenciasParaVencer)
+                {
+                    if (faseAtual < tamanhoPorFase.Length)
+                    {
+                        faseAtual++;
+                        sequenciasAcertadas = 0; // Reseta o contador para a próxima fase
+                        StartCoroutine(ProximaFase());
+                    }
+                    else
+                    {
+                        Debug.Log("Você venceu todas as fases!");
+                        botaoReiniciar.gameObject.SetActive(true);
+                    }
+                }
+                else
+                {
+                    StartCoroutine(ProximaFase());
+                }
             }
         }
         else
         {
-            Debug.Log("Errou! Fim de jogo.");
-            StartGame(); // Reinicia o jogo
+            GameOver();
         }
+    }
+
+    private IEnumerator ProximaFase()
+    {
+        yield return new WaitForSeconds(1f);
+        GerarSequencia();
+    }
+
+    private void GameOver()
+    {
+        audioSource.PlayOneShot(wrongSound);
+        inputEnabled = false;
+        esperandoReinicio = true;
+        botaoReiniciar.gameObject.SetActive(true);
+    }
+
+    private void ReiniciarJogoCompleto()
+    {
+        // Chama o método que reinicia completamente o jogo
+        IniciarJogo();
     }
 }
