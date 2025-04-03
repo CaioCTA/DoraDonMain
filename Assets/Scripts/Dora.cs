@@ -22,7 +22,7 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField] private int _flyQuant = 1;
     public TMP_Text flyTime_Text;
 
-    private Rigidbody2D _rb;
+    public Rigidbody2D _rb;
     private Animator _anim;
     
     //BoxColliderFlying
@@ -38,12 +38,14 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
 
     //Coins
     public CoinRewardSystem coinReward;
+    
+    //Pause
+    public bool _canMove = true;
 
 
 
     private void Start()
     {
-
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
@@ -83,8 +85,22 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
                 photonView.RPC("CheckWinner", RpcTarget.AllBuffered);
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            _canMove = !_canMove;
+            
+        }
+        if (_canMove)
+        {
+            MovePlayer(); // Chama o movimento apenas se permitido
+        }
+        else
+        {
+            // Garante que o player pare imediatamente
+            _rb.velocity = Vector2.zero; // Se estiver usando Rigidbody
+        }
         
-        MovePlayer();
         
     }
 
@@ -92,7 +108,15 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (photonView.IsMine)
         {
-            MovePlayer();
+            if (_canMove)
+            {
+                MovePlayer();
+            }
+            else
+            {
+                _rb.velocity = Vector2.zero;
+            }
+            
         }
         else
         {
@@ -245,15 +269,15 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
             if (PhotonNetwork.IsMasterClient)
             {
                 GameManager.Instance.player1 = true;
-                coinReward.CompleteLevel();
-                Debug.Log("Fase concluída! Moedas ganhas.");
+                // coinReward.CompleteLevel();
+                // Debug.Log("Fase concluída! Moedas ganhas.");
                 Debug.Log("Sou o player1");
             }
             else
             {
                 GameManager.Instance.player2 = true;
-                coinReward.CompleteLevel();
-                Debug.Log("Fase concluída! Moedas ganhas.");
+                // coinReward.CompleteLevel();
+                // Debug.Log("Fase concluída! Moedas ganhas.");
                 Debug.Log("Sou o player2");
             }
         }

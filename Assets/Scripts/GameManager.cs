@@ -19,6 +19,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public bool player1 = false;
     public bool player2 = false;
+    
+    //Exit-Pause
+    private bool isLeaving = false;
 
     public void Awake()
     {
@@ -51,6 +54,36 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
     }
+
+    
+    public void OnQuitButtonPressed()
+    {
+        if (PhotonNetwork.InRoom && !isLeaving)
+        {
+            isLeaving = true;
+            PhotonNetwork.LeaveRoom();
+        }
+    }
+
+    public override void OnLeftRoom()
+    {
+        if (isLeaving)
+        {
+            PhotonNetwork.LoadLevel("CreateGame");
+        }
+    }
+    
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        base.OnPlayerLeftRoom(otherPlayer);
+        
+        if (!isLeaving)
+        {
+            PhotonNetwork.LoadLevel("Menu");
+        }
+        
+    }
+    
 
     public static void PlayerDeath()
     {
