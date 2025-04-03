@@ -34,11 +34,15 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         menuMusicSource.clip = menuBackground;
-        gameplayMusicSource.clip = gameplayBackground;
         menuMusicSource.Play();
+    }
+
+    private void Update()
+    {
         if (SceneManager.GetActiveScene().name == "GameScene")
         {
             menuMusicSource.Stop();
+            gameplayMusicSource.clip = gameplayBackground;
             gameplayMusicSource.Play();
         }
     }
