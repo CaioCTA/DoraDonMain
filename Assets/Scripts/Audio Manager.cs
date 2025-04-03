@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
@@ -33,7 +34,13 @@ public class AudioManager : MonoBehaviour
     private void Start()
     {
         menuMusicSource.clip = menuBackground;
+        gameplayMusicSource.clip = gameplayBackground;
         menuMusicSource.Play();
+        if (SceneManager.GetActiveScene().name == "GameScene")
+        {
+            menuMusicSource.Stop();
+            gameplayMusicSource.Play();
+        }
     }
 
     public void PlaySFX(AudioClip clip)
