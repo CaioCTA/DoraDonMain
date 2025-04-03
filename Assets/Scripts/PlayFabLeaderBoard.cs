@@ -78,7 +78,9 @@ public class PlayFabLeaderBoard : MonoBehaviour
                         colunas[1].text = result.Leaderboard[i].DisplayName;
                         colunas[2].text = result.Leaderboard[i].StatValue.ToString(); 
                         }
-                    },
+                    }
+                    //TODO: ARRAY SORT
+                    ,
                     error => 
                     {
                         Debug.LogError($"[PlayFab] {error.GenerateErrorReport()}");
