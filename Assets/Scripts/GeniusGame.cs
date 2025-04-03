@@ -166,6 +166,7 @@ public class GeniusGame : MonoBehaviour
 
     private void GameOver()
     {
+        Debug.Log("Perdeu");
         audioSource.PlayOneShot(wrongSound);
         inputEnabled = false;
         esperandoReinicio = true;
