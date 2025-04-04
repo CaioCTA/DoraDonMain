@@ -235,7 +235,7 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") && collision.gameObject.CompareTag("Door"))
         {
             isGrounded = true;
             _flyQuant = 1; // Restaura a quantidade de voo
@@ -246,11 +246,12 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
         {
             photonView.RPC("Death", RpcTarget.AllBuffered);
         }
+        
             
     }
     private void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") && collision.gameObject.CompareTag("Door"))
         {
             isGrounded = false;
         }
