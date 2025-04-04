@@ -40,6 +40,8 @@ public class PlayFabLogin : MonoBehaviour
     static Loading loadManager;
 
     public static PlayFabLogin PFL;
+    
+    
 
     private void Awake()
     {
@@ -83,6 +85,7 @@ public class PlayFabLogin : MonoBehaviour
                 PlayFabClientAPI.LoginWithPlayFab(requestUsername, SucessoLogin, FalhaLogin);
 
             }
+            
         }
     }
 
@@ -142,6 +145,7 @@ public class PlayFabLogin : MonoBehaviour
 
         // carrega nova cena e conecta no photon
         //loadManager.Connect();
+        
         PhotonNetwork.LoadLevel("Loading");
     }
 
@@ -259,3 +263,4 @@ public class PlayFabLogin : MonoBehaviour
         error => Debug.Log(error.ErrorMessage));
     }
 }
+

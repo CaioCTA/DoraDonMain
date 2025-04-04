@@ -1,30 +1,58 @@
 using PlayFab;
 using PlayFab.ClientModels;
+using TMPro;
 using UnityEngine;
 
 public class CoinRewardSystem : MonoBehaviour
 {
-    [SerializeField] private int coinsPerLevel = 100; // Moedas por fase
+    [SerializeField] private TMP_Text coinText;
+    public static CoinRewardSystem Instance;
+    
 
-    // Chamar quando o jogador COMPLETAR uma fase
-    public void CompleteLevel()
+    private void Awake()
     {
-        AddCoins(coinsPerLevel);
-    }
-
-    // M�todo para adicionar moedas
-    private void AddCoins(int amount)
-    {
-        var request = new AddUserVirtualCurrencyRequest
+        if (Instance == null)
         {
-            VirtualCurrency = "GC", // C�digo da moeda criada
-            Amount = amount
-        };
-
-        PlayFabClientAPI.AddUserVirtualCurrency(
-            request,
-            result => Debug.Log($"Moedas adicionadas! Total: {result.Balance}"),
-            error => Debug.LogError($"Erro: {error.GenerateErrorReport()}")
-        );
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
+        LoadCoins();
+    }
+    
+    // Chame este método APÓS o login bem-sucedido
+    public void LoadCoins()
+    {
+        PlayFabClientAPI.GetUserInventory(new GetUserInventoryRequest(),
+            result => {
+                if(result.VirtualCurrency.TryGetValue("GC", out int coins))
+                {
+                    UpdateCoinUI(coins);
+                }
+                else
+                {
+                    Debug.LogWarning("Moeda 'GC' não encontrada - Criando saldo zero...");
+                    UpdateCoinUI(0);
+                }
+            },
+            error => {
+                Debug.LogError("Erro ao carregar moedas: " + error.GenerateErrorReport());
+            });
+    }
+    
+    private void UpdateCoinUI(int coins)
+    {
+        if (coinText != null)
+        {
+            coinText.text = coins.ToString();
+        }
+        else
+        {
+            Debug.LogWarning("Componente de texto não atribuído no Inspector");
+        }
     }
 }

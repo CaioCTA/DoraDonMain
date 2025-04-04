@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using PlayFab;
 using PlayFab.ClientModels;
 using TMPro;
@@ -69,12 +70,15 @@ public class PlayFabLeaderBoard : MonoBehaviour
                     // inicializar o array de linhas da tabela
                     _LBEntries = new GameObject[result.Leaderboard.Count];
 
+                    
+                    var leaderboardOrdenado = result.Leaderboard.OrderBy(jogador => jogador.StatValue).ToList();
+                    
                     // popula as linhas da tabela com as informações do playfab
                     for (int i = 0; i < _LBEntries.Length; i++)
                     {
                         _LBEntries[i] = Instantiate(_LBRow, _LBTransform);
                         TMP_Text[] colunas = _LBEntries[i].GetComponentsInChildren<TMP_Text>();
-                        colunas[0].text = (result.Leaderboard[i].Position + 1).ToString();
+                        colunas[0].text = (i + 1).ToString();
                         colunas[1].text = result.Leaderboard[i].DisplayName;
                         colunas[2].text = result.Leaderboard[i].StatValue.ToString(); 
                         }

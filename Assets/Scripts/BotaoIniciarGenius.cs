@@ -45,7 +45,6 @@ public class BotaoIniciarGenius : MonoBehaviourPun
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
-                    animator.Play("Button_apertado_dora");
                     geniusGame.photonView.RPC("IniciarJogo", RpcTarget.AllBuffered);
                 }
                 else

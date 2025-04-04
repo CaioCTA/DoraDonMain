@@ -196,6 +196,8 @@ public class GeniusGame : MonoBehaviourPunCallbacks
     [Header("Configurações")]
     [SerializeField] private float delayBetweenSteps = 1f;
     [SerializeField] private AudioClip correctSound, wrongSound, completeSound;
+
+    [Header("Porta")] [SerializeField] private GameObject porta;
     
     private AudioSource audioSource;
     private List<int> sequenciaAtual = new List<int>();
@@ -344,6 +346,7 @@ public class GeniusGame : MonoBehaviourPunCallbacks
             {
                 Debug.Log("Você venceu todas as fases!");
                 botaoReiniciar.gameObject.SetActive(true);
+                porta.gameObject.SetActive(false);
             }
         }
         else

@@ -40,7 +40,7 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
     private Vector2 _originalBoxColliderOffset;
 
     //Coins
-    public CoinRewardSystem coinReward;
+    // public CoinRewardSystem coinReward;
 
     private void Start()
     {

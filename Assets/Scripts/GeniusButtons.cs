@@ -74,6 +74,8 @@ public class GeniusButtons : MonoBehaviourPun
     private Animator anim;
     private AudioSource audioSource;
 
+    [SerializeField] private GameObject image;
+
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -115,6 +117,15 @@ public class GeniusButtons : MonoBehaviourPun
     {
         jogadorPerto = state;
         Debug.Log($"Jogador {(state ? "entrou" : "saiu")} do trigger");
+        
+        if (image != null)
+        {
+            image.gameObject.SetActive(state);
+        }
+        else
+        {
+            Debug.LogWarning("Objeto filho 'Feedback' não encontrado!", this);
+        }
     }
 
     private void Update()
@@ -147,4 +158,5 @@ public class GeniusButtons : MonoBehaviourPun
         
         anim.Play("Idle");
     }
+    
 }

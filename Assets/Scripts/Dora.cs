@@ -6,6 +6,8 @@ using Photon.Pun.UtilityScripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
 public class Dora : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static Dora DoraInstance;
@@ -37,19 +39,27 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
     private Quaternion latestRotation;
 
     //Coins
-    public CoinRewardSystem coinReward;
+    // public CoinRewardSystem coinReward;
     
     //Pause
     public bool _canMove = true;
+    
+    public Slider flyTimeSlider;
 
 
 
     private void Start()
     {
+        
+        flyTimeSlider.gameObject.SetActive(false);
+        flyTimeSlider.minValue = 0;
+        flyTimeSlider.maxValue = maxFlyTime;
+        flyTimeSlider.value = maxFlyTime; // Start full
+        
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
-        coinReward = FindAnyObjectByType<CoinRewardSystem>();
+        // coinReward = FindAnyObjectByType<CoinRewardSystem>();
         
         _originalBoxColliderSize = _capsuleCollider2D.size;
         _originalBoxColliderOffset = _capsuleCollider2D.offset;
@@ -100,6 +110,20 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
             // Garante que o player pare imediatamente
             _rb.velocity = Vector2.zero; // Se estiver usando Rigidbody
         }
+        
+        if (_isFlying)
+        {
+            currentFlyTime -= Time.deltaTime;
+            flyTimeSlider.value = currentFlyTime; // Update slider value
+        
+            if (currentFlyTime <= 0)
+            {
+                StopFlying();
+                ChangeColliderOut();
+                flyTimeSlider.gameObject.SetActive(false);
+            }
+        }
+        
         
         
     }
@@ -191,14 +215,13 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
             if (_isFlying)
             {
                 currentFlyTime -= Time.deltaTime;
-                string v = currentFlyTime.ToString("00:00");
-                flyTime_Text.text = $"Timer: {v}";
+                flyTimeSlider.value = currentFlyTime / maxFlyTime;  // Normalized value between 0 and 1
 
                 if (currentFlyTime <= 0)
                 {
                     StopFlying();
                     ChangeColliderOut();
-                    flyTime_Text.text = "";
+                    flyTimeSlider.gameObject.SetActive(false); 
                 }
                 
             }
@@ -316,6 +339,8 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
              _rb.gravityScale = 0f; // Desativa a gravidade
              _rb.velocity = Vector2.zero; // Reseta a velocidade
              _flyQuant--;
+             flyTimeSlider.value = maxFlyTime; // Make sure it starts full
+             flyTimeSlider.gameObject.SetActive(true);
              
 
              // // Ativa o texto do timer
