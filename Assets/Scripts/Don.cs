@@ -291,7 +291,7 @@ public class Don : MonoBehaviourPunCallbacks, IPunObservable
         {
             latestPosition = (Vector3)stream.ReceiveNext();
             latestRotation = (Quaternion)stream.ReceiveNext();
-            float receivedVelocityY = (float)stream.ReceiveNext();
+            // float receivedVelocityY = (float)stream.ReceiveNext();
             int direction = (int)stream.ReceiveNext();
 
 
