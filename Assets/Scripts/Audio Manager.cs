@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,18 +34,33 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        menuMusicSource.clip = menuBackground;
-        menuMusicSource.Play();
+        PlayMenuMusic();
     }
 
     private void Update()
     {
-        if (SceneManager.GetActiveScene().name == "GameScene")
+        if (SceneManager.GetActiveScene().name == "GameScene" && !gameplayMusicSource.isPlaying)
         {
-            menuMusicSource.Stop();
-            gameplayMusicSource.clip = gameplayBackground;
-            gameplayMusicSource.Play();
+            PlayGameplayMusic();
         }
+        else if (SceneManager.GetActiveScene().name != "GameScene" && !menuMusicSource.isPlaying)
+        {
+            PlayMenuMusic();
+        }
+    }
+
+    void PlayMenuMusic()
+    {
+        gameplayMusicSource.Stop();
+        menuMusicSource.clip = menuBackground;
+        menuMusicSource.Play();
+    }
+
+    void PlayGameplayMusic()
+    {
+        menuMusicSource.Stop();
+        gameplayMusicSource.clip = gameplayBackground;
+        gameplayMusicSource.Play();
     }
 
     public void PlaySFX(AudioClip clip)

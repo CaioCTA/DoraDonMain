@@ -358,6 +358,7 @@ MonoBehaviour:
   _movSpeed: 350
   _jumpForce: 6.5
   _waterSpeed: 325
+  coinReward: {fileID: 0}
 --- !u!95 &2151184408635049651
 Animator:
   serializedVersion: 5
