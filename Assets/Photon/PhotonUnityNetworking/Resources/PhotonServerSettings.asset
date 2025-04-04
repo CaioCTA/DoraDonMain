@@ -51,6 +51,14 @@ MonoBehaviour:
   - SyncAnimationState
   - SetAnimationState
   - Death
+  - IniciarJogo
+  - AtualizarEstado
+  - GameOver
+  - PiscarObjeto
+  - ProcessarInput
+  - SequenciaCompleta
+  - SincronizarSequencia
+  - PlayButtonAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 0
