@@ -5,9 +5,13 @@ public class BotaoIniciarGenius : MonoBehaviourPun
 {
     [SerializeField] private GeniusGame geniusGame;
     private bool jogadorPerto;
+    Animator animator;
 
     private void Start()
     {
+        
+        animator = GetComponent<Animator>();
+        
         // Verificação segura ao iniciar
         if (geniusGame == null)
         {
@@ -41,6 +45,7 @@ public class BotaoIniciarGenius : MonoBehaviourPun
             {
                 if (PhotonNetwork.IsMasterClient)
                 {
+                    animator.Play("Button_apertado_dora");
                     geniusGame.photonView.RPC("IniciarJogo", RpcTarget.AllBuffered);
                 }
                 else
