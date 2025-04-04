@@ -98,25 +98,19 @@ public class GeniusGame : MonoBehaviour
 
     private IEnumerator PiscarObjeto(int index)
     {
-        GameObject obj = sequenciaObjects[index];
-        SpriteRenderer sprite = obj.GetComponent<SpriteRenderer>();
-        sprite.enabled = true;
-
-        Color originalColor = sprite.color;
-        originalColor.a = 1f;
-
-        Color corPiscar = coresPiscar[index];
-        corPiscar.a = 1f;
-
-        sprite.color = corPiscar;
+        // Pisca o objeto da sequência (como antes)
+        GameObject objPai = sequenciaObjects[index];
+        Animator animSequencia = objPai.transform.Find("Animacao").GetComponent<Animator>();
+        animSequencia.Play("Piscar");
         audioSource.PlayOneShot(correctSound);
     
         yield return new WaitForSeconds(0.5f);
     
-        sprite.color = originalColor;
+        // Volta para idle (opcional)
+        animSequencia.Play("Idle");
     }
 
-    private void OnPlayerButtonClick(int buttonIndex)
+    public void OnPlayerButtonClick(int buttonIndex)
     {
         if (!inputEnabled || esperandoReinicio) return;
 
