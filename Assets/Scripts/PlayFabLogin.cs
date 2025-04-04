@@ -146,7 +146,7 @@ public class PlayFabLogin : MonoBehaviour
         // carrega nova cena e conecta no photon
         //loadManager.Connect();
         
-        PhotonNetwork.LoadLevel("Loading");
+        PhotonNetwork.LoadLevel("LeaderBoard");
     }
 
 

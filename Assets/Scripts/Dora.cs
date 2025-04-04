@@ -250,7 +250,7 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
         PhotonNetwork.Destroy(GameManager.player1Obj);
         GameManager.PlayerDeath();
         PlayFabLeaderBoard leaderBoard = FindAnyObjectByType<PlayFabLeaderBoard>();
-        leaderBoard.UpdateLeaderBoard(30);
+        leaderBoard.IncrementPlayerDeath();
         
         
         
@@ -293,15 +293,14 @@ public class Dora : MonoBehaviourPunCallbacks, IPunObservable
             if (PhotonNetwork.IsMasterClient)
             {
                 GameManager.Instance.player1 = true;
-                // coinReward.CompleteLevel();
-                // Debug.Log("Fase concluída! Moedas ganhas.");
+                CoinRewardSystem.Instance.AddCoinsToPlayer(1); // Adiciona moedas ao completar
                 Debug.Log("Sou o player1");
+                PhotonNetwork.LoadLevel("LeaderBoard");
             }
             else
             {
                 GameManager.Instance.player2 = true;
-                // coinReward.CompleteLevel();
-                // Debug.Log("Fase concluída! Moedas ganhas.");
+                CoinRewardSystem.Instance.AddCoinsToPlayer(1); // Adiciona moedas ao completar
                 Debug.Log("Sou o player2");
             }
         }

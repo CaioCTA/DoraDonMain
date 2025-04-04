@@ -55,4 +55,35 @@ public class CoinRewardSystem : MonoBehaviour
             Debug.LogWarning("Componente de texto não atribuído no Inspector");
         }
     }
+    
+    public void AddCoinsToPlayer(int amount)
+    {
+        // Atualização local imediata para feedback visual
+        if (coinText != null && int.TryParse(coinText.text, out int currentCoins))
+        {
+            coinText.text = (currentCoins + amount).ToString();
+        }
+
+        // Atualização no PlayFab
+        var request = new AddUserVirtualCurrencyRequest
+        {
+            VirtualCurrency = "GC",
+            Amount = amount
+        };
+
+        PlayFabClientAPI.AddUserVirtualCurrency(request,
+            result => {
+                Debug.Log($"Moedas adicionadas com sucesso! Novo total: {result.Balance}");
+                // Atualiza com o valor confirmado pelo servidor
+                coinText.text = result.Balance.ToString();
+            },
+            error => {
+                Debug.LogError($"Erro ao adicionar moedas: {error.GenerateErrorReport()}");
+                // Reverte a mudança local em caso de erro
+                if (coinText != null && int.TryParse(coinText.text, out currentCoins))
+                {
+                    coinText.text = (currentCoins - amount).ToString();
+                }
+            });
+    }
 }
