@@ -1,21 +1,13 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeniusButtons : MonoBehaviour
+public class BotaoIniciarGenius : MonoBehaviour
 {
     public GeniusGame geniusGame;
-    public int indexCor; // 0=Vermelho, 1=Azul, 2=Roxo, 3=Amarelo
     private bool jogadorPerto;
-    private Animator anim;
-
-
-    private void Start()
-    {
-        anim = GetComponent<Animator>();
-    }
-
+    
+    
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
@@ -32,12 +24,18 @@ public class GeniusButtons : MonoBehaviour
         }
     }
 
-    private void Update()
+    void Update()
     {
         if (jogadorPerto && Input.GetKeyDown(KeyCode.E))
         {
-            anim.Play("Apertar"); // Nome da animação de clique
-            geniusGame.OnPlayerButtonClick(indexCor);
+            if (geniusGame != null) // Adicione esta verificação
+            {
+                geniusGame.IniciarJogo();
+            }
+            else
+            {
+                Debug.LogError("GeniusGame não atribuído no BotaoIniciarGenius!");
+            }
         }
     }
 }

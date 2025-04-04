@@ -23,8 +23,8 @@ public class GeniusGame : MonoBehaviour
     [SerializeField] private GameObject[] sequenciaObjects;
     [SerializeField] private Color[] sequenciaColors;
 
-    [Header("Botões do Jogador")]
-    [SerializeField] private Button[] playerButtons;
+    // [Header("Botões do Jogador")]
+    // [SerializeField] private Button[] playerButtons;
 
     [Header("Configurações")]
     [SerializeField] private float delayBetweenSteps = 1f;
@@ -35,38 +35,34 @@ public class GeniusGame : MonoBehaviour
     private int playerStep = 0;
     private bool inputEnabled = false;
     private bool esperandoReinicio = false;
+    
+    [Header("Botão de Início")]
+    [SerializeField] private GameObject botaoIniciar; // Objeto físico com Collider2D
+    private bool jogoIniciado = false;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        IniciarJogo();
     }
 
-    private void IniciarJogo()
+    public void IniciarJogo()
     {
-        // Reinicia todos os valores para o estado inicial
+        
+        // Verifique se os arrays estão atribuídos
+        if (sequenciaObjects == null || sequenciaObjects.Length == 0)
+        {
+            Debug.LogError("Sequencia Objects não configurado!");
+            return;
+        }
+        
+        
+        // Configuração inicial do jogo
         faseAtual = 1;
         sequenciasAcertadas = 0;
         playerStep = 0;
         sequenciaAtual.Clear();
         inputEnabled = false;
         esperandoReinicio = false;
-        botaoReiniciar.gameObject.SetActive(false);
-
-        // Configura os botões
-        foreach (Button btn in playerButtons)
-        {
-            btn.onClick.RemoveAllListeners();
-        }
-        
-        for (int i = 0; i < playerButtons.Length; i++)
-        {
-            int index = i;
-            playerButtons[i].onClick.AddListener(() => OnPlayerButtonClick(index));
-        }
-
-        botaoReiniciar.onClick.RemoveAllListeners();
-        botaoReiniciar.onClick.AddListener(ReiniciarJogoCompleto);
 
         GerarSequencia();
     }
@@ -101,13 +97,13 @@ public class GeniusGame : MonoBehaviour
         // Pisca o objeto da sequência (como antes)
         GameObject objPai = sequenciaObjects[index];
         Animator animSequencia = objPai.transform.Find("Animacao").GetComponent<Animator>();
-        animSequencia.Play("Piscar");
+        animSequencia.SetTrigger("Piscar");
         audioSource.PlayOneShot(correctSound);
     
         yield return new WaitForSeconds(0.5f);
     
         // Volta para idle (opcional)
-        animSequencia.Play("Idle");
+        animSequencia.SetTrigger("Idle");;
     }
 
     public void OnPlayerButtonClick(int buttonIndex)
@@ -166,10 +162,5 @@ public class GeniusGame : MonoBehaviour
         esperandoReinicio = true;
         botaoReiniciar.gameObject.SetActive(true);
     }
-
-    private void ReiniciarJogoCompleto()
-    {
-        // Chama o método que reinicia completamente o jogo
-        IniciarJogo();
-    }
+    
 }

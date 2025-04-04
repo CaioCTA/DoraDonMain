@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 5494144496277638301}
   - component: {fileID: 3765561693487450251}
   m_Layer: 0
-  m_Name: notas
+  m_Name: Animacao
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
