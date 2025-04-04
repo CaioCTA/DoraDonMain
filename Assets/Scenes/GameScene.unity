@@ -1200,6 +1200,7 @@ GameObject:
   - component: {fileID: 91216864}
   - component: {fileID: 91216863}
   - component: {fileID: 91216870}
+  - component: {fileID: 91216871}
   m_Layer: 0
   m_Name: Button_Inciar
   m_TagString: Button
@@ -1394,9 +1395,26 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 91216863}
+  - {fileID: 91216871}
   sceneViewId: 17
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &91216871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 91216862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &92195813
 GameObject:
   m_ObjectHideFlags: 0
@@ -35240,6 +35258,7 @@ GameObject:
   - component: {fileID: 439829949}
   - component: {fileID: 439829951}
   - component: {fileID: 439829950}
+  - component: {fileID: 439829952}
   m_Layer: 0
   m_Name: GeniusManager
   m_TagString: Untagged
@@ -35314,6 +35333,28 @@ MonoBehaviour:
   correctSound: {fileID: 0}
   wrongSound: {fileID: 0}
   completeSound: {fileID: 0}
+--- !u!114 &439829952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 439829948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 18
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &442083834
 GameObject:
   m_ObjectHideFlags: 0
@@ -35884,7 +35925,7 @@ Transform:
   m_GameObject: {fileID: 474096597}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -79.19001, y: -4.0600004, z: 8.129178}
+  m_LocalPosition: {x: 134.79999, y: -1.9700003, z: 8.129178}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -59787,7 +59828,7 @@ Transform:
   m_GameObject: {fileID: 1707158907}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -74.36, y: -4.05, z: 8.129178}
+  m_LocalPosition: {x: 139.63, y: -1.96, z: 8.129178}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

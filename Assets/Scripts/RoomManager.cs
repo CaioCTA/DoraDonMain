@@ -25,45 +25,64 @@ public class RoomManager : MonoBehaviourPunCallbacks
         }
     }
     
+    // void AssignFollowToLocalPlayer()
+    // {
+    //     if (PhotonNetwork.LocalPlayer == null)
+    //     {
+    //         Debug.LogError("LocalPlayer não está disponível.");
+    //         return;
+    //     }
+    //
+    //     // Tente encontrar o PhotonView do jogador local
+    //     PhotonView localPhotonView = PhotonView.Find(PhotonNetwork.LocalPlayer.ActorNumber);
+    //     
+    //     if (localPhotonView == null)
+    //     {
+    //         Debug.LogError("Não foi possível encontrar o PhotonView do jogador local.");
+    //         return;
+    //     }
+    //
+    //     GameObject localPlayerObject = localPhotonView.gameObject;
+    //
+    //     if (localPlayerObject != null)
+    //     {
+    //         // Acesse a Cinemachine Virtual Camera
+    //         CinemachineVirtualCamera cinemachineCamera = virtualCam.GetComponent<CinemachineVirtualCamera>();
+    //
+    //         if (cinemachineCamera != null)
+    //         {
+    //             // Defina o Follow como o transform do jogador local
+    //             cinemachineCamera.Follow = localPlayerObject.transform;
+    //             // Debug.Log("Virtual Camera agora segue: " + PhotonNetwork.LocalPlayer.NickName);
+    //         }
+    //         else
+    //         {
+    //             Debug.LogError("Componente CinemachineVirtualCamera não encontrado no objeto da câmera virtual.");
+    //         }
+    //     }
+    //     else
+    //     {
+    //         Debug.LogError("Objeto do jogador local não encontrado.");
+    //     }
+    // }
+    
     void AssignFollowToLocalPlayer()
     {
-        if (PhotonNetwork.LocalPlayer == null)
+        PhotonView[] photonViews = FindObjectsOfType<PhotonView>();
+        foreach (PhotonView pv in photonViews)
         {
-            Debug.LogError("LocalPlayer não está disponível.");
-            return;
-        }
-
-        // Tente encontrar o PhotonView do jogador local
-        PhotonView localPhotonView = PhotonView.Find(PhotonNetwork.LocalPlayer.ActorNumber);
-        
-        if (localPhotonView == null)
-        {
-            Debug.LogError("Não foi possível encontrar o PhotonView do jogador local.");
-            return;
-        }
-
-        GameObject localPlayerObject = localPhotonView.gameObject;
-
-        if (localPlayerObject != null)
-        {
-            // Acesse a Cinemachine Virtual Camera
-            CinemachineVirtualCamera cinemachineCamera = virtualCam.GetComponent<CinemachineVirtualCamera>();
-
-            if (cinemachineCamera != null)
+            if (pv.IsMine)
             {
-                // Defina o Follow como o transform do jogador local
-                cinemachineCamera.Follow = localPlayerObject.transform;
-                // Debug.Log("Virtual Camera agora segue: " + PhotonNetwork.LocalPlayer.NickName);
-            }
-            else
-            {
-                Debug.LogError("Componente CinemachineVirtualCamera não encontrado no objeto da câmera virtual.");
+                // Configurar a câmera aqui
+                CinemachineVirtualCamera cinemachineCamera = virtualCam.GetComponent<CinemachineVirtualCamera>();
+                if (cinemachineCamera != null)
+                {
+                    cinemachineCamera.Follow = pv.transform;
+                    return;
+                }
             }
         }
-        else
-        {
-            Debug.LogError("Objeto do jogador local não encontrado.");
-        }
+        Debug.LogError("Nenhum PhotonView local encontrado.");
     }
 
     private void OnTriggerEnter2D(Collider2D other)

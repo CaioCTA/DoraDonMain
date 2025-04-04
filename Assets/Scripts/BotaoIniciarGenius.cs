@@ -6,6 +6,17 @@ public class BotaoIniciarGenius : MonoBehaviourPun
     [SerializeField] private GeniusGame geniusGame;
     private bool jogadorPerto;
 
+    private void Start()
+    {
+        // Verificação segura ao iniciar
+        if (geniusGame == null)
+        {
+            Debug.LogError("GeniusGame não atribuído no Inspector!", this);
+            enabled = false; // Desativa o script
+            return;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player") && photonView.IsMine)
@@ -26,21 +37,22 @@ public class BotaoIniciarGenius : MonoBehaviourPun
     {
         if (jogadorPerto && Input.GetKeyDown(KeyCode.E) && photonView.IsMine)
         {
-            if (geniusGame != null)
+            if (geniusGame != null && geniusGame.photonView != null)
             {
-                // Só o mestre pode iniciar o jogo
                 if (PhotonNetwork.IsMasterClient)
                 {
                     geniusGame.photonView.RPC("IniciarJogo", RpcTarget.AllBuffered);
                 }
                 else
                 {
-                    Debug.Log("Aguardando mestre iniciar o jogo...");
+                    Debug.Log("Apenas o mestre pode iniciar o jogo");
                 }
             }
             else
             {
-                Debug.LogError("GeniusGame não atribuído!", this);
+                Debug.LogError("Referências faltando: " +
+                               $"GeniusGame: {geniusGame != null}, " +
+                               $"PhotonView: {geniusGame?.photonView != null}");
             }
         }
     }
