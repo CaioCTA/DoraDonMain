@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LeaderBoard.unity
     guid: 387a228ef892c8d468c7aad4f19972c8
+  - enabled: 1
+    path: Assets/Scenes/Loja.unity
+    guid: dfb63071730c0fb48bbdfef9a1bdd833
   m_configObjects: {}

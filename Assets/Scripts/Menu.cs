@@ -2,21 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Menu : MonoBehaviourPunCallbacks
 {
-    #region Unity Methods
-
-    private void Awake()
-    {
-        PhotonNetwork.AutomaticallySyncScene = true;
-    }
     
-    #endregion
-    
-    #region Public Methods
-
     public void Play()
     {
         PhotonNetwork.LoadLevel("CreateGame");
@@ -37,9 +29,10 @@ public class Menu : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LoadLevel("Menu");
     }
+    public void Loja()
+    {
+        PhotonNetwork.LoadLevel("Loja");
+    }
     
-    
-
-    #endregion
 
 }

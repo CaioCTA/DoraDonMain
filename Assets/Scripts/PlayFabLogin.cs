@@ -147,6 +147,7 @@ public class PlayFabLogin : MonoBehaviour
         //loadManager.Connect();
         
         PhotonNetwork.LoadLevel("Loading");
+        CoinRewardSystem.Instance.CheckPlayerInventory();
     }
 
 
